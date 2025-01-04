@@ -1,0 +1,16 @@
+.button {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    padding: 0;
+    height: min-content;
+    margin-inline-start: var(--ant-margin-xxs);
+    margin-bottom: var(--ant-margin-xxs);
+    color: var(--ant-color-primary-text);
+}
+
+.icon {
+    text-decoration: var(--ant-link-decoration);
+    cursor: pointer;
+    transition: all var(--ant-motion-duration-slow);
+}
