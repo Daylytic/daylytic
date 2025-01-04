@@ -1,0 +1,36 @@
+.root {
+  display: block;
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  background-color: var(--stroke-color);
+}
+
+.horizontal {
+  border-top: calc(var(--stroke-width) * 2) solid var(--stroke-color);
+  inset-inline-start: var(--line-main-axis-start);
+  inset-inline-end: 0;
+}
+
+.vertical {
+  border-left: calc(var(--stroke-width) * 2) solid var(--stroke-color);
+  top: var(--line-main-axis-start);
+  bottom: 0;
+}
+
+/* Edge positioning */
+.top {
+  top: var(--main-axis-offset);
+}
+
+.right {
+  right: var(--main-axis-offset);
+}
+
+.bottom {
+  bottom: var(--main-axis-offset);
+}
+
+.left {
+  left: var(--main-axis-offset);
+}
