@@ -1,9 +1,3 @@
-/**
- * Runs a flash animation on the background color of the provided `element`.
- *
- * This animation should be used after an element has been reordered,
- * in order to highlight where the element has moved to.
- */
 export function triggerPostMoveFlash(element: HTMLElement) {
 
   const computedStyles = getComputedStyle(element);
