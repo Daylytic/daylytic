@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @unique // Unique ID for the user
+  email      String   @unique // Email must be unique
+  name       String? // Optional name
+  picture    String? // Optional name
+  createdAt  DateTime @default(now()) // Timestamp of account creation
+  lastSeenAt DateTime @default(now()) // Last login time
+  goals      Goal[] // One user can have multiple goals
+}
+
+model Goal {
+  id          String    @id @default(cuid()) // Unique ID for the goal
+  title       String // Title of the goal
+  description String? // Optional description
+  deadline    DateTime? // Optional deadline for the goal
+  progress    Float     @default(0) // Progress percentage (0 to 100)
+  createdAt   DateTime  @default(now()) // Creation timestamp
+  updatedAt   DateTime  @updatedAt // Auto-updated when modified
+  userId      String // Relation field to User
+  user        User      @relation(fields: [userId], references: [id])
+  projects    Project[] // One goal can have multiple projects
+}
+
+model Project {
+  id          String     @id @default(cuid()) // Unique ID for the project
+  title       String // Title of the project
+  description String? // Optional description
+  deadline    DateTime? // Optional deadline for the project
+  progress    Float      @default(0) // Progress percentage (0 to 100)
+  createdAt   DateTime   @default(now()) // Creation timestamp
+  updatedAt   DateTime   @updatedAt // Auto-updated when modified
+  goalId      String // Relation field to Goal
+  goal        Goal       @relation(fields: [goalId], references: [id])
+  todoLists   ToDoList[] // One project can have multiple to-do lists
+}
+
+model ToDoList {
+  id        String   @id @default(cuid()) // Unique ID for the to-do list
+  title     String // Title of the to-do list
+  createdAt DateTime @default(now()) // Creation timestamp
+  updatedAt DateTime @updatedAt // Auto-updated when modified
+  projectId String // Relation field to Project
+  project   Project  @relation(fields: [projectId], references: [id])
+  tasks     Task[] // One to-do list can have multiple tasks
+}
+
+model Task {
+  id          String   @id @default(cuid()) // Unique ID for the task
+  title       String // Title of the task
+  isCompleted Boolean  @default(false) // Task completion status
+  createdAt   DateTime @default(now()) // Creation timestamp
+  updatedAt   DateTime @updatedAt // Auto-updated when modified
+  todoListId  String // Relation field to ToDoList
+  todoList    ToDoList @relation(fields: [todoListId], references: [id])
+}

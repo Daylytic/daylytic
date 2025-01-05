@@ -1,0 +1,50 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    
+    margin: 0;
+    font-family: "Poppins";
+}
+
+:root {
+    --color1: #e2cfea;
+    --color2: #a06cd5;
+    --color3: #6247aa;
+    --color4: #102b3f;
+    --color5: #062726;
+}
+
+body {
+    background-color: #fbfbfb;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+@media screen and (max-width: 400px) {
+    section {
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    section {
+        width: 75%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    section {
+        width: 60%;
+    }
+}
