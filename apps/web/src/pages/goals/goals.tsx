@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { FloatButton, Layout } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import { GoalsList } from "components/goals/goals-list";
 import { GoalsHeader } from "components/goals/goals-header";
