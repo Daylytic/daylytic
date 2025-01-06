@@ -14,7 +14,7 @@ const goalResponse = goalInput.extend({
     updatedAt: z.string(),
 })
 
-export type CreateGoalInput = z.infer<typeof goalResponse>;
+export type CreateGoalInput = z.infer<typeof goalInput>;
 
 export const {schemas: goalSchemas, $ref} = buildJsonSchemas({
     goalInput,

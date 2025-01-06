@@ -21,6 +21,14 @@ model User {
   createdAt  DateTime @default(now()) // Timestamp of account creation
   lastSeenAt DateTime @default(now()) // Last login time
   goals      Goal[] // One user can have multiple goals
+  sessions   Session[]
+}
+
+model Session {
+  token       String   @unique
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  validUntil  DateTime @default(dbgenerated("now() + interval '7 days'"))
 }
 
 model Goal {
