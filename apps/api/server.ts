@@ -2,12 +2,13 @@ import Fastify from 'fastify';
 import postgres from '@fastify/postgres'; // Use import instead of requird
 import { authHandler } from './src/modules/auth/index.js'; // Ensure the extension is included
 import { userSchemas } from './src/modules/auth/auth.schema.js';
+import { goalSchemas } from './src/modules/goals/goals.schema.js';
 import { goalsHandler } from './src/modules/goals/goals.routes.js';
 
 const server = Fastify({ logger: true })
 
 const main = async () => {
-  for(const schema of userSchemas) {
+  for (const schema of [...userSchemas, ...goalSchemas]) {
     server.addSchema(schema);
   }
 
@@ -22,7 +23,7 @@ const main = async () => {
   });
 
   server.register(authHandler, { prefix: "/oauth2" });
-  server.register(goalsHandler, { prefix: "/goals"});
+  server.register(goalsHandler, { prefix: "/goals" });
 
   try {
     await server.listen({ port: 8084 })
