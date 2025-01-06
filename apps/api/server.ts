@@ -8,6 +8,9 @@ import { goalsHandler } from './src/modules/goals/goals.routes.js';
 const server = Fastify({ logger: true })
 
 const main = async () => {
+
+  server.decorateRequest('token', '')
+    
   for (const schema of [...userSchemas, ...goalSchemas]) {
     server.addSchema(schema);
   }
