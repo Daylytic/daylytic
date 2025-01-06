@@ -1,8 +1,8 @@
 import { buildJsonSchemas } from "fastify-zod";
-import {z} from "zod";
+import { z } from "zod";
 
 const createUserSchema = z.object({
-    token: z.string()  
+    token: z.string()
 })
 
 const createUserSchemaResponse = z.object({
@@ -16,7 +16,7 @@ const createUserSchemaResponse = z.object({
 
 export type CreateUserInput = z.infer<typeof createUserSchemaResponse>;
 
-export const {schemas: userSchemas, $ref} = buildJsonSchemas({
+export const { schemas: userSchemas, $ref } = buildJsonSchemas({
     createUserSchema,
     createUserSchemaResponse
-})
+}, { $id: "UsersSchema" })
