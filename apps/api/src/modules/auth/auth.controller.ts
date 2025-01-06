@@ -10,15 +10,36 @@ export const googleAuthentication = async (req: FastifyRequest, rep: FastifyRepl
     }
     try {
         const authInfo = await authService.getGoogleAccount({ token });
-        
+
         console.log(authInfo)
         if(await existsUser(authInfo)) {
-            return { success: true, user: authInfo }
+            return { user: authInfo }
         }
 
         const user = authService.createUser(authInfo);
-        return { success: true, user: user };
+        return { user: user };
     } catch (error: any) {
         rep.status(401).send({ error: error.message });
     }
 }
+
+const authenticate = async (req: FastifyRequest, rep: FastifyReply) => {
+    
+}
+
+export const authController = {
+    authenticate,
+} 
+
+// import { OAuth2Client } from "google-auth-library";
+
+// const client = new OAuth2Client(CLIENT_ID);
+
+// async function verifyToken(token: string) {
+//     const ticket = await client.verifyIdToken({
+//         idToken: token,
+//         audience: CLIENT_ID,
+//     });
+//     const payload = ticket.getPayload();
+//     return payload; // Contains user details like 'sub' (Google ID) and 'email'
+// }
