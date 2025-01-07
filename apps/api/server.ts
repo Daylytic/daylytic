@@ -5,7 +5,9 @@ import postgres from '@fastify/postgres'; // Use import instead of requird
 import { authHandler } from './src/modules/auth/index.js'; // Ensure the extension is included
 import { SessionCore, UserCore, userSchemas } from './src/modules/auth/auth.schema.js';
 import { goalSchemas } from './src/modules/goals/goals.schema.js';
+import { projectsSchemas } from './src/modules/projects/projects.schema.js';
 import { goalsHandler } from './src/modules/goals/goals.routes.js';
+import { projectsHandler } from './src/modules/projects/projects.routes.js';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -18,7 +20,7 @@ const server = Fastify({ logger: true })
 
 const main = async () => {
 
-  for (const schema of [...userSchemas, ...goalSchemas]) {
+  for (const schema of [...userSchemas, ...goalSchemas, ...projectsSchemas]) {
     server.addSchema(schema);
   }
 
@@ -48,7 +50,8 @@ const main = async () => {
       ],
       tags: [
         { name: 'auth', description: 'Authentication related end-points' },
-        { name: 'goals', description: 'Goals related end-points' }
+        { name: 'goals', description: 'Goals related end-points' },
+        { name: 'projects', description: 'Projects related end-points' }
       ],
       components: {
         securitySchemes: {
@@ -80,6 +83,7 @@ const main = async () => {
 
   server.register(authHandler, { prefix: "/oauth2" });
   server.register(goalsHandler, { prefix: "/goals" });
+  server.register(projectsHandler, { prefix: "/projects" });
 
   try {
     await server.listen({ port: 8084 })
