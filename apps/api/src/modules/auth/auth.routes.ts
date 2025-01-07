@@ -4,9 +4,10 @@ import { $ref } from './auth.schema.js';
 import { authController } from './auth.controller.js';
 
 export const authHandler: FastifyPluginAsync = async (server, _) => {
-    // server.route({url: "/google", handler: googleAuthentication});
     server.route({
         url: "/google", method: "POST", handler: authController.login, schema: {
+            tags: ["auth"],
+            description: "Creates an account with session in the db, and returns user object.",
             body: $ref("createUserSchema"),
             response: {
                 201: $ref("createUserSchemaResponse")
@@ -16,7 +17,12 @@ export const authHandler: FastifyPluginAsync = async (server, _) => {
 
     server.route({
         url: "/google", method: "DELETE", preHandler: authController.authenticate, handler: authController.logout, schema: {
-
+            tags: ["auth"],
+            description: "Logs out session assosiated with the bearer",
+            headers: $ref("headersBearer"),
+            response: {
+                200: $ref("logoutResponse")
+            }
         }
     });
 };

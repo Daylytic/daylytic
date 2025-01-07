@@ -31,11 +31,21 @@ export const createUserSchemaResponse = z.object({
     picture: z.string().optional(),
 })
 
+const logoutResponse = z.object({
+    status: z.string()
+});
+
+const headersBearer = z.object({
+    authorization: z.string(),
+})
+
 export type SessionCore = z.infer<typeof sessionCore>
 export type UserCore = z.infer<typeof userCore>
 export type CreateUserInput = z.infer<typeof createUserSchemaResponse>;
 
 export const { schemas: userSchemas, $ref } = buildJsonSchemas({
     createUserSchema,
-    createUserSchemaResponse
+    createUserSchemaResponse,
+    logoutResponse,
+    headersBearer,
 }, { $id: "UsersSchema" })
