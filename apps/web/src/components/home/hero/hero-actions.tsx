@@ -24,7 +24,8 @@ export const HeroActions = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
 
   const login = useGoogleLogin({
-    onSuccess: (codeResponse: User) => setCookies("token", codeResponse.access_token),
+    onSuccess: (codeResponse: User) =>
+      setCookies("token", codeResponse.access_token),
     onError: (error: unknown) => console.log("Login Failed:", error),
   });
 
@@ -34,6 +35,7 @@ export const HeroActions = () => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`,
         },
         method: "POST",
         body: JSON.stringify({ token: cookies.token }),
@@ -42,8 +44,7 @@ export const HeroActions = () => {
           console.log(1);
           if (res.ok) {
             console.log(2);
-            const { user } = await res.json();
-            setProfile(user);
+            setProfile(await res.json());
           }
         })
         .catch((res) => {
@@ -56,6 +57,27 @@ export const HeroActions = () => {
   // Log out function to log the user out of Google and set the profile to null
   const logOut = () => {
     googleLogout();
+    fetch("http://localhost:8084/oauth2/google", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookies.token}`,
+      },
+      method: "DELETE",
+      body: JSON.stringify({ token: cookies.token }),
+    })
+      .then(async (res) => {
+        console.log(1);
+        if (res.ok) {
+          console.log(2);
+          const { user } = await res.json();
+          setProfile(user);
+        }
+      })
+      .catch((res) => {
+        console.log(3);
+        console.log(res);
+      });
     setProfile(null);
     removeCookie("token");
   };
@@ -78,7 +100,9 @@ export const HeroActions = () => {
             <br />
             <button onClick={logOut}>Log out</button>
           </div>
-        ) : <></>}
+        ) : (
+          <></>
+        )}
       </div>
     </Flex>
   );
