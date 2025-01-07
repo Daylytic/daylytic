@@ -1,5 +1,5 @@
 import { prisma } from "../../utils/prisma.js"
-import { $ref, CreateUserInput, createUserSchemaResponse, SessionCore, UserCore } from "./auth.schema.js";
+import { $ref, CreateUserInput, googleAccountCore, SessionCore, UserCore } from "./auth.schema.js";
 
 const getAuthenticationProfile = async (token: string): Promise<{ user: UserCore; session: SessionCore }> => {
     const session = await prisma.session.findFirstOrThrow({ where: { token: token } });
@@ -10,7 +10,7 @@ const getAuthenticationProfile = async (token: string): Promise<{ user: UserCore
 const createAuthenticationProfile = async (token: string): Promise<{ user: UserCore; session: SessionCore }> => {
     /* If session doesn't exist in DB, fetch google info about token*/
     const rawGoogleAccount = await fetchGoogleAccountInfo(token);
-    const googleAccount = createUserSchemaResponse.parse(rawGoogleAccount);
+    const googleAccount = googleAccountCore.parse(rawGoogleAccount);
     
     const session = { token: token, userId: googleAccount.id };
 
