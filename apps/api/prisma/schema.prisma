@@ -16,8 +16,8 @@ datasource db {
 model User {
   id         String   @unique // Unique ID for the user
   email      String   @unique // Email must be unique
-  name       String? // Optional name
-  picture    String? // Optional name
+  name       String
+  picture    String
   createdAt  DateTime @default(now()) // Timestamp of account creation
   lastSeenAt DateTime @default(now()) // Last login time
   goals      Goal[] // One user can have multiple goals
@@ -34,7 +34,7 @@ model Session {
 model Goal {
   id          String    @id @default(cuid()) // Unique ID for the goal
   title       String // Title of the goal
-  description String? // Optional description
+  description String // Optional description
   deadline    DateTime? // Optional deadline for the goal
   progress    Float     @default(0) // Progress percentage (0 to 100)
   createdAt   DateTime  @default(now()) // Creation timestamp
