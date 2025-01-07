@@ -1,15 +1,21 @@
 import Fastify from 'fastify';
 import postgres from '@fastify/postgres'; // Use import instead of requird
 import { authHandler } from './src/modules/auth/index.js'; // Ensure the extension is included
-import { userSchemas } from './src/modules/auth/auth.schema.js';
+import { SessionCore, UserCore, userSchemas } from './src/modules/auth/auth.schema.js';
 import { goalSchemas } from './src/modules/goals/goals.schema.js';
 import { goalsHandler } from './src/modules/goals/goals.routes.js';
+
+declare module 'fastify' {
+  interface FastifyRequest {
+    session: SessionCore | undefined,
+    user: UserCore | undefined,
+  }
+}
 
 const server = Fastify({ logger: true })
 
 const main = async () => {
 
-  server.decorateRequest('token', '')
     
   for (const schema of [...userSchemas, ...goalSchemas]) {
     server.addSchema(schema);
