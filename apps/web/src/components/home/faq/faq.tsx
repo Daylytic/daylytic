@@ -1,0 +1,1 @@
+export const FAQ = () => (<section id="faq">Here is my FAQ</section>)
