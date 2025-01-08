@@ -48,3 +48,18 @@ h1 {
         width: 60%;
     }
 }
+
+.ant-anchor-link {
+    height: 63px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ant-anchor-link-title:has(img) {
+    height: 100%;
+}
+
+.ant-anchor-wrapper-horizontal::before {
+    border-bottom: 0px !important;
+}
