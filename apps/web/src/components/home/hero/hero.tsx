@@ -3,7 +3,7 @@ import { HeroActions } from "./hero-actions";
 
 
 export const Hero = () => (
-  <section>
+  <section id="hero">
     <HeroHeader />
     <HeroActions />
   </section>
