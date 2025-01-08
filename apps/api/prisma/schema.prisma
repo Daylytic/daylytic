@@ -47,8 +47,8 @@ model Goal {
 model Project {
   id          String     @id @default(cuid()) // Unique ID for the project
   title       String // Title of the project
-  description String? // Optional description
-  deadline    DateTime? // Optional deadline for the project
+  description String // Optional description
+  deadline    DateTime // Optional deadline for the project
   progress    Float      @default(0) // Progress percentage (0 to 100)
   createdAt   DateTime   @default(now()) // Creation timestamp
   updatedAt   DateTime   @updatedAt // Auto-updated when modified
