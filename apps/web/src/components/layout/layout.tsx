@@ -10,19 +10,9 @@ import { Goals } from "pages/goals";
 import { Home } from "pages/home";
 import { Showcase } from "pages/showcase";
 import { useUser } from "providers/user-provider";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Logo from "assets/svgs/logo.svg";
-
-const items = [
-  {
-    key: 1,
-    label: <img height="100%" src={Logo} style={{ padding: "5px" }}></img>,
-  },
-  { key: 2, label: "About" },
-  { key: 3, label: "FAQ" },
-  { key: 4, label: "Contact" },
-];
 
 const anchoritems = [
   {
@@ -38,11 +28,11 @@ const anchoritems = [
         }}
       ></img>
     ),
-    href: "#hero",
+    href: "/#hero",
   },
-  { key: "about", title: "About", href: "#about" },
-  { key: "faq", title: "FAQ", href: "#faq" },
-  { key: "contact", title: "Contact", href: "#contact" },
+  { key: "about", title: <span>About</span>, href: "/#about" },
+  { key: "faq", title: "FAQ", href: "/#faq" },
+  { key: "contact", title: "Contact", href: "/#contact" },
 ];
 
 interface LayoutProps {
@@ -50,9 +40,19 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  //   const { componentSize} = ConfigProvider.use();
-
   const user = useUser();
+
+  const [cachedProfile, setCachedProfile] = useState({
+    picture: user.profile?.picture,
+  });
+
+  // Update cached profile if the picture URL changes
+  useEffect(() => {
+    if (user.profile?.picture !== cachedProfile.picture) {
+      setCachedProfile({ picture: user.profile?.picture });
+    }
+  }, [user.profile?.picture]);
+
   return (
     <AntLayout>
       <Header
@@ -64,15 +64,6 @@ export const Layout = ({ children }: LayoutProps) => {
           border: "1px solid rgba(5, 5, 5, 0.06)",
         }}
       >
-        {/* <div className="demo-logo">Heee</div> */}
-
-        {/* <Menu
-          theme="light"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items}
-          style={{ flex: 1, minWidth: 0, justifyContent: "center" }}
-        /> */}
         <Anchor
           direction="horizontal"
           items={anchoritems}
@@ -83,10 +74,10 @@ export const Layout = ({ children }: LayoutProps) => {
             maxHeight: "100%",
           }}
         />
-        <Avatar
+        {cachedProfile.picture ? <Avatar
           src={
             <img
-              src={user.profile?.picture}
+              src={cachedProfile.picture}
               alt="avatar"
               style={{
                 borderRadius: "",
@@ -105,7 +96,7 @@ export const Layout = ({ children }: LayoutProps) => {
             fontSize: "54px",
             padding: "5px",
           }}
-        ></Avatar>
+        ></Avatar> : <></>}
       </Header>
       <Content>{children}</Content>
       <Footer style={{ textAlign: "center" }}>
