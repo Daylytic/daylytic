@@ -7,7 +7,13 @@ export const projectsHandler: FastifyPluginAsync = async (server) => {
     // Get /projects&goalsId=
     server.route({
         url: "/", method: "GET", preHandler: [authController.authenticate, projectsController.verifyGoalId], handler: projectsController.getProjects, schema: {
-            querystring: $ref("projectsQuery")
+            querystring: $ref("projectsBaseQuery")
+        }
+    });
+
+    server.route({
+        url: "/", method: "POST", preHandler: [authController.authenticate], handler: projectsController.createProject, schema: {
+            querystring: $ref("projectsBaseQuery")
         }
     })
 }
