@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "exports": {
-    "./constants": "./src/constants.ts"
+    "./constants": "./src/constants.ts",
+    "./schemas": "./src/schemas/index.ts"
   }
 }
