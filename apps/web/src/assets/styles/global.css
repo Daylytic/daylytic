@@ -51,9 +51,15 @@ h1 {
 
 .ant-anchor-link {
     height: 63px;
+    line-height: 63px;
+}
+
+.ant-anchor-link a {
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
 
 .ant-anchor-link-title:has(img) {

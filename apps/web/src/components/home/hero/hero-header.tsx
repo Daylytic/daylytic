@@ -6,6 +6,6 @@ const { Title, Paragraph } = Typography;
 export const HeroHeader = () => (
   <header id={styles.header}>
     <Title>Daylytic</Title>
-    <Paragraph>Modern way to wake up.</Paragraph>
+    <Paragraph>Modern solution to reach the impossible.</Paragraph>
   </header>
 );
