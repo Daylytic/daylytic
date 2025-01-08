@@ -9,8 +9,10 @@ import {
   Input,
   Modal,
 } from "antd";
+import { useUser } from "providers/user-provider";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
+import { client } from "services/api-client";
 
 type FieldType = {
   title?: string;
@@ -26,6 +28,7 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 };
 
 export const GoalsList = () => {
+  const user = useUser();
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState("Content of the modal");
@@ -55,6 +58,14 @@ export const GoalsList = () => {
     setConfirmLoading(true);
 
     if (cookies.token !== undefined) {
+      const { data, error } = await client.POST("/goals/", {
+        body: {
+          "title": "string",
+          "description": "string",
+          "deadline": "string",
+          "userId": user.profile!.id
+        }
+      });
       fetch("http://localhost:8084/oauth2/google", {
         headers: {
           Accept: "application/json",
