@@ -4,6 +4,7 @@ import { Home } from "pages/home/home";
 import { Showcase } from "pages/showcase";
 import { Routes, Route, BrowserRouter } from "react-router";
 import { Layout } from "components/layout";
+import { ScrollToHash } from "components/common/scroll-to-hash";
 
 export const App = () => (
   <ConfigProvider
@@ -31,9 +32,10 @@ export const App = () => (
   >
     <Layout>
       <BrowserRouter>
+      <ScrollToHash />
         <Routes>
           <Route index element={<Home />} />
-          <Route path="/goals" element={<Goals />} />
+          <Route path="/panel" element={<Goals />} />
           <Route path="/showcase" element={<Showcase />} />
           <Route path="/todo" element={<Showcase />} />
         </Routes>
