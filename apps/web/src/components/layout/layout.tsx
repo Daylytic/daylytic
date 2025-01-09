@@ -4,6 +4,7 @@ import {
   Layout as AntLayout,
   Anchor,
   ConfigProvider,
+  Breadcrumb,
 } from "antd";
 import { Header, Content, Footer } from "antd/es/layout/layout";
 import { Goals } from "pages/goals";
@@ -30,7 +31,7 @@ const anchoritems = [
     ),
     href: "/#hero",
   },
-  { key: "about", title: <span>About</span>, href: "/#about" },
+  { key: "about", title: "About", href: "/#about" },
   { key: "faq", title: "FAQ", href: "/#faq" },
   { key: "contact", title: "Contact", href: "/#contact" },
 ];
