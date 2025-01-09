@@ -4,6 +4,7 @@ import {
   Layout as AntLayout,
   Anchor,
   ConfigProvider,
+  Breadcrumb,
 } from "antd";
 import { Header, Content, Footer } from "antd/es/layout/layout";
 import { Goals } from "pages/goals";
@@ -30,7 +31,7 @@ const anchoritems = [
     ),
     href: "/#hero",
   },
-  { key: "about", title: <span>About</span>, href: "/#about" },
+  { key: "about", title: "About", href: "/#about" },
   { key: "faq", title: "FAQ", href: "/#faq" },
   { key: "contact", title: "Contact", href: "/#contact" },
 ];
@@ -74,29 +75,34 @@ export const Layout = ({ children }: LayoutProps) => {
             maxHeight: "100%",
           }}
         />
-        {cachedProfile.picture ? <Avatar
-          src={
-            <img
-              src={cachedProfile.picture}
-              alt="avatar"
-              style={{
-                borderRadius: "",
-                color: "black",
-                height: "100%",
-                width: "100%",
-              }}
-            />
-          }
-          style={{
-            color: "black",
-            position: "fixed",
-            right: 0,
-            height: "64px",
-            width: "64px",
-            fontSize: "54px",
-            padding: "5px",
-          }}
-        ></Avatar> : <></>}
+
+        {cachedProfile.picture ? (
+          <Avatar
+            src={
+              <img
+                src={cachedProfile.picture}
+                alt="avatar"
+                style={{
+                  borderRadius: "",
+                  color: "black",
+                  height: "100%",
+                  width: "100%",
+                }}
+              />
+            }
+            style={{
+              color: "black",
+              position: "fixed",
+              right: 0,
+              height: "64px",
+              width: "64px",
+              fontSize: "54px",
+              padding: "5px",
+            }}
+          ></Avatar>
+        ) : (
+          <></>
+        )}
       </Header>
       <Content>{children}</Content>
       <Footer style={{ textAlign: "center" }}>

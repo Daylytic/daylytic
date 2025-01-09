@@ -13,10 +13,6 @@
     --color5: #062726;
 }
 
-body {
-    background-color: #fbfbfb;
-}
-
 section {
     display: flex;
     flex-direction: column;

@@ -9,7 +9,7 @@ export const HeroActions = () => {
 
   return (
     <Flex gap={"small"}>
-      <Button onClick={profile ? () => {navigate("/goals")} : login}>
+      <Button onClick={profile ? () => {navigate("/panel")} : login}>
         Join <GoogleOutlined />
       </Button>
     </Flex>
