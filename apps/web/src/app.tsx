@@ -1,5 +1,5 @@
 import { ConfigProvider } from "antd";
-import { Goals } from "pages/goals";
+import { Panel } from "pages/panel";
 import { Home } from "pages/home/home";
 import { Showcase } from "pages/showcase";
 import { Routes, Route, BrowserRouter } from "react-router";
@@ -39,7 +39,7 @@ export const App = () => (
       <ScrollToHash />
       <Routes>
         <Route index element={<Home />} />
-        <Route path="/panel" element={<Goals />} />
+        <Route path="/panel" element={<Panel />} />
         <Route path="/showcase" element={<Showcase />} />
         <Route path="/todo" element={<Showcase />} />
       </Routes>

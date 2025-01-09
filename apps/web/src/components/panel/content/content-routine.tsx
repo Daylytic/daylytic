@@ -1,22 +1,11 @@
-import Sider from "antd/es/layout/Sider";
 import {
-  Avatar,
-  Card,
   Checkbox,
-  Divider,
-  Flex,
   Input,
   List,
-  Menu,
-  Skeleton,
-  Space,
   theme,
   Typography,
 } from "antd";
-import logo from "assets/svgs/logo.svg";
 import { Content } from "antd/es/layout/layout";
-
-import { Y } from "react-router/dist/development/fog-of-war-DLtn2OLr";
 import { PlusOutlined } from "@ant-design/icons";
 
 const { Text, Title } = Typography;
@@ -36,7 +25,7 @@ const data = [
   },
 ];
 
-export const GoalsRoutine = () => {
+export const ContentRoutine = () => {
   const {
     token: { colorWhite, borderRadiusLG, paddingMD, paddingXS },
   } = theme.useToken();
@@ -52,13 +41,6 @@ export const GoalsRoutine = () => {
       }}
     >
       <Title level={1}>Routine</Title>
-      {/* 
-    <Menu
-      mode="inline"
-      defaultSelectedKeys={["sub1"]}
-      defaultOpenKeys={["sub1"]}
-      items={general}
-    /> */}
 
       <List
         itemLayout="horizontal"

@@ -1,18 +1,11 @@
 import {
-  Menu,
   Avatar,
   Layout as AntLayout,
   Anchor,
-  ConfigProvider,
-  Breadcrumb,
 } from "antd";
 import { Header, Content, Footer } from "antd/es/layout/layout";
-import { Goals } from "pages/goals";
-import { Home } from "pages/home";
-import { Showcase } from "pages/showcase";
 import { useUser } from "providers/user-provider";
-import { ReactNode, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { useEffect, useState } from "react";
 import Logo from "assets/svgs/logo.svg";
 
 const anchoritems = [
