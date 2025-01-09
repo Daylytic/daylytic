@@ -35,16 +35,14 @@ export const App = () => (
       },
     }}
   >
-    <Layout>
-      <BrowserRouter>
+    <BrowserRouter>
       <ScrollToHash />
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="/panel" element={<Goals />} />
-          <Route path="/showcase" element={<Showcase />} />
-          <Route path="/todo" element={<Showcase />} />
-        </Routes>
-      </BrowserRouter>
-    </Layout>
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="/panel" element={<Goals />} />
+        <Route path="/showcase" element={<Showcase />} />
+        <Route path="/todo" element={<Showcase />} />
+      </Routes>
+    </BrowserRouter>
   </ConfigProvider>
 );
