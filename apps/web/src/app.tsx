@@ -3,6 +3,7 @@ import { Panel } from "pages/panel";
 import { Home } from "pages/home/home";
 import { Routes, Route, BrowserRouter } from "react-router";
 import { ScrollToHash } from "components/common/scroll-to-hash";
+import { PrivateRoute } from "pages/private-route";
 
 export const App = () => (
   <ConfigProvider
@@ -40,9 +41,14 @@ export const App = () => (
       <ScrollToHash />
       <Routes>
         <Route index element={<Home />} />
-        <Route path="/panel" element={<Panel />} />
-        <Route path="/showcase" element={<Showcase />} />
-        <Route path="/todo" element={<Showcase />} />
+        <Route
+          path="/panel"
+          element={
+            <PrivateRoute>
+              <Panel />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   </ConfigProvider>
