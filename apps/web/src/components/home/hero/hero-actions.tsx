@@ -4,7 +4,7 @@ import { useUser } from "providers/user-provider";
 import { useNavigate } from "react-router";
 
 export const HeroActions = () => {
-  const { profile, login, logout } = useUser();
+  const { profile, login } = useUser();
   const navigate = useNavigate();
 
   return (
