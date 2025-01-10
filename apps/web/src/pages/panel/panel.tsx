@@ -20,7 +20,7 @@ export const Panel = () => {
       <Flex gap={paddingMD} flex={1} style={{height: "100%"}}>
         <Menu />
         <ContentRoutine></ContentRoutine>
-        <Sider style={{}} width={500}></Sider>
+        {/* <Sider style={{}} width={500}></Sider> */}
       </Flex>
     </Layout>
   );
