@@ -1,23 +1,16 @@
-import { Badge, Card, Flex, theme } from "antd";
+import { Flex, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { Space, Typography } from "antd";
-
-import {
-  CalendarOutlined,
-  ClockCircleOutlined,
-  FastForwardOutlined,
-  ForwardOutlined,
-  ScheduleOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
 import { MenuGeneral } from "./menu-general";
 import { MenuGoals } from "./menu-goals";
+import { useState } from "react";
 
 export const Menu = () => {
   const {
-    token: { colorBgLayout, borderRadiusLG, paddingMD, paddingXS },
+    token: { borderRadiusLG, paddingMD },
   } = theme.useToken();
 
+  const [selectedMenu, setSelectedMenu] = useState("dashboard");
+  
   return (
     <Sider
       style={{
@@ -29,9 +22,9 @@ export const Menu = () => {
       width={400}
     >
       <Flex vertical style={{ height: "100%", display: "flex" }}>
-        <MenuGeneral />
+        <MenuGeneral selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu}/>
 
-        <MenuGoals />
+        <MenuGoals selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu}/>
       </Flex>
     </Sider>
   );

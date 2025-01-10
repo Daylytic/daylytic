@@ -4,8 +4,9 @@ import {
   UnorderedListOutlined,
   ForwardOutlined,
   CalendarOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
-import { Flex, Badge, Menu, Typography, theme } from "antd";
+import { Flex, Badge, Menu, Typography, theme, Button } from "antd";
 import { MenuGeneralItem } from "./menu-general-item";
 import logo from "assets/svgs/logo.svg";
 
@@ -42,21 +43,41 @@ const general = [
   },
 ];
 
-export const MenuGeneral = () => {
+export const MenuGeneral = ({ selectedMenu, setSelectedMenu }) => {
   const {
-    token: { paddingXS },
+    token: { fontSizeHeading4, paddingXS },
   } = theme.useToken();
 
-  return <>
-    <Flex gap={paddingXS}>
-      <img height="38px" src={logo} />
-      <Title level={2}>Daylytic</Title>
-    </Flex>
-    <Menu
-      mode="inline"
-      defaultSelectedKeys={["dashboard"]}
-      defaultOpenKeys={["dashboard"]}
-      items={general}
-    />
-  </>
+  return (
+    <>
+      <Flex
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 15,
+        }}
+      >
+        <Flex gap={paddingXS}>
+          <img height="38px" src={logo} />
+          <Title level={2} style={{ marginBottom: 0 }}>
+            Daylytic
+          </Title>
+        </Flex>
+        <Button shape="circle" type="text">
+          <SettingOutlined style={{ fontSize: fontSizeHeading4 }} />
+        </Button>
+      </Flex>
+      <Menu
+        mode="inline"
+        defaultSelectedKeys={[selectedMenu]}
+        selectedKeys={[selectedMenu]}
+        defaultOpenKeys={["dashboard"]}
+        onClick={({ item, key, keyPath }) => {
+          setSelectedMenu(key);
+        }}
+        items={general}
+      />
+    </>
+  );
 };
