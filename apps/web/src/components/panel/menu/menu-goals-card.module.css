@@ -1,0 +1,20 @@
+.wrapper {
+    background-color: #fafafa;
+    transition: border-color 0.3s,background 0.3s,padding 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    cursor: pointer;
+}
+
+.wrapper.selected {
+    background-color: #e3ddeb;
+    transition: border-color 0.3s,background 0.3s,padding 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.wrapper:hover:not(.selected) {
+    background-color: rgba(0, 0, 0, 0.06);
+    transition: border-color 0.3s,background 0.3s,padding 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.wrapper.selected,
+.wrapper.selected *:not(a) {
+    color: rgb(98, 71, 170) !important;
+}
