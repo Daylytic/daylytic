@@ -24,13 +24,15 @@ export const App = () => (
           headerBg: "#f5f5f5",
           headerColor: "#f5f5f5",
           headerPadding: 0,
-          // colorBgContainer: "#fafafa",
+          colorBgContainer: "#fafafa",
           bodyBg: "#fafafa",
           siderBg: "#f5f5f5",
         },
         Menu: {
           popupBg: "#f5f5f5",
           itemBg: "#f5f5f5",
+          activeBarBorderWidth: 0,
+          itemMarginInline: 0,
         },
       },
     }}

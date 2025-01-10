@@ -1429,6 +1429,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
+"@faker-js/faker@^9.3.0":
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-9.3.0.tgz#ef398dab34c67faaa0e348318c905eae3564fa58"
+  integrity sha512-r0tJ3ZOkMd9xsu3VRfqlFR6cz0V/jFYRswAIpC+m/DIfAUXq7g8N7wTAlhSANySXYGKzGryfDXwtwsY8TxEIDw==
+
 "@fastify/accept-negotiator@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@fastify/accept-negotiator/-/accept-negotiator-1.1.0.tgz#c1c66b3b771c09742a54dd5bc87c582f6b0630ff"
@@ -3849,6 +3854,11 @@ close-with-grace@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/close-with-grace/-/close-with-grace-2.1.0.tgz#fa8ddbcf99bc16b0c5a21e7fd1fcc3575ae29409"
   integrity sha512-rME1AtzKc9dfpLr8XBVhXqhVZDvtaIA7FIpjPaO+DmDsomaTNtuEBZMoNDgIvjHYK5q8/Afxy34YTXInUBsT1A==
+
+clsx@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.1.tgz#eed397c9fd8bd882bfb18deab7102049a2f32999"
+  integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
 
 co@^4.6.0:
   version "4.6.0"
