@@ -8,6 +8,7 @@ export const App = () => (
   <ConfigProvider
     theme={{
       hashed: false,
+      cssVar: true,
       token: {
         // Seed Token
         colorPrimary: "#6247aa",
