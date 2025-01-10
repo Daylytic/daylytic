@@ -6,11 +6,9 @@ import { Layout } from "components/layout";
 
 export const Home = () => (
   <Layout>
-    <Content>
-      <Hero />
-      <About />
-      <FAQ />
-      <Contact />
-    </Content>
+    <Hero />
+    <About />
+    <FAQ />
+    <Contact />
   </Layout>
 );
