@@ -5,3 +5,4 @@
 - Panel with dashboard, daily todo list, and then goals.
 - Trailer of the site
 - Notepad
+- Different themes
