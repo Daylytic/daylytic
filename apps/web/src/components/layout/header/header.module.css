@@ -1,0 +1,42 @@
+#header {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border: var(--ant-line-width) var(--ant-line-type) var(--ant-color-split);
+    z-index: 1;
+}
+
+#header-img {
+    padding: var(--ant-padding-xxs);
+    width: auto;
+    margin: auto;
+}
+
+
+.anchor {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    max-height: 100%;
+}
+
+.avatar {
+    background-color: transparent;
+    color: black;
+    position: fixed;
+    right: 0;
+    height: var(--ant-layout-header-height);
+    width: var(--ant-layout-header-height);
+    border-radius: var(--ant-border-radius);
+    padding: var(--ant-padding-xxs);
+}
+
+#avatar-img {
+    background-color: pink;
+    color: black;
+    height: 100%;
+    width: 100%;
+    border-radius: var(--ant-border-radius);
+    object-fit: cover;
+}

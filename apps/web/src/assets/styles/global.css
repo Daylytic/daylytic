@@ -1,28 +1,26 @@
-* {
-    scrollbar-width: thin !important; /* For Firefox */
-    scrollbar-color: #eaeaea transparent; /* For Firefox */
-}
-
 /* WebKit Browsers (Chrome, Edge, Safari) */
 *::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
-    height: 8px; /* Height of the scrollbar (for horizontal scrollbars) */
+    width: 8px;
+    height: 8px;
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: #eaeaea; /* Color of the scrollbar thumb */
-    border-radius: 4px; /* Rounded corners */
+    background-color: #eaeaea;
+    border-radius: 4px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-    background-color: #d6d6d6; /* Color on hover */
+    background-color: #d6d6d6;
 }
 
 *::-webkit-scrollbar-track {
-    background: transparent; /* Color of the track */
+    background: transparent;
 }
 
 *, *::before, *::after {
+    scrollbar-width: thin !important; /* For Firefox */
+    scrollbar-color: #eaeaea transparent; /* For Firefox */
+
     box-sizing: border-box;
     
     margin: 0;
@@ -47,10 +45,6 @@ section {
     margin: 0 auto;
 }
 
-h1 {
-    font-size: 3rem;
-}
-
 @media screen and (max-width: 400px) {
     section {
         width: 90%;
@@ -69,9 +63,11 @@ h1 {
     }
 }
 
+/* Ant Design Changes */
+
 .ant-anchor-link {
-    height: 63px;
-    line-height: 63px;
+    height: 64px;
+    line-height: 64px;
 }
 
 .ant-anchor-link a {

@@ -32,27 +32,46 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   useEffect(() => {
-    if (cookies.token && !profile) {
-      fetch("http://localhost:8084/oauth2/google", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-        method: "POST",
-        body: JSON.stringify({ token: cookies.token }),
-      })
-        .then(async (res) => {
+    const fetchProfile = async () => {
+      if (cookies.token && !profile) {
+        // Check local storage for cached profile picture
+        const cachedPicture = localStorage.getItem("profile_picture");
+
+        try {
+          const res = await fetch("http://localhost:8084/oauth2/google", {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookies.token}`,
+            },
+            method: "POST",
+            body: JSON.stringify({ token: cookies.token }),
+          });
+
           if (res.ok) {
-            setProfile(await res.json());
+            const fetchedProfile = await res.json();
+            // Cache the picture in localStorage
+            if (fetchedProfile.picture && fetchedProfile.picture !== cachedPicture) {
+              localStorage.setItem("profile_picture", fetchedProfile.picture);
+            }
+
+            setProfile({
+              ...fetchedProfile,
+              picture: fetchedProfile.picture || cachedPicture || "", // Fallback to cached or empty string
+            });
           }
-        })
-        .catch((error) => console.error("Error fetching profile:", error));
-    }
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+        }
+      }
+    };
+
+    fetchProfile();
   }, [cookies.token, profile]);
 
   const logout = () => {
     googleLogout();
+
     fetch("http://localhost:8084/oauth2/google", {
       headers: {
         Accept: "application/json",
@@ -65,6 +84,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       .then((res) => {
         if (res.ok) {
           setProfile(null);
+          localStorage.removeItem("profile_picture"); // Clear cached picture on logout
         }
       })
       .catch((error) => console.error("Error logging out:", error));
