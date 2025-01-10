@@ -65,9 +65,11 @@ section {
     }
 }
 
+/* Ant Design Changes */
+
 .ant-anchor-link {
-    height: 63px;
-    line-height: 63px;
+    height: 64px;
+    line-height: 64px;
 }
 
 .ant-anchor-link a {
