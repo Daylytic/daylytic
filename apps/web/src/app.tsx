@@ -1,9 +1,7 @@
 import { ConfigProvider } from "antd";
 import { Panel } from "pages/panel";
 import { Home } from "pages/home/home";
-import { Showcase } from "pages/showcase";
 import { Routes, Route, BrowserRouter } from "react-router";
-import { Layout } from "components/layout";
 import { ScrollToHash } from "components/common/scroll-to-hash";
 
 export const App = () => (
