@@ -1,0 +1,6 @@
+#panel {
+    padding: var(--ant-padding-lg) var(--ant-padding-lg);
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
