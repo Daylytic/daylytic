@@ -1,4 +1,4 @@
-import { useUser } from "providers/user-provider";
+import { useUser } from "providers/user";
 import { Navigate } from "react-router";
 
 interface PrivateRouteProps {

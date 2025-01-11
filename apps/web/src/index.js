@@ -4,7 +4,7 @@ import "./assets/styles/global.css";
 import { App } from "./app.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { CookiesProvider } from "react-cookie";
-import { UserProvider } from "./providers/user-provider.tsx";
+import { UserProvider } from "./providers/user";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

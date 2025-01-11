@@ -3,14 +3,13 @@ import Sider from "antd/es/layout/Sider";
 import { MenuGeneral } from "./menu-general";
 import { MenuGoals } from "./menu-goals";
 import { useState } from "react";
+import { MenuControllerProvider } from "providers/menu-controller";
 
 export const Menu = () => {
   const {
     token: { borderRadiusLG, paddingMD },
   } = theme.useToken();
 
-  const [selectedMenu, setSelectedMenu] = useState("dashboard");
-  
   return (
     <Sider
       style={{
@@ -22,9 +21,11 @@ export const Menu = () => {
       width={400}
     >
       <Flex vertical style={{ height: "100%", display: "flex" }}>
-        <MenuGeneral selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu}/>
+        <MenuControllerProvider>
+          <MenuGeneral />
 
-        <MenuGoals selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu}/>
+          <MenuGoals />
+        </MenuControllerProvider>
       </Flex>
     </Sider>
   );
