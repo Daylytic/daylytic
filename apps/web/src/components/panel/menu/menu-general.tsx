@@ -9,6 +9,7 @@ import {
 import { Flex, Badge, Menu, Typography, theme, Button } from "antd";
 import { MenuGeneralItem } from "./menu-general-item";
 import logo from "assets/svgs/logo.svg";
+import { useMenuController } from "providers/menu-controller";
 
 const { Title } = Typography;
 
@@ -43,7 +44,9 @@ const general = [
   },
 ];
 
-export const MenuGeneral = ({ selectedMenu, setSelectedMenu }) => {
+export const MenuGeneral = () => {
+  const { setMenu, menu } = useMenuController();
+
   const {
     token: { fontSizeHeading4, paddingXS },
   } = theme.useToken();
@@ -70,11 +73,11 @@ export const MenuGeneral = ({ selectedMenu, setSelectedMenu }) => {
       </Flex>
       <Menu
         mode="inline"
-        defaultSelectedKeys={[selectedMenu]}
-        selectedKeys={[selectedMenu]}
+        defaultSelectedKeys={[menu]}
+        selectedKeys={[menu]}
         defaultOpenKeys={["dashboard"]}
         onClick={({ item, key, keyPath }) => {
-          setSelectedMenu(key);
+          setMenu(key);
         }}
         items={general}
       />
