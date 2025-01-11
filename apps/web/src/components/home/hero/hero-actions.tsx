@@ -1,6 +1,6 @@
 import { Button, Flex } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
-import { useUser } from "providers/user-provider";
+import { useUser } from "providers/user";
 import { useNavigate } from "react-router";
 
 export const HeroActions = () => {

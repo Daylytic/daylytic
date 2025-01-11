@@ -3,7 +3,7 @@ import { Header as AntHeader } from "antd/es/layout/layout";
 import styles from "./header.module.css";
 import { Anchor, Avatar } from "antd";
 import Logo from "assets/svgs/logo.svg";
-import { useUser } from "providers/user-provider";
+import { useUser } from "providers/user";
 
 const anchoritems = [
   {
