@@ -11,5 +11,15 @@ export const MenuGeneral = () => {
 
   return (
     <Menu
+      mode="inline"
+      defaultSelectedKeys={[menu]}
+      selectedKeys={[menu]}
+      defaultOpenKeys={["dashboard"]}
+      onClick={({ key }) => {
+        setMenu(key);
+        navigate(`/panel/${key}`)
+      }}
+      items={generalItems}
+    />
   );
 };

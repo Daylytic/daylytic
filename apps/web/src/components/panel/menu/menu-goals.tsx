@@ -1,17 +1,21 @@
-import { Card, Checkbox, List, Menu } from "antd";
+import { List } from "antd";
 import { useGoals } from "../use-goals";
 import { useCookies } from "react-cookie";
 import { MenuGoalsCard } from "./menu-goals-card";
 import Title from "antd/es/typography/Title";
 import { useMenuController } from "providers/menu-controller";
 
+import styles from "./menu.module.css";
+import clsx from "clsx";
+import { usePanel } from "../use-panel";
+import { useNavigate } from "react-router";
+
 export const MenuGoals = () => {
-  const { setMenu, menu } = useMenuController();
+  const navigate = useNavigate();
+  const {menu, setMenu} = useMenuController();
 
   const [cookies, _] = useCookies(["token"]);
   const { goals } = useGoals(cookies.token);
-
-  console.log(goals);
 
   return (
     <>
@@ -19,23 +23,18 @@ export const MenuGoals = () => {
       <List
         itemLayout="vertical"
         dataSource={goals}
-        style={{
-          overflowY: "auto",
-          height: "100%",
-          width: "100%",
-          position: "relative",
-        }}
+        id={styles.goals}
+        className={clsx("css-var-r1", "ant-menu-css-var")}
         renderItem={(item, index) => {
-          const itemKey = `goalsCard-${index}`;
-
           return (
             <MenuGoalsCard
-              selected={menu === itemKey}
-              id={itemKey}
+              selected={menu === item.id}
+              id={item.id}
               title={item.title}
               description={item.description}
               onClick={(key) => {
                 setMenu(key);
+                navigate(`/panel/goals/${key}`)
               }}
             />
           );
