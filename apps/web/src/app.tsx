@@ -34,6 +34,10 @@ export const App = () => (
           activeBarBorderWidth: 0,
           itemMarginInline: 0,
         },
+        List: {
+          metaMarginBottom: 0,
+          itemPadding: "4px",
+        }
       },
     }}
   >
