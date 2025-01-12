@@ -46,11 +46,12 @@ export const App = () => (
       <Routes>
         <Route index element={<Home />} />
         <Route
-          path="/panel"
+          path="/panel/*"
           element={
-            <PrivateRoute>
-              <Panel />
-            </PrivateRoute>
+            // <PrivateRoute>
+            //   <Panel />
+            // </PrivateRoute>
+            <Panel />
           }
         />
       </Routes>
