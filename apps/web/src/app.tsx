@@ -34,6 +34,10 @@ export const App = () => (
           activeBarBorderWidth: 0,
           itemMarginInline: 0,
         },
+        List: {
+          metaMarginBottom: 0,
+          itemPadding: "4px",
+        }
       },
     }}
   >
@@ -42,11 +46,12 @@ export const App = () => (
       <Routes>
         <Route index element={<Home />} />
         <Route
-          path="/panel"
+          path="/panel/*"
           element={
-            <PrivateRoute>
-              <Panel />
-            </PrivateRoute>
+            // <PrivateRoute>
+            //   <Panel />
+            // </PrivateRoute>
+            <Panel />
           }
         />
       </Routes>

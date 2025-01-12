@@ -1,5 +1,6 @@
 import React from "react";
-import { createContext, useContext, useState } from "react";
+import { useContext, useState } from "react";
+import { MENU_KEYS } from "utils/menu-items";
 
 interface MenuControllerContextType {
   menu: string;
@@ -11,19 +12,21 @@ const MenuControllerContext = React.createContext<
 >(undefined);
 
 export const MenuControllerProvider = ({ children }) => {
-  const [menu, setMenu] = useState<string>("dashboard");
+  const [menu, setMenu] = useState<string>(MENU_KEYS.DASHBOARD);
 
   return (
-    <MenuControllerContext.Provider
-      value={{ menu, setMenu }}
-    ></MenuControllerContext.Provider>
+    <MenuControllerContext.Provider value={{ menu, setMenu }}>
+      {children}
+    </MenuControllerContext.Provider>
   );
 };
 
 export const useMenuController = () => {
   const context = useContext(MenuControllerContext);
   if (!context) {
-    throw new Error("useMenuController must be used within a MenuControllerContext");
+    throw new Error(
+      "useMenuController must be used within a MenuControllerContext"
+    );
   }
   return context;
-}
+};

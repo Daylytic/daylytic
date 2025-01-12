@@ -85,3 +85,9 @@ section {
 .ant-anchor-wrapper-horizontal::before {
     border-bottom: 0px !important;
 }
+
+.ant-layout-sider-children {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

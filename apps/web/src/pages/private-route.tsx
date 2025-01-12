@@ -5,7 +5,7 @@ interface PrivateRouteProps {
     children: React.ReactNode;
 }
 
-export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+export const PrivateRoute = async ({ children }: PrivateRouteProps) => {
   const user = useUser();
 
   return user.profile ? (
