@@ -8,6 +8,8 @@ import { goalSchemas } from './src/modules/goals/goals.schema.js';
 import { projectsSchemas } from './src/modules/projects/projects.schema.js';
 import { goalsHandler } from './src/modules/goals/goals.routes.js';
 import { projectsHandler } from './src/modules/projects/projects.routes.js';
+import { routineHandler } from './src/modules/routine/routine.routes.js';
+import { routineSchemas } from './src/modules/routine/index.js';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -20,7 +22,7 @@ const server = Fastify({ logger: true })
 
 const main = async () => {
 
-  for (const schema of [...userSchemas, ...goalSchemas, ...projectsSchemas]) {
+  for (const schema of [...userSchemas, ...goalSchemas, ...projectsSchemas, ...routineSchemas]) {
     server.addSchema(schema);
   }
 
@@ -51,7 +53,8 @@ const main = async () => {
       tags: [
         { name: 'auth', description: 'Authentication related end-points' },
         { name: 'goals', description: 'Goals related end-points' },
-        { name: 'projects', description: 'Projects related end-points' }
+        { name: 'projects', description: 'Projects related end-points' },
+        { name: 'routine', description: 'Routine related end-points' },
       ],
       components: {
         securitySchemes: {
@@ -84,7 +87,7 @@ const main = async () => {
   server.register(authHandler, { prefix: "/oauth2" });
   server.register(goalsHandler, { prefix: "/goals" });
   server.register(projectsHandler, { prefix: "/projects" });
-
+  server.register(routineHandler, {prefix: "/routine"});
   try {
     await server.listen({ port: 8084 })
     console.log(`Server listening at https://localhost:8084`)
