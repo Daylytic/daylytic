@@ -6,6 +6,7 @@ import {
   CalendarOutlined,
 } from "@ant-design/icons";
 import { Badge } from "antd";
+import { Routine } from "components/panel/action/routine/routine";
 import { ContentGoals } from "components/panel/content/content-goals";
 import { ContentRoutine } from "components/panel/content/routine/routine";
 import { MenuGeneralItem } from "components/panel/menu/menu-general-item";
@@ -29,6 +30,14 @@ export const ContentMap = {
   [MENU_KEYS.UPCOMING]: null,
   [MENU_KEYS.CALENDAR]: null,
   [MENU_KEYS.GOALS]: ContentGoals,
+};
+
+export const ActionMap = {
+  [MENU_KEYS.DASHBOARD]: null,
+  [MENU_KEYS.ROUTINE]: Routine,
+  [MENU_KEYS.UPCOMING]: null,
+  [MENU_KEYS.CALENDAR]: null,
+  [MENU_KEYS.GOALS]: null,
 };
 
 export const getGeneralMenuItems = () => [
@@ -56,7 +65,7 @@ export const getGeneralMenuItems = () => [
     icon: <ForwardOutlined />,
   },
   {
-    key:MENU_KEYS.CALENDAR,
+    key: MENU_KEYS.CALENDAR,
     label: <MenuGeneralItem text="Calendar" />,
     icon: <CalendarOutlined />,
   },
