@@ -14,18 +14,10 @@ export interface Task {
   tags: string[];
 }
 
-const generateTasks = (numberOfTasks: number): Task[] => {
-  return Array.from({ length: numberOfTasks }, () => ({
-    title: faker.lorem.words(5),
-    description: faker.lorem.sentence({ min: 5, max: 15 }),
-    tags: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () =>
-      faker.lorem.word()
-    ),
-  }));
-};
+
 
 export const ContentRoutine = () => {
-  const tasks = generateTasks(7);
+  const tasks = generateTasks();
 
   return (
     <Content id={styles.content}>
