@@ -5,10 +5,13 @@ import { faker } from "@faker-js/faker";
 
 import styles from "./routine.module.css";
 import { RoutineCard } from "./routine-card";
+import clsx from "clsx";
+import { generateTasks } from "utils/utils";
 
 const { Title } = Typography;
 
 export interface Task {
+  id: string;
   title: string;
   description: string;
   tags: string[];
@@ -24,6 +27,7 @@ export const ContentRoutine = () => {
       <Title level={1}>Routine</Title>
       <Input
         size="large"
+        className={clsx(styles.input, "ant-list")}
         prefix={<PlusOutlined />}
         placeholder="Add new task"
       />
