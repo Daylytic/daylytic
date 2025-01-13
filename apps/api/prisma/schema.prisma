@@ -14,21 +14,22 @@ datasource db {
 }
 
 model User {
-  id         String   @unique // Unique ID for the user
-  email      String   @unique // Email must be unique
+  id         String      @unique // Unique ID for the user
+  email      String      @unique // Email must be unique
   name       String
   picture    String
-  createdAt  DateTime @default(now()) // Timestamp of account creation
-  lastSeenAt DateTime @default(now()) // Last login time
+  createdAt  DateTime    @default(now()) // Timestamp of account creation
+  lastSeenAt DateTime    @default(now()) // Last login time
   goals      Goal[] // One user can have multiple goals
   sessions   Session[]
+  dailyTasks DailyTask[]
 }
 
 model Session {
-  token       String   @unique
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  validUntil  DateTime @default(dbgenerated("now() + interval '7 days'"))
+  token      String   @unique
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  validUntil DateTime @default(dbgenerated("now() + interval '7 days'"))
 }
 
 model Goal {
@@ -75,4 +76,12 @@ model Task {
   updatedAt   DateTime @updatedAt // Auto-updated when modified
   todoListId  String // Relation field to ToDoList
   todoList    ToDoList @relation(fields: [todoListId], references: [id])
+}
+
+model DailyTask {
+  id          String  @id @default(cuid()) // Unique ID for the task
+  title       String // Title of the task
+  isCompleted Boolean @default(false)
+  userId      String // Relation field to ToDoList
+  user        User    @relation(fields: [userId], references: [id])
 }
