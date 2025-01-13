@@ -23,13 +23,13 @@ export const CONTENT_KEYS = {
   GOAL: "goal",
 };
 
-export const ComponentMap = {
-    [MENU_KEYS.DASHBOARD]: null,
-    [MENU_KEYS.ROUTINE]: ContentRoutine,
-    [MENU_KEYS.UPCOMING]: null,
-    [MENU_KEYS.CALENDAR]: null,
-    [MENU_KEYS.GOALS]: ContentGoals,
-  };
+export const ContentMap = {
+  [MENU_KEYS.DASHBOARD]: null,
+  [MENU_KEYS.ROUTINE]: ContentRoutine,
+  [MENU_KEYS.UPCOMING]: null,
+  [MENU_KEYS.CALENDAR]: null,
+  [MENU_KEYS.GOALS]: ContentGoals,
+};
 
 export const getGeneralMenuItems = () => [
   {
