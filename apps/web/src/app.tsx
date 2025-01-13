@@ -36,7 +36,7 @@ export const App = () => (
         },
         List: {
           metaMarginBottom: 0,
-          itemPadding: "4px",
+          itemPadding: "4px 0",
         }
       },
     }}

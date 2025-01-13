@@ -15,6 +15,10 @@
     width: 100%;
 }
 
+.input {
+    margin: var(--ant-list-item-padding);
+}
+
 .checkbox {
     padding-block: var(--ant-padding-xxs);
 }
