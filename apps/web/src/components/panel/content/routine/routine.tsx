@@ -17,8 +17,6 @@ export interface Task {
   tags: string[];
 }
 
-
-
 export const ContentRoutine = () => {
   const tasks = generateTasks();
 
