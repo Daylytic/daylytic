@@ -96,6 +96,7 @@ model Task {
 model DailyTask {
   id          String  @id @default(cuid()) // Unique ID for the task
   title       String // Title of the task
+  description String?
   isCompleted Boolean @default(false)
   userId      String // Relation field to ToDoList
   user        User    @relation(fields: [userId], references: [id])
