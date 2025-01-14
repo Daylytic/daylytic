@@ -8,7 +8,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
     method: "POST",
-    preHandler: authController.authenticate,
+    preHandler: [authController.authenticate, routineController.initializeDailyTasks],
     handler: routineController.createDailyTask,
     schema: {
       tags: ["routine"],
@@ -25,7 +25,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
     method: "GET",
-    preHandler: authController.authenticate,
+    preHandler: [authController.authenticate, routineController.initializeDailyTasks],
     handler: routineController.getDailyTasks,
     schema: {
       tags: ["routine"],
@@ -40,7 +40,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
     method: "DELETE",
-    preHandler: authController.authenticate,
+    preHandler: [authController.authenticate, routineController.initializeDailyTasks],
     handler: routineController.deleteDailyTask,
     schema: {
       tags: ["routine"],
