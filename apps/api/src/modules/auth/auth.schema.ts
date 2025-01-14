@@ -1,5 +1,6 @@
 import { buildJsonSchemas } from "fastify-zod";
 import { z } from "zod";
+import { analyticsCore } from "../analytics/analytics.schema.js";
 
 const sessionCore = z.object({
     token: z.string(),
@@ -14,11 +15,12 @@ const userCore = z.object({
     picture: z.string(),
     createdAt: z.date(),
     lastSeenAt: z.date(),
-
+    timeZone: z.string(),
 })
 
 const createUserSchema = z.object({
-    token: z.string()
+    token: z.string(),
+    timeZone: z.string().optional(),
 })
 
 export const googleAccountCore = z.object({
@@ -29,6 +31,7 @@ export const googleAccountCore = z.object({
     }).email(),
     name: z.string(),
     picture: z.string(),
+    timeZone: z.string(),
 })
 
 const headersBearer = z.object({
@@ -37,7 +40,8 @@ const headersBearer = z.object({
 
 export type SessionCore = z.infer<typeof sessionCore>
 export type UserCore = z.infer<typeof userCore>
-export type CreateUserInput = z.infer<typeof googleAccountCore>;
+export type CreateGoogleUserInput = z.infer<typeof googleAccountCore>;
+export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 export const { schemas: userSchemas, $ref } = buildJsonSchemas({
     userCore,
