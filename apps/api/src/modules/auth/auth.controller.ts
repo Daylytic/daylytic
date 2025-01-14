@@ -1,15 +1,23 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { authService } from "./index.js";
+import { isValidTimeZone } from "../../utils/date.js";
+import { CreateUserInput } from "./auth.schema.js";
+import { analyticsService } from "../analytics/analytics.service.js";
 
 const login = async (req: FastifyRequest, rep: FastifyReply) => {
-    const { token } = req.body as { token: string }
+    const { token, timeZone } = req.body as CreateUserInput;
 
     try {
-        return (await authService.getAuthenticationProfile(token)).user;
+        const user = (await authService.getAuthenticationProfile(token)).user;
+        analyticsService.initializeAnalytics({userId: user.id})
+        return user;
     } catch (err) {
         try {
-            const { user, session } = await authService.createAuthenticationProfile(token);
-            return user;
+            if(isValidTimeZone(timeZone)) {
+                const { user } = await authService.createAuthenticationProfile(token, timeZone!);
+                analyticsService.initializeAnalytics({userId: user.id})
+                return user;
+            }
         } catch (err: any) {
             return rep.status(401).send({ error: err.message });
         }
@@ -32,7 +40,7 @@ const authenticate = async (req: FastifyRequest, rep: FastifyReply) => {
         const token = authHeader.split(" ")[1];
         const { user, session } = await authService.getAuthenticationProfile(token);
 
-        req.user = user;
+        req.user = await authService.updateLastSeen(user.id);
         req.session = session;
     } catch (error) {
         return rep.status(401).send({ error: "Authentication failed" });

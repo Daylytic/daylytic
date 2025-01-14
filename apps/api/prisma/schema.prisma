@@ -20,9 +20,25 @@ model User {
   picture    String
   createdAt  DateTime    @default(now()) // Timestamp of account creation
   lastSeenAt DateTime    @default(now()) // Last login time
+  timeZone   String
   goals      Goal[] // One user can have multiple goals
   sessions   Session[]
   dailyTasks DailyTask[]
+  analytics  Analytics?
+}
+
+model Analytics {
+  id          String       @id @default(cuid()) // Unique ID for the goal
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @unique
+  routineData RoutineData? @relation // Optional RoutineData link
+}
+
+model RoutineData {
+  id               String    @id @default(cuid())
+  analytics        Analytics @relation(fields: [analyticsId], references: [id])
+  analyticsId      String    @unique
+  lastRoutineReset DateTime  @default(now())
 }
 
 model Session {
@@ -81,6 +97,7 @@ model Task {
 model DailyTask {
   id          String  @id @default(cuid()) // Unique ID for the task
   title       String // Title of the task
+  description String?
   isCompleted Boolean @default(false)
   userId      String // Relation field to ToDoList
   user        User    @relation(fields: [userId], references: [id])

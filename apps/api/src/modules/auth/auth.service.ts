@@ -1,5 +1,6 @@
+import { convertToTimeZoneISO8601 } from "../../utils/date.js";
 import { prisma } from "../../utils/prisma.js"
-import { $ref, CreateUserInput, googleAccountCore, SessionCore, UserCore } from "./auth.schema.js";
+import { $ref, CreateGoogleUserInput, googleAccountCore, SessionCore, UserCore } from "./auth.schema.js";
 
 const getAuthenticationProfile = async (token: string): Promise<{ user: UserCore; session: SessionCore }> => {
     const session = await prisma.session.findFirstOrThrow({ where: { token: token } });
@@ -7,17 +8,16 @@ const getAuthenticationProfile = async (token: string): Promise<{ user: UserCore
     return { user: await getUser(session.userId), session: session };
 }
 
-const createAuthenticationProfile = async (token: string): Promise<{ user: UserCore; session: SessionCore }> => {
+const createAuthenticationProfile = async (token: string, timeZone: string): Promise<{ user: UserCore; session: SessionCore }> => {
     /* If session doesn't exist in DB, fetch google info about token*/
     const rawGoogleAccount = await fetchGoogleAccountInfo(token);
-    const googleAccount = googleAccountCore.parse(rawGoogleAccount);
+    const googleAccount = googleAccountCore.parse({...rawGoogleAccount, timeZone: timeZone});
     
     const session = { token: token, userId: googleAccount.id };
 
     /* Create User if doesnt exist, else get existing user data from google account id */
     const userExists = await prisma.user.findFirst({ where: { id: googleAccount.id } });
-    console.log(googleAccount);
-    const user = userExists || await createUser(googleAccount);
+    const user = userExists || await createUser({...googleAccount, timeZone: timeZone});
 
     /* Create Session attached to the userId */
     createSession(session);
@@ -33,7 +33,7 @@ const deleteSession = async (token: string) => {
     })
 }
 
-const fetchGoogleAccountInfo = async (token: string): Promise<CreateUserInput> => {
+const fetchGoogleAccountInfo = async (token: string): Promise<CreateGoogleUserInput> => {
     const userDetails = await fetch(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
         {
@@ -52,7 +52,7 @@ const fetchGoogleAccountInfo = async (token: string): Promise<CreateUserInput> =
 }
 
 // Create a new user in the database
-const createUser = async (input: CreateUserInput): Promise<UserCore> => {
+const createUser = async (input: CreateGoogleUserInput): Promise<UserCore> => {
     return await prisma.user.create({ data: input });
 };
 
@@ -71,9 +71,19 @@ const getUser = async (userId: string): Promise<UserCore> => {
     }
 }
 
+const updateLastSeen = async (userId: string) : Promise<UserCore> => {
+    const now = convertToTimeZoneISO8601();
+    return await prisma.user.update({where: {
+        id: userId,
+    }, data: {
+        lastSeenAt: now
+    }});
+}
+
 export const authService = {
     createUser,
     createAuthenticationProfile,
     getAuthenticationProfile,
-    deleteSession
+    deleteSession,
+    updateLastSeen
 };
