@@ -23,6 +23,21 @@ model User {
   goals      Goal[] // One user can have multiple goals
   sessions   Session[]
   dailyTasks DailyTask[]
+  analytics  Analytics?
+}
+
+model Analytics {
+  id          String       @id @default(cuid()) // Unique ID for the goal
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @unique
+  routineData RoutineData? @relation // Optional RoutineData link
+}
+
+model RoutineData {
+  id               String    @id @default(cuid())
+  analytics        Analytics @relation(fields: [analyticsId], references: [id])
+  analyticsId      String    @unique
+  lastRoutineReset DateTime  @default(now())
 }
 
 model Session {
