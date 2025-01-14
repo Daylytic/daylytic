@@ -50,7 +50,7 @@ export const RoutineCard = (item: Task) => {
                   whiteSpace: "normal",
                 }}
               >
-                {item.description}
+                Example description
               </p>
               <Flex gap="4px 0" wrap style={{ width: "100%" }}>
                 <Tag color="magenta">magenta</Tag>
