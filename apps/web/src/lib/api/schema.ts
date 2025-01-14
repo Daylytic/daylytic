@@ -201,6 +201,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/routine/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-3"]["fetchDailyTasksResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-3"]["createDailyTaskInput"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-3"]["createDailyTaskResponse"];
+                    };
+                };
+            };
+        };
+        delete: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-3"]["deleteDailyTaskInput"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -261,6 +346,22 @@ export interface components {
             projectsBaseQuery: {
                 goalId: string;
                 projectId: string;
+            };
+        };
+        /** RoutineSchema */
+        "def-3": {
+            createDailyTaskInput: {
+                title: string;
+            };
+            createDailyTaskResponse: {
+                id: string;
+                title: string;
+                isCompleted: boolean;
+                userId: string;
+            };
+            fetchDailyTasksResponse: components["schemas"]["def-3"]["createDailyTaskResponse"][];
+            deleteDailyTaskInput: {
+                id: string;
             };
         };
     };
