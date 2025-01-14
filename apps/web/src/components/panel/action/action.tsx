@@ -1,7 +1,7 @@
 import Sider from "antd/es/layout/Sider";
 import styles from "./action.module.css";
 import { useMenuController } from "providers/menu-controller";
-import { usePanel } from "../use-panel";
+import { usePanel } from "../../../hooks/use-panel";
 import { ActionMap } from "utils/menu-items";
 
 export interface ActionDataProps {
