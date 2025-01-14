@@ -20,6 +20,7 @@ model User {
   picture    String
   createdAt  DateTime    @default(now()) // Timestamp of account creation
   lastSeenAt DateTime    @default(now()) // Last login time
+  timeZone   String
   goals      Goal[] // One user can have multiple goals
   sessions   Session[]
   dailyTasks DailyTask[]
