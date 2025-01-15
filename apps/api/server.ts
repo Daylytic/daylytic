@@ -3,7 +3,7 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import postgres from '@fastify/postgres'; // Use import instead of requird
 import { authHandler } from './src/modules/auth/index.js'; // Ensure the extension is included
-import { SessionCore, UserCore, userSchemas } from './src/modules/auth/auth.schema.js';
+import { Session, User, userSchemas } from './src/modules/auth/auth.schema.js';
 import { goalSchemas } from './src/modules/goals/goals.schema.js';
 import { projectsSchemas } from './src/modules/projects/projects.schema.js';
 import { goalsHandler } from './src/modules/goals/goals.routes.js';
@@ -13,8 +13,8 @@ import { routineSchemas } from './src/modules/routine/index.js';
 
 declare module 'fastify' {
   interface FastifyRequest {
-    session: SessionCore | undefined,
-    user: UserCore | undefined,
+    session: Session | undefined,
+    user: User | undefined,
   }
 }
 
