@@ -16,7 +16,9 @@ const resetDailyTasks = async (userId: string) => {
         isCompleted: false,
       },
     });
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const createDailyTask = async (
@@ -73,6 +75,7 @@ const updateDailyTask = async (userId: string, data: UpdateDailyTaskInput) => {
 }
 
 export const routineService = {
+  resetDailyTasks,
   createDailyTask,
   getDailyTasks,
   deleteDailyTask,
