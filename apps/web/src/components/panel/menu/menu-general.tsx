@@ -5,18 +5,19 @@ import { usePanel } from "hooks/use-panel";
 
 export const MenuGeneral = () => {
   const navigate = useNavigate();
-  const {menu, setMenu} = useMenuController();
+  const {getMenu} = usePanel();
+
+  const currentMenu = getMenu();
 
   const generalItems = getGeneralMenuItems();
 
   return (
     <Menu
       mode="inline"
-      defaultSelectedKeys={[menu]}
-      selectedKeys={[menu]}
-      defaultOpenKeys={["dashboard"]}
+      defaultSelectedKeys={[currentMenu]}
+      selectedKeys={[currentMenu]}
+      defaultOpenKeys={[currentMenu]}
       onClick={({ key }) => {
-        setMenu(key);
         navigate(`/panel/${key}`)
       }}
       items={generalItems}

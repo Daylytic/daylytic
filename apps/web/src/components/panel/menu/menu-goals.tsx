@@ -14,6 +14,7 @@ export const MenuGoals = () => {
 
   const [cookies, _] = useCookies(["token"]);
   const { goals } = useGoals(cookies.token);
+  const {getContent} = usePanel();
 
   return (
     <>
@@ -26,12 +27,11 @@ export const MenuGoals = () => {
         renderItem={(item, index) => {
           return (
             <MenuGoalsCard
-              selected={menu === item.id}
+              selected={getContent() === item.id}
               id={item.id}
               title={item.title}
               description={item.description}
               onClick={(key) => {
-                setMenu(key);
                 navigate(`/panel/goals/${key}`)
               }}
             />
