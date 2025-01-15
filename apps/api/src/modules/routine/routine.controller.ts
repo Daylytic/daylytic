@@ -3,6 +3,7 @@ import { routineService } from "./routine.service.js";
 import {
   CreateDailyTaskInput,
   DeleteDailyTaskInput,
+  UpdateDailyTaskInput,
 } from "./routine.schema.js";
 import { RequestError } from "../../utils/error.js";
 import { analyticsService } from "../analytics/analytics.service.js";
@@ -17,8 +18,8 @@ const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
       userId: userId,
     });
   } catch (err) {
-    if (err instanceof RequestError){
-        rep.status(err.status).send({ error: err.message });
+    if (err instanceof RequestError) {
+      rep.status(err.status).send({ error: err.message });
     }
 
     throw err;
@@ -30,8 +31,21 @@ const getDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     return await routineService.getDailyTasks(userId);
   } catch (err) {
-    if (err instanceof RequestError){
-        rep.status(err.status).send({ error: err.message });
+    if (err instanceof RequestError) {
+      rep.status(err.status).send({ error: err.message });
+    }
+  }
+};
+
+const updateDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
+  const dailyTask = req.body as UpdateDailyTaskInput;
+  const userId = req.user!.id;
+
+  try {
+    return await routineService.updateDailyTask(userId, dailyTask);
+  } catch (err: any) {
+    if (err instanceof RequestError) {
+      rep.status(err.status).send({ error: err.message });
     }
   }
 };
@@ -76,6 +90,6 @@ export const routineController = {
   createDailyTask,
   getDailyTasks,
   deleteDailyTask,
-  getTaskDetails,
   initializeDailyTasks,
+  updateDailyTask,
 };

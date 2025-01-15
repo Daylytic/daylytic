@@ -1,3 +1,4 @@
+import { convertToTimeZoneISO8601 } from "../../../utils/date.js";
 import { prisma } from "../../../utils/prisma.js";
 import { RoutineDataCore, RoutineDataInput } from "./routine.schema.js";
 
@@ -19,7 +20,16 @@ const getRoutineData = async (data: RoutineDataInput): Promise<RoutineDataCore> 
   }
 };
 
+const updateLastResetDate = async (data: RoutineDataInput): Promise<RoutineDataCore> => {
+  const now = convertToTimeZoneISO8601();
+  return await prisma.routineData.update({
+    where: { analyticsId: data.analyticsId },
+    data: { lastRoutineReset: now }
+  });
+}
+
 export const routineDataService = {
   initializeRoutineData,
   getRoutineData,
+  updateLastResetDate,
 };

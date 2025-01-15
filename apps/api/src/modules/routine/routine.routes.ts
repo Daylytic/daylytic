@@ -48,4 +48,17 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       body: $ref("deleteDailyTaskInput"),
     },
   });
+
+  /* Update Task */
+  server.route({
+    url: "/",
+    method: "PUT",
+    preHandler: [authController.authenticate, routineController.initializeDailyTasks],
+    handler: routineController.updateDailyTask,
+    schema: {
+      tags: ["routine"],
+      headers: $refAuth("headersBearer"),
+      body: $ref("updateDailyTaskInput"),
+    },
+  });
 };
