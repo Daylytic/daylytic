@@ -1,4 +1,4 @@
-import { Input, List, message, theme, Typography } from "antd";
+import { Input, List, message, Spin, theme, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { PlusOutlined } from "@ant-design/icons";
 import { faker } from "@faker-js/faker";
@@ -6,30 +6,35 @@ import { faker } from "@faker-js/faker";
 import styles from "./routine.module.css";
 import { RoutineCard } from "./routine-card";
 import clsx from "clsx";
-import { useDailyTasks } from "hooks/use-daily-tasks";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
+import { useDailyTasks } from "providers/daily-tasks";
 
 const { Title } = Typography;
 
 export interface Task {
   id: string;
   title: string;
+  description: string;
+  isCompleted: boolean;
 }
 
 export const ContentRoutine = () => {
   const [newTask, setNewTask] = useState("");
-  const [cookies] = useCookies(["token"]);
-  const { tasks, createTask } = useDailyTasks(cookies.token);
+  const [loading, setLoading] = useState(false); // Local loading state
+  const { tasks, createTask } = useDailyTasks();
 
   const handleCreateTask = async () => {
     if (newTask.trim()) {
+      setLoading(true); // Start loading
       try {
         await createTask(newTask.trim());
         setNewTask(""); // Clear input after success
         message.success("Task added successfully");
       } catch {
         message.error("Failed to add task. Please try again.");
+      } finally {
+        setLoading(false); // Stop loading
       }
     }
   };
@@ -50,6 +55,8 @@ export const ContentRoutine = () => {
         onChange={handleInputChange}
         onPressEnter={handleCreateTask}
         aria-label="New task input"
+        disabled={loading} // Disable input while loading
+        suffix={loading && <Spin size="small" />} // Show spinner when loading
       />
       <List
         itemLayout="vertical"
