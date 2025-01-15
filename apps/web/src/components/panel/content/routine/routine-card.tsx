@@ -2,11 +2,13 @@ import { List, Checkbox, Button, Flex, Tag, Typography, theme } from "antd";
 import { Task } from "./routine";
 import styles from "./routine.module.css";
 import { useNavigate } from "react-router";
+import { useDailyTasks } from "providers/daily-tasks";
 
 const { Title } = Typography;
 
 export const RoutineCard = (item: Task) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { updateTask } = useDailyTasks();
 
   return (
     <List.Item actions={[]} style={{ position: "relative" }}>
@@ -14,14 +16,18 @@ export const RoutineCard = (item: Task) => {
         avatar={
           <Checkbox
             className={styles.checkbox}
-            onChange={console.log}
+            defaultChecked={item.isCompleted}
+            onChange={async () => {
+              const updatedItem = { ...item, isCompleted: !item.isCompleted };
+              await updateTask(updatedItem);
+            }}
           ></Checkbox>
         }
         description={
           <Button
             type="text"
             onClick={() => {
-                navigate(`/panel/routine/${item.id}`)
+              navigate(`/panel/routine/${item.id}`);
               // setAction(CONTENT_KEYS.ROUTINE);
             }}
             className={styles.button}
@@ -50,7 +56,7 @@ export const RoutineCard = (item: Task) => {
                   whiteSpace: "normal",
                 }}
               >
-                Example description
+                {item.description}
               </p>
               <Flex gap="4px 0" wrap style={{ width: "100%" }}>
                 <Tag color="magenta">magenta</Tag>
