@@ -6,6 +6,7 @@ import { z } from "zod";
 const dailyTaskCore = z.object({
     id: z.string(),
     title: z.string(),
+    description: z.string().nullable(),
     isCompleted: z.boolean(),
     userId: z.string(),
 });
