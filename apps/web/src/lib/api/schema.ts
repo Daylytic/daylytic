@@ -230,7 +230,30 @@ export interface paths {
                 };
             };
         };
-        put?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-3"]["updateDailyTaskInput"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         post: {
             parameters: {
                 query?: never;
@@ -301,9 +324,11 @@ export interface components {
                 createdAt: string;
                 /** Format: date-time */
                 lastSeenAt: string;
+                timeZone: string;
             };
             createUserSchema: {
                 token: string;
+                timeZone?: string;
             };
             googleAccountCore: {
                 id: string;
@@ -311,6 +336,7 @@ export interface components {
                 email: string;
                 name: string;
                 picture: string;
+                timeZone: string;
             };
             headersBearer: {
                 authorization: string;
@@ -356,12 +382,19 @@ export interface components {
             createDailyTaskResponse: {
                 id: string;
                 title: string;
+                description: null | string;
                 isCompleted: boolean;
                 userId: string;
             };
             fetchDailyTasksResponse: components["schemas"]["def-3"]["createDailyTaskResponse"][];
             deleteDailyTaskInput: {
                 id: string;
+            };
+            updateDailyTaskInput: {
+                id: string;
+                title: string;
+                description: string | null;
+                isCompleted: boolean;
             };
         };
     };

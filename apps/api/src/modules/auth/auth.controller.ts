@@ -12,6 +12,7 @@ const login = async (req: FastifyRequest, rep: FastifyReply) => {
         analyticsService.initializeAnalytics({userId: user.id})
         return user;
     } catch (err) {
+        console.error(err);
         try {
             if(isValidTimeZone(timeZone)) {
                 const { user } = await authService.createAuthenticationProfile(token, timeZone!);
@@ -39,6 +40,7 @@ const authenticate = async (req: FastifyRequest, rep: FastifyReply) => {
 
         const token = authHeader.split(" ")[1];
         const { user, session } = await authService.getAuthenticationProfile(token);
+        analyticsService.initializeAnalytics({userId: user.id})
 
         req.user = await authService.updateLastSeen(user.id);
         req.session = session;

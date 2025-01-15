@@ -9,6 +9,7 @@ export const generateTasks = (): Task[] => {
             id: faker.number.int(100000000).toString(),
             title: faker.lorem.words(5),
             description: faker.lorem.sentence({ min: 5, max: 15 }),
+            isCompleted: false,
             tags: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () =>
                 faker.lorem.word()
             ),

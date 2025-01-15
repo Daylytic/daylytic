@@ -4,10 +4,14 @@ import { AnalyticsCore, AnalyticsInput } from "./analytics.schema.js";
 import { routineDataService } from "./routine/routine.service.js";
 
 const initializeAnalytics = async (data: AnalyticsInput) => {
-    const analytics = await prisma.analytics.create({data: data});
-    
-    routineDataService.initializeRoutineData({analyticsId: analytics.id})
-}
+    const analytics = await prisma.analytics.upsert({
+        where: { userId: data.userId },
+        update: {},
+        create: data,
+    });
+
+    await routineDataService.initializeRoutineData({ analyticsId: analytics.id });
+};
 
 const getAnalytics = async (data: AnalyticsInput): Promise<AnalyticsCore> => {
     try {

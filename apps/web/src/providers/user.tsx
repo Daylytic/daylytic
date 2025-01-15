@@ -36,6 +36,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (cookies.token && !profile) {
         // Check local storage for cached profile picture
         const cachedPicture = localStorage.getItem("profile_picture");
+        const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
 
         try {
           const res = await fetch("http://localhost:8084/oauth2/google", {
@@ -45,7 +46,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
               Authorization: `Bearer ${cookies.token}`,
             },
             method: "POST",
-            body: JSON.stringify({ token: cookies.token }),
+            body: JSON.stringify({ token: cookies.token, timeZone: timeZone }),
           });
 
           if (res.ok) {

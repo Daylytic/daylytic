@@ -2,8 +2,8 @@ import { RequestError } from "../../utils/error.js";
 import { prisma } from "../../utils/prisma.js";
 import {
   CreateDailyTaskDetailed,
-  CreateDailyTaskInput,
   DailyTaskCore,
+  UpdateDailyTaskInput,
 } from "./routine.schema.js";
 
 const resetDailyTasks = async (userId: string) => {
@@ -16,7 +16,9 @@ const resetDailyTasks = async (userId: string) => {
         isCompleted: false,
       },
     });
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const createDailyTask = async (
@@ -54,8 +56,28 @@ const deleteDailyTask = async (
   }
 };
 
+const updateDailyTask = async (userId: string, data: UpdateDailyTaskInput) => {
+  try {
+    await prisma.dailyTask.update({
+      where: {
+        id: data.id,
+        userId: userId,
+      },
+      data: {
+        title: data.title,
+        description: data.description,
+        isCompleted: data.isCompleted,
+      }
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while deleting daily task", 400);
+  }
+}
+
 export const routineService = {
+  resetDailyTasks,
   createDailyTask,
   getDailyTasks,
   deleteDailyTask,
+  updateDailyTask,
 };
