@@ -11,7 +11,6 @@ import {
   import { Content } from "antd/es/layout/layout";
   import { PlusOutlined } from "@ant-design/icons";
   import { faker } from "@faker-js/faker";
-  import { useMenuController } from "providers/menu-controller";
   import { CONTENT_KEYS } from "utils/menu-items";
   
   const { Title } = Typography;
