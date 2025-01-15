@@ -33,9 +33,19 @@ const deleteDailyTaskInput = z.object({
     id: z.string(),
 });
 
+/* UPDATE DAILY TASK */
+
+const updateDailyTaskInput = z.object({
+    id: z.string(),
+    title: z.string(),
+    description: z.string().nullable(),
+    isCompleted: z.boolean(),
+});
+
 export type DailyTaskCore = z.infer<typeof dailyTaskCore>
 
 export type DeleteDailyTaskInput = z.infer<typeof deleteDailyTaskInput>
+export type UpdateDailyTaskInput = z.infer<typeof updateDailyTaskInput>
 export type CreateDailyTaskInput = z.infer<typeof createDailyTaskInput>
 export type CreateDailyTaskDetailed = z.infer<typeof createDailyTaskDetailed>
 
@@ -44,4 +54,5 @@ export const {schemas: routineSchemas, $ref} = buildJsonSchemas({
     createDailyTaskResponse,
     fetchDailyTasksResponse,
     deleteDailyTaskInput,
+    updateDailyTaskInput,
 }, {$id: "RoutineSchema"})
