@@ -23,7 +23,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-0"]["createUserSchema"];
+                    "application/json": components["schemas"]["def-0"]["CreateUserInputSchema"];
                 };
             };
             responses: {
@@ -33,7 +33,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-0"]["userCore"];
+                        "application/json": components["schemas"]["def-0"]["UserSchema"];
                     };
                 };
             };
@@ -225,7 +225,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-3"]["fetchDailyTasksResponse"];
+                        "application/json": components["schemas"]["def-3"]["FetchDailyTasksResponseSchema"];
                     };
                 };
             };
@@ -241,7 +241,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["updateDailyTaskInput"];
+                    "application/json": components["schemas"]["def-3"]["UpdateDailyTaskInputSchema"];
                 };
             };
             responses: {
@@ -265,7 +265,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["createDailyTaskInput"];
+                    "application/json": components["schemas"]["def-3"]["CreateDailyTaskInputSchema"];
                 };
             };
             responses: {
@@ -275,7 +275,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-3"]["createDailyTaskResponse"];
+                        "application/json": components["schemas"]["def-3"]["CreateDailyTaskResponseSchema"];
                     };
                 };
             };
@@ -291,7 +291,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["deleteDailyTaskInput"];
+                    "application/json": components["schemas"]["def-3"]["DeleteDailyTaskInputSchema"];
                 };
             };
             responses: {
@@ -315,7 +315,7 @@ export interface components {
     schemas: {
         /** UsersSchema */
         "def-0": {
-            userCore: {
+            UserSchema: {
                 id: string;
                 name: string;
                 email: string;
@@ -326,11 +326,11 @@ export interface components {
                 lastSeenAt: string;
                 timeZone: string;
             };
-            createUserSchema: {
+            CreateUserInputSchema: {
                 token: string;
                 timeZone?: string;
             };
-            googleAccountCore: {
+            GoogleAccountSchema: {
                 id: string;
                 /** Format: email */
                 email: string;
@@ -338,7 +338,7 @@ export interface components {
                 picture: string;
                 timeZone: string;
             };
-            headersBearer: {
+            HeaderBearerSchema: {
                 authorization: string;
             };
         };
@@ -376,21 +376,21 @@ export interface components {
         };
         /** RoutineSchema */
         "def-3": {
-            createDailyTaskInput: {
+            CreateDailyTaskInputSchema: {
                 title: string;
             };
-            createDailyTaskResponse: {
+            CreateDailyTaskResponseSchema: {
                 id: string;
                 title: string;
                 description: null | string;
                 isCompleted: boolean;
                 userId: string;
             };
-            fetchDailyTasksResponse: components["schemas"]["def-3"]["createDailyTaskResponse"][];
-            deleteDailyTaskInput: {
+            FetchDailyTasksResponseSchema: components["schemas"]["def-3"]["CreateDailyTaskResponseSchema"][];
+            DeleteDailyTaskInputSchema: {
                 id: string;
             };
-            updateDailyTaskInput: {
+            UpdateDailyTaskInputSchema: {
                 id: string;
                 title: string;
                 description: string | null;

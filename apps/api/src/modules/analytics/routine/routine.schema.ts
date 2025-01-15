@@ -1,13 +1,16 @@
+import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
-const routineDataInput = z.object({
-    analyticsId: z.string(),
-});
-const routineDataCore = z.object({
-    id: z.string(),
-    analyticsId: z.string(),
+// Base
+const RoutineDataSchema = z.object({
+    id: IdSchema,
+    analyticsId: IdSchema,
     lastRoutineReset: z.date(),
 });
 
-export type RoutineDataCore = z.infer<typeof routineDataCore>
-export type RoutineDataInput = z.infer<typeof routineDataInput>;
+const RoutineDataInputSchema = RoutineDataSchema.pick({
+    analyticsId: true,
+});
+
+export type RoutineData = z.infer<typeof RoutineDataSchema>
+export type RoutineDataInput = z.infer<typeof RoutineDataInputSchema>;

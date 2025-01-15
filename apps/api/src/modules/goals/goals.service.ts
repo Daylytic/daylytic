@@ -1,5 +1,5 @@
 import { prisma } from "../../utils/prisma.js"
-import { UserCore } from "../auth/auth.schema.js"
+import { User } from "../auth/auth.schema.js"
 import { CreateGoalInput, GoalCore } from "./goals.schema.js";
 
 const getGoal = async (goalId: string): Promise<GoalCore> => {
@@ -12,7 +12,7 @@ const getGoal = async (goalId: string): Promise<GoalCore> => {
     }
 }
 
-const getGoals = async (user: UserCore): Promise<GoalCore[]> => {
+const getGoals = async (user: User): Promise<GoalCore[]> => {
     const goals = await prisma.goal.findMany({
         where: {
             userId: user.id

@@ -8,9 +8,9 @@ export const authHandler: FastifyPluginAsync = async (server, _) => {
         url: "/google", method: "POST", handler: authController.login, schema: {
             tags: ["auth"],
             description: "Creates an account with session in the db, and returns user object.",
-            body: $ref("createUserSchema"),
+            body: $ref("LoadUserInputSchema"),
             response: {
-                201: $ref("userCore")
+                201: $ref("UserSchema")
             }
         }
     });
@@ -19,7 +19,7 @@ export const authHandler: FastifyPluginAsync = async (server, _) => {
         url: "/google", method: "DELETE", preHandler: authController.authenticate, handler: authController.logout, schema: {
             tags: ["auth"],
             description: "Logs out session assosiated with the bearer",
-            headers: $ref("headersBearer"),
+            headers: $ref("HeaderBearerSchema"),
             response: {
                 204: {
                     description: "Succesfully logged out from the account",

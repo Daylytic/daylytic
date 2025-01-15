@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id         String      @unique // Unique ID for the user
+  id         String      @unique @default(cuid()) // Unique ID for the user
   email      String      @unique // Email must be unique
   name       String
   picture    String
