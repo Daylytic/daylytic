@@ -1,7 +1,7 @@
 import { Menu } from "antd";
 import { useNavigate } from "react-router";
 import { getGeneralMenuItems } from "utils/menu-items";
-import { useMenuController } from "providers/menu-controller";
+import { usePanel } from "hooks/use-panel";
 
 export const MenuGeneral = () => {
   const navigate = useNavigate();
