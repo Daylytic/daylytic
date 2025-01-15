@@ -1,51 +1,91 @@
 import { buildJsonSchemas } from "fastify-zod";
+import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
-import { analyticsCore } from "../analytics/analytics.schema.js";
 
-const sessionCore = z.object({
-    token: z.string(),
-    userId: z.string(),
-    validUntil: z.date().optional(),
+// Base
+
+const SessionSchema = z.object({
+  token: z.string(),
+  userId: IdSchema,
+  validUntil: z.date().optional(),
 });
 
-const userCore = z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string(),
-    picture: z.string(),
-    createdAt: z.date(),
-    lastSeenAt: z.date(),
-    timeZone: z.string(),
-})
+const UserSchema = z.object({
+  id: IdSchema,
+  name: z.string(),
+  email: z.string(),
+  picture: z.string(),
+  createdAt: z.date(),
+  lastSeenAt: z.date(),
+  timeZone: z.string(),
+});
 
-const createUserSchema = z.object({
+export const GoogleAccountSchema = z.object({
+  id: IdSchema,
+  email: z
+    .string({
+      required_error: "Email is required",
+      invalid_type_error: "Email must be a string",
+    })
+    .email(),
+  name: z.string(),
+  picture: z.string(),
+  timeZone: z.string(),
+});
+
+// Create
+
+const CreateUserInputSchema = z.object({
+  token: z.string(),
+  timeZone: z.string(),
+});
+
+const LoadUserInputSchema = z.object({
     token: z.string(),
     timeZone: z.string().optional(),
-})
+  });
 
-export const googleAccountCore = z.object({
-    id: z.string(),
-    email: z.string({
-        required_error: "Email is required",
-        invalid_type_error: "Email must be a string",
-    }).email(),
-    name: z.string(),
-    picture: z.string(),
-    timeZone: z.string(),
-})
+// Fetch
 
-const headersBearer = z.object({
-    authorization: z.string(),
-})
+const FetchAuthenticationProfileSchema = SessionSchema.pick({ token: true });
 
-export type SessionCore = z.infer<typeof sessionCore>
-export type UserCore = z.infer<typeof userCore>
-export type CreateGoogleUserInput = z.infer<typeof googleAccountCore>;
-export type CreateUserInput = z.infer<typeof createUserSchema>;
+const FetchGoogleAccountInfoSchema = SessionSchema.pick({token: true});
 
-export const { schemas: userSchemas, $ref } = buildJsonSchemas({
-    userCore,
-    createUserSchema,
-    googleAccountCore,
-    headersBearer,
-}, { $id: "UsersSchema" })
+const FetchUserSchema = UserSchema.pick({id: true});
+// Delete
+
+const DeleteSessionInputSchema = SessionSchema.pick({token: true});
+
+// Update
+
+const UpdateLastSeenSchema = UserSchema.pick({id: true});
+
+// Header
+
+const HeaderBearerSchema = z.object({
+  authorization: z.string(),
+});
+
+export type Session = z.infer<typeof SessionSchema>;
+export type User = z.infer<typeof UserSchema>;
+export type GoogleAccount = z.infer<typeof GoogleAccountSchema>;
+export type CreateUserInput = z.infer<typeof CreateUserInputSchema>;
+export type LoadUserInput = z.infer<typeof LoadUserInputSchema>;
+export type DeleteSessionInput = z.infer<typeof DeleteSessionInputSchema>;
+export type FetchAuthenticationProfile = z.infer<
+  typeof FetchAuthenticationProfileSchema
+>;
+export type FetchUser = z.infer<typeof FetchUserSchema>;
+export type FetchGoogleAccountInfo = z.infer<typeof FetchGoogleAccountInfoSchema>;
+export type UpdateLastSeen = z.infer<typeof UpdateLastSeenSchema>;
+
+export const { schemas: userSchemas, $ref } = buildJsonSchemas(
+  {
+    UserSchema,
+    CreateUserInputSchema,
+    GoogleAccountSchema,
+    HeaderBearerSchema,
+    LoadUserInputSchema,
+  },
+  { $id: "UsersSchema" }
+);
