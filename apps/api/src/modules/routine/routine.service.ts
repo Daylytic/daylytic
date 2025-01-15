@@ -1,67 +1,59 @@
-import { RequestError } from "../../utils/error.js";
-import { prisma } from "../../utils/prisma.js";
+import { RequestError } from "utils/error.js";
+import { prisma } from "utils/prisma.js";
 import {
-  CreateDailyTaskDetailed,
-  DailyTaskCore,
-  UpdateDailyTaskInput,
+  CreateDailyTaskWithUserIdSchema,
+  DailyTask,
+  DeleteDailyTaskWithUserIdInputSchema,
+  FetchDailyTaskInputSchema,
+  ResetDailyTaskInputSchema,
+  UpdateDailyTaskWithUserIdInputSchema,
 } from "./routine.schema.js";
 
-const resetDailyTasks = async (userId: string) => {
+const resetDailyTasks = async (data: ResetDailyTaskInputSchema) => {
   try {
     await prisma.dailyTask.updateMany({
-      where: {
-        userId: userId,
-      },
+      where: data,
       data: {
         isCompleted: false,
       },
     });
   } catch (err) {
-    console.error(err);
+    throw new RequestError("Problem occured while resetting daily tasks", 500);
   }
 };
 
 const createDailyTask = async (
-  data: CreateDailyTaskDetailed
-): Promise<DailyTaskCore> => {
+  data: CreateDailyTaskWithUserIdSchema
+): Promise<DailyTask> => {
   try {
     return await prisma.dailyTask.create({ data: data });
   } catch (err) {
-    throw err;
-    // throw new RequestError("Problem occured while creating daily task", 500);
+    throw new RequestError("Problem occured while creating daily task", 500);
   }
 };
 
-const getDailyTasks = async (userId: string): Promise<DailyTaskCore[]> => {
+const getDailyTasks = async (data: FetchDailyTaskInputSchema): Promise<DailyTask[]> => {
   return await prisma.dailyTask.findMany({
-    where: {
-      userId: userId,
-    },
+    where: data
   });
 };
 
-const deleteDailyTask = async (
-  userId: string,
-  taskId: string
-): Promise<void> => {
+const deleteDailyTask = async (data: DeleteDailyTaskWithUserIdInputSchema): Promise<void> => {
   try {
     await prisma.dailyTask.delete({
-      where: {
-        id: taskId,
-        userId: userId,
-      },
+      where: data,
     });
   } catch (err) {
-    throw new RequestError("Problem occured while deleting daily task", 400);
+    throw new RequestError("Problem occured while deleting daily task", 500);
   }
 };
 
-const updateDailyTask = async (userId: string, data: UpdateDailyTaskInput) => {
+const updateDailyTask = async (data: UpdateDailyTaskWithUserIdInputSchema) => {
   try {
     await prisma.dailyTask.update({
       where: {
         id: data.id,
-        userId: userId,
+        userId: data.userId,
       },
       data: {
         title: data.title,
@@ -70,7 +62,7 @@ const updateDailyTask = async (userId: string, data: UpdateDailyTaskInput) => {
       }
     });
   } catch (err) {
-    throw new RequestError("Problem occured while deleting daily task", 400);
+    throw new RequestError("Problem occured while updating daily task", 500);
   }
 }
 
