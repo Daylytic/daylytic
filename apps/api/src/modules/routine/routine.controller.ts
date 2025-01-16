@@ -1,13 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { routineService } from "./routine.service.js";
-import {
-  CreateDailyTaskInputSchema,
-  DeleteDailyTaskInputSchema,
-  UpdateDailyTaskInputSchema,
-} from "./routine.schema.js";
 import { RequestError } from "utils/error.js";
 import { analyticsService } from "modules/analytics/analytics.service.js";
 import { routineDataService } from "modules/analytics/routine/routine.service.js";
+import { CreateDailyTaskInputSchema, UpdateDailyTaskInputSchema, DeleteDailyTaskInputSchema } from "./routine.schema.js";
 
 const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   const userId = req.user!.id;
@@ -16,6 +12,7 @@ const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
     return await routineService.createDailyTask({
       title: title,
       userId: userId,
+      taskType: "ROUTINE",
     });
   } catch (err) {
     if (err instanceof RequestError) {
@@ -30,7 +27,7 @@ const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
 const getDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
   const userId = req.user!.id;
   try {
-    return await routineService.getDailyTasks({id: userId});
+    return await routineService.getDailyTasks({ userId: userId });
   } catch (err) {
     if (err instanceof RequestError) {
       return rep.status(err.status).send({ error: err.message });
@@ -46,7 +43,7 @@ const updateDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   const userId = req.user!.id;
 
   try {
-    return await routineService.updateDailyTask({userId, ...dailyTask});
+    return await routineService.updateDailyTask({ userId, ...dailyTask });
   } catch (err: any) {
     if (err instanceof RequestError) {
       return rep.status(err.status).send({ error: err.message });
@@ -62,7 +59,7 @@ const deleteDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   const userId = req.user!.id;
 
   try {
-    return await routineService.deleteDailyTask({userId, id});
+    return await routineService.deleteDailyTask({ userId, id });
   } catch (err: any) {
     if (err instanceof RequestError) {
       return rep.status(err.status).send({ error: err.message });
@@ -92,7 +89,7 @@ const initializeDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
 
   if (lastResetDate < todayDate) {
     await routineDataService.updateLastResetDate({ analyticsId: analytics.id });
-    await routineService.resetDailyTasks({id: user.id});
+    await routineService.resetDailyTasks({ id: user.id });
   }
 };
 export const routineController = {

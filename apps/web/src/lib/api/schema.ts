@@ -23,7 +23,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-0"]["CreateUserInputSchema"];
+                    "application/json": components["schemas"]["def-0"]["LoadUserInputSchema"];
                 };
             };
             responses: {
@@ -208,6 +208,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** @description Fetches given user tasks */
         get: {
             parameters: {
                 query?: never;
@@ -220,7 +221,7 @@ export interface paths {
             requestBody?: never;
             responses: {
                 /** @description Default Response */
-                200: {
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -230,6 +231,7 @@ export interface paths {
                 };
             };
         };
+        /** @description Updates the data of the daily task */
         put: {
             parameters: {
                 query?: never;
@@ -246,14 +248,17 @@ export interface paths {
             };
             responses: {
                 /** @description Default Response */
-                200: {
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["def-3"]["TaskSchema"];
+                    };
                 };
             };
         };
+        /** @description Create new daily task */
         post: {
             parameters: {
                 query?: never;
@@ -275,11 +280,12 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-3"]["CreateDailyTaskResponseSchema"];
+                        "application/json": components["schemas"]["def-3"]["TaskSchema"];
                     };
                 };
             };
         };
+        /** @description Deletes daily task */
         delete: {
             parameters: {
                 query?: never;
@@ -328,10 +334,10 @@ export interface components {
             };
             CreateUserInputSchema: {
                 token: string;
-                timeZone?: string;
+                timeZone: string;
             };
             GoogleAccountSchema: {
-                id: string;
+                id: components["schemas"]["def-0"]["UserSchema"]["id"];
                 /** Format: email */
                 email: string;
                 name: string;
@@ -340,6 +346,10 @@ export interface components {
             };
             HeaderBearerSchema: {
                 authorization: string;
+            };
+            LoadUserInputSchema: {
+                token: string;
+                timeZone?: string;
             };
         };
         /** GoalsSchema */
@@ -374,27 +384,58 @@ export interface components {
                 projectId: string;
             };
         };
-        /** RoutineSchema */
+        /** RoutineSchemas */
         "def-3": {
-            CreateDailyTaskInputSchema: {
-                title: string;
-            };
-            CreateDailyTaskResponseSchema: {
+            TaskSchema: {
                 id: string;
-                title: string;
-                description: null | string;
-                isCompleted: boolean;
-                userId: string;
-            };
-            FetchDailyTasksResponseSchema: components["schemas"]["def-3"]["CreateDailyTaskResponseSchema"][];
-            DeleteDailyTaskInputSchema: {
-                id: string;
-            };
-            UpdateDailyTaskInputSchema: {
-                id: string;
+                /** @enum {string} */
+                taskType: "ROUTINE" | "TODOLIST";
+                /** @default 0 */
+                priority: number;
                 title: string;
                 description: string | null;
+                /** @default false */
                 isCompleted: boolean;
+                /**
+                 * Format: date-time
+                 * @default {}
+                 */
+                createdAt: string;
+                /** Format: date-time */
+                updatedAt: string;
+                deadline: string | null;
+                todoListId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
+                todoList?: unknown | null;
+                userId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
+                user?: unknown | null;
+                tags?: unknown[];
+                recurrencePattern: null | string;
+                recurrenceEndDate: string | null;
+            };
+            CreateDailyTaskInputSchema: {
+                title: components["schemas"]["def-3"]["TaskSchema"]["title"];
+                taskType: components["schemas"]["def-3"]["TaskSchema"]["taskType"];
+            };
+            FetchDailyTasksResponseSchema: components["schemas"]["def-3"]["TaskSchema"][];
+            DeleteDailyTaskInputSchema: {
+                id: components["schemas"]["def-3"]["TaskSchema"]["id"];
+            };
+            UpdateDailyTaskInputSchema: {
+                id: components["schemas"]["def-3"]["TaskSchema"]["id"];
+                taskType: components["schemas"]["def-3"]["TaskSchema"]["taskType"];
+                priority?: components["schemas"]["def-3"]["TaskSchema"]["priority"];
+                title: components["schemas"]["def-3"]["TaskSchema"]["title"];
+                description: components["schemas"]["def-3"]["TaskSchema"]["description"];
+                isCompleted?: components["schemas"]["def-3"]["TaskSchema"]["isCompleted"];
+                createdAt?: components["schemas"]["def-3"]["TaskSchema"]["createdAt"];
+                updatedAt: components["schemas"]["def-3"]["TaskSchema"]["updatedAt"];
+                deadline: components["schemas"]["def-3"]["TaskSchema"]["deadline"];
+                todoListId: components["schemas"]["def-3"]["TaskSchema"]["todoListId"];
+                todoList?: components["schemas"]["def-3"]["TaskSchema"]["todoList"];
+                user?: components["schemas"]["def-3"]["TaskSchema"]["user"];
+                tags?: components["schemas"]["def-3"]["TaskSchema"]["tags"];
+                recurrencePattern: components["schemas"]["def-3"]["TaskSchema"]["recurrencePattern"];
+                recurrenceEndDate: components["schemas"]["def-3"]["TaskSchema"]["recurrenceEndDate"];
             };
         };
     };

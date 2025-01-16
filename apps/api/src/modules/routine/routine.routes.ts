@@ -19,7 +19,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       body: $ref("CreateDailyTaskInputSchema"),
       headers: $refAuth("HeaderBearerSchema"),
       response: {
-        201: $ref("DailyTaskSchema"),
+        201: $ref("TaskSchema"),
       },
     },
   });
@@ -75,7 +75,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       headers: $refAuth("HeaderBearerSchema"),
       body: $ref("UpdateDailyTaskInputSchema"),
       response: {
-        201: $ref("DailyTaskSchema"),
+        201: $ref("TaskSchema"),
       },
     },
   });
