@@ -1,7 +1,8 @@
 import { FastifyPluginAsync } from "fastify";
 import { authController } from "modules/auth/auth.controller.js";
-import { $ref, routineController } from "./index.js";
+import { $ref } from "modules/task/index.js";
 import { $ref as $refAuth } from "modules/auth/auth.schema.js";
+import { routineController } from "./index.js";
 
 export const routineHandler: FastifyPluginAsync = async (server, _) => {
   // Create Daily Task
@@ -16,7 +17,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
     schema: {
       description: "Create new daily task",
       tags: ["routine"],
-      body: $ref("CreateDailyTaskInputSchema"),
+      body: $ref("CreateTaskInputSchema"),
       headers: $refAuth("HeaderBearerSchema"),
       response: {
         201: $ref("TaskSchema"),
@@ -38,7 +39,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["routine"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
-        201: $ref("FetchDailyTasksResponseSchema"),
+        201: $ref("FetchTasksResponseSchema"),
       },
     },
   });
@@ -56,7 +57,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       description: "Deletes daily task",
       tags: ["routine"],
       headers: $refAuth("HeaderBearerSchema"),
-      body: $ref("DeleteDailyTaskInputSchema"),
+      body: $ref("DeleteTaskInputSchema"),
     },
   });
 
@@ -73,7 +74,7 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       description: "Updates the data of the daily task",
       tags: ["routine"],
       headers: $refAuth("HeaderBearerSchema"),
-      body: $ref("UpdateDailyTaskInputSchema"),
+      body: $ref("UpdateTaskInputSchema"),
       response: {
         201: $ref("TaskSchema"),
       },

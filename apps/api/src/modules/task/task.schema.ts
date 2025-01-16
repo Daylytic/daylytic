@@ -4,6 +4,7 @@ import {
   TASK_TITLE_MAX_LENGTH,
   TASK_TITLE_MIN_LENGTH,
 } from "@daylytic/shared/constants";
+import { buildJsonSchemas } from "fastify-zod";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
@@ -40,17 +41,83 @@ export const TaskSchema = z.object({
   updatedAt: z.date(), // Auto-updated when modified
   deadline: z.date().nullable(), // Optional deadline
   todoListId: IdSchema.nullable(), // Relation field to ToDoList
-  todoList: z.any().nullable(), // Placeholder for the ToDoList relation (to be refined)
   userId: IdSchema.nullable(), // Relation field to User
-  user: z.any().nullable(), // Placeholder for the User relation (to be refined)
-  tags: z.array(z.lazy((): z.ZodType<any> => TagSchema)).optional(),
-  recurrencePattern: z.string().nullable(), // e.g., "daily", "weekly", "monthly", or custom logic
-  recurrenceEndDate: z.date().nullable(), // When the recurrence stops
+  tagIds: z.array(IdSchema).optional(), // References to tag IDs
 });
 
 export const TagSchema = z.object({
   id: IdSchema,
   name: TagNameSchema,
   color: z.string(),
-  tasks: z.array(z.lazy((): z.ZodType<any> => TaskSchema)).optional(),
+  tasks: z.array(z.string()).optional(), // Array of task IDs,
 })
+
+// Create Task Schemas
+
+const CreateTaskInputSchema = TaskSchema.pick({ title: true, taskType: true });
+const CreateTaskWithIdSchema = CreateTaskInputSchema.extend({
+  userId: IdSchema.optional(),
+  todoListId: IdSchema.optional(),
+});
+
+// Fetch Tasks Schema
+const FetchTaskInputSchema = z.object({
+  userId: IdSchema.optional(),
+  todoListId: IdSchema.optional(),
+});
+const FetchTasksResponseSchema = z.array(TaskSchema);
+
+// Delete Task Schema
+const DeleteTaskInputSchema = z.object({
+  id: IdSchema,
+});
+const DeleteTaskWithIdInputSchema = DeleteTaskInputSchema.extend({
+  userId: IdSchema.optional(),
+  todoListId: IdSchema.optional(),
+});
+
+// Reset Task Schema
+const ResetTaskInputSchema = z.object({
+  id: IdSchema,
+});
+
+// Update Task Schema
+const UpdateTaskInputSchema = TaskSchema.omit({ userId: true, todoListId: true, });
+const UpdateTaskWithIdInputSchema = TaskSchema;
+
+export type Task = z.infer<typeof TaskSchema>;
+export type CreateTaskInputSchema = z.infer<
+  typeof CreateTaskInputSchema
+>;
+export type CreateTaskWithIdSchema = z.infer<
+  typeof CreateTaskWithIdSchema
+>;
+export type DeleteTaskInputSchema = z.infer<
+  typeof DeleteTaskInputSchema
+>;
+export type DeleteTaskWithIdInputSchema = z.infer<
+  typeof DeleteTaskWithIdInputSchema
+>;
+export type UpdateTaskInputSchema = z.infer<
+  typeof UpdateTaskInputSchema
+>;
+export type UpdateTaskWithIdInputSchema = z.infer<
+  typeof UpdateTaskWithIdInputSchema
+>;
+export type ResetTaskInputSchema = z.infer<
+  typeof ResetTaskInputSchema
+>;
+export type FetchTaskInputSchema = z.infer<
+  typeof FetchTaskInputSchema
+>;
+
+export const { schemas: routineSchemas, $ref } = buildJsonSchemas(
+  {
+    TaskSchema,
+    CreateTaskInputSchema,
+    FetchTasksResponseSchema,
+    DeleteTaskInputSchema,
+    UpdateTaskInputSchema,
+  },
+  { $id: "RoutineSchemas" }
+);
