@@ -37,7 +37,7 @@ export const DailyTasksProvider = ({ token, children }) => {
         params: {
           header: { authorization: `Bearer ${token}` },
         },
-        body: { title },
+        body: { title, taskType: "ROUTINE" },
       });
       await fetchTasks(); // Refresh tasks after creating
       return data;
@@ -64,24 +64,25 @@ export const DailyTasksProvider = ({ token, children }) => {
   };
 
   const updateTask = async (task: Task) => {
-    try {
-      const { data } = await client.PUT("/routine/", {
-        params: {
-          header: { authorization: `Bearer ${token}` },
-        },
-        body: {
-          id: task.id,
-          title: task.title,
-          description: task.description,
-          isCompleted: task.isCompleted,
-        },
-      });
-      await fetchTasks(); // Refresh tasks after creating
-      return data;
-    } catch (error) {
-      console.error("Failed to delete task:", error);
-      throw error;
-    }
+    // try {
+    //   const { data } = await client.PUT("/routine/", {
+    //     params: {
+    //       header: { authorization: `Bearer ${token}` },
+    //     },
+    //     body: {
+    //       id: task.id,
+    //       title: task.title,
+    //       description: task.description,
+    //       isCompleted: task.isCompleted,
+    //       taskType: "ROUTINE",
+    //     },
+    //   });
+    //   await fetchTasks(); // Refresh tasks after creating
+    //   return data;
+    // } catch (error) {
+    //   console.error("Failed to delete task:", error);
+    //   throw error;
+    // }
   };
 
   useEffect(() => {

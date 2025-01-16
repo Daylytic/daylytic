@@ -11,7 +11,7 @@ import {
 
 const resetDailyTasks = async (data: ResetDailyTaskInputSchema) => {
   try {
-    await prisma.dailyTask.updateMany({
+    await prisma.task.updateMany({
       where: data,
       data: {
         isCompleted: false,
@@ -26,21 +26,33 @@ const createDailyTask = async (
   data: CreateDailyTaskWithUserIdSchema
 ): Promise<DailyTask> => {
   try {
-    return await prisma.dailyTask.create({ data: data });
+    return await prisma.task.create({
+      data: {
+        ...data, tags: {
+          create: [
+            { id: "tag-id-1", name: "Urgent", color: "red" },
+            { id: "tag-id-2", name: "Personal", color: "blue" },
+          ]
+        }
+      }
+    });
   } catch (err) {
     throw new RequestError("Problem occured while creating daily task", 500);
   }
 };
 
 const getDailyTasks = async (data: FetchDailyTaskInputSchema): Promise<DailyTask[]> => {
-  return await prisma.dailyTask.findMany({
-    where: data
+  return await prisma.task.findMany({
+    where: data,
+    include: {
+      tags: true,
+    }
   });
 };
 
 const deleteDailyTask = async (data: DeleteDailyTaskWithUserIdInputSchema): Promise<void> => {
   try {
-    await prisma.dailyTask.delete({
+    await prisma.task.delete({
       where: data,
     });
   } catch (err) {
@@ -50,7 +62,7 @@ const deleteDailyTask = async (data: DeleteDailyTaskWithUserIdInputSchema): Prom
 
 const updateDailyTask = async (data: UpdateDailyTaskWithUserIdInputSchema) => {
   try {
-    await prisma.dailyTask.update({
+    await prisma.task.update({
       where: {
         id: data.id,
         userId: data.userId,
