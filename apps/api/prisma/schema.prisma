@@ -90,29 +90,27 @@ enum TaskType {
 }
 
 model Task {
-  id                String    @id @default(cuid()) // Unique ID for the task
-  taskType          TaskType // Specifies the owner type (User or ToDoList)
-  priority          Int       @default(0) // Allows for custom ordering
-  title             String // Title of the task
-  description       String?
-  isCompleted       Boolean   @default(false) // Task completion status
-  createdAt         DateTime  @default(now()) // Creation timestamp
-  updatedAt         DateTime  @updatedAt // Auto-updated when modified
-  deadline          DateTime?
-  todoListId        String? // Relation field to ToDoList
-  todoList          ToDoList? @relation(fields: [todoListId], references: [id])
-  userId            String? // Relation field to ToDoList
-  user              User?     @relation(fields: [userId], references: [id])
-  tags              Tag[]     @relation("TaskTags") // Many-to-many relationship with tags
-  recurrencePattern String? // e.g., "daily", "weekly", "monthly", or custom logic
-  recurrenceEndDate DateTime? // When the recurrence stops
+  id          String    @id @default(cuid()) // Unique ID for the task
+  taskType    TaskType // Specifies the owner type (User or ToDoList)
+  priority    Int       @default(0) // Allows for custom ordering
+  title       String // Title of the task
+  description String?
+  isCompleted Boolean   @default(false) // Task completion status
+  createdAt   DateTime  @default(now()) // Creation timestamp
+  updatedAt   DateTime  @updatedAt // Auto-updated when modified
+  deadline    DateTime?
+  todoListId  String? // Relation field to ToDoList
+  todoList    ToDoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade) // Cascade delete here
+  userId      String? // Relation field to ToDoList
+  user        User?     @relation(fields: [userId], references: [id])
+  tags        Tag[]     @relation("TaskTags")
 }
 
 model Tag {
   id    String @id @default(cuid()) // Unique ID for the tag
   name  String // Name of the tag
   color String // Color of the tag
-  tasks Task[] @relation("TaskTags") // Many-to-many relationship with tasks
+  tasks Task[] @relation("TaskTags")
 }
 
 // model DailyTask {

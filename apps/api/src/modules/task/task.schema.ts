@@ -40,12 +40,8 @@ export const TaskSchema = z.object({
   updatedAt: z.date(), // Auto-updated when modified
   deadline: z.date().nullable(), // Optional deadline
   todoListId: IdSchema.nullable(), // Relation field to ToDoList
-  todoList: z.any().nullable(), // Placeholder for the ToDoList relation (to be refined)
   userId: IdSchema.nullable(), // Relation field to User
-  user: z.any().nullable(), // Placeholder for the User relation (to be refined)
-  tags: z.array(z.lazy((): z.ZodType<any> => TagSchema)).optional(),
-  recurrencePattern: z.string().nullable(), // e.g., "daily", "weekly", "monthly", or custom logic
-  recurrenceEndDate: z.date().nullable(), // When the recurrence stops
+  tagIds: z.array(IdSchema).optional(), // References to tag IDs
 });
 
 export const TagSchema = z.object({
