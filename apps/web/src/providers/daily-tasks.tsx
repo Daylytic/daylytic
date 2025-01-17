@@ -1,13 +1,13 @@
-import { Task } from "components/panel/content/routine/routine";
+import { Task } from "types/task";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { client } from "services/api-client";
 
 interface DailyTasksContextType {
   tasks: Task[];
-  createTask: (title: string) => void;
-  deleteTask: (id: string) => void;
-  fetchTasks: () => void;
-  updateTask: (task: Task) => void;
+  createTask: (title: string) => Promise<Task>;
+  deleteTask: (id: string) => Promise<void>;
+  fetchTasks: () => Promise<void>;
+  updateTask: (task: Task) => Promise<Task>;
 }
 
 const DailyTasksContext = React.createContext<
@@ -31,7 +31,7 @@ export const DailyTasksProvider = ({ token, children }) => {
     }
   };
 
-  const createTask = async (title) => {
+  const createTask = async (title: string) => {
     try {
       const { data } = await client.POST("/routine/", {
         params: {
@@ -40,14 +40,14 @@ export const DailyTasksProvider = ({ token, children }) => {
         body: { title, taskType: "ROUTINE" },
       });
       await fetchTasks(); // Refresh tasks after creating
-      return data;
+      return data as Task;
     } catch (error) {
       console.error("Failed to create task:", error);
       throw error;
     }
   };
 
-  const deleteTask = async (id) => {
+  const deleteTask = async (id: string) => {
     try {
       const { data } = await client.DELETE("/routine/", {
         params: {
@@ -75,7 +75,7 @@ export const DailyTasksProvider = ({ token, children }) => {
         },
       });
       await fetchTasks(); // Refresh tasks after creating
-      return data;
+      return data as Task;
     } catch (error) {
       console.error("Failed to update task:", error);
       throw error;
