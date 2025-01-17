@@ -1,4 +1,3 @@
-
 #sider {
     border-radius: var(--ant-border-radius-lg);
     padding: var(--ant-padding-md);
@@ -6,54 +5,4 @@
     position: relative;
     display: flex;
     flex-direction: column;
-}
-
-#header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: calc(var(--ant-font-size-heading-2) * var(--ant-line-height-heading-2));
-}
-
-#logo-wrapper {
-    height: 100%;
-    width: 100%;
-
-}
-
-#logo-text {
-    margin: 0;
-}
-
-#goals {
-    overflow-y: auto;
-    height: 100%;
-    width: 100%;
-    position: relative;
-}
-
-.goals-card {
-    width: 100%;
-    background-color: var(--ant-color-white);
-    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
-    cursor: pointer;
-}
-
-.goals-card.selected {
-    background-color: var(--ant-menu-item-selected-bg);
-    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
-}
-
-.goals-card:hover:not(.selected) {
-    background-color: var(--ant-menu-item-hover-bg);
-    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
-}
-
-.goals-card.selected,
-.goals-card.selected *:not(a) {
-    color: var(--ant-menu-item-selected-color) !important;
-}
-
-#setting-icon {
-    font-size: var(--ant-font-size-heading-4);
 }

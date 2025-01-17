@@ -1,0 +1,19 @@
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: calc(var(--ant-font-size-heading-2) * var(--ant-line-height-heading-2));
+}
+
+#logo-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+#logo-text {
+    margin: 0;
+}
+
+#setting-icon {
+    font-size: var(--ant-font-size-heading-4);
+}

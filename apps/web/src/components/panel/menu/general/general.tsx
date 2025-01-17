@@ -3,9 +3,9 @@ import { useNavigate } from "react-router";
 import { getGeneralMenuItems } from "utils/menu-items";
 import { usePanel } from "hooks/use-panel";
 
-export const MenuGeneral = () => {
+export const General = () => {
   const navigate = useNavigate();
-  const {getMenu} = usePanel();
+  const { getMenu } = usePanel();
 
   const currentMenu = getMenu();
 
@@ -17,9 +17,7 @@ export const MenuGeneral = () => {
       defaultSelectedKeys={[currentMenu]}
       selectedKeys={[currentMenu]}
       defaultOpenKeys={[currentMenu]}
-      onClick={({ key }) => {
-        navigate(`/panel/${key}`)
-      }}
+      onClick={({ key }) => navigate(`/panel/${key}`)}
       items={generalItems}
     />
   );
