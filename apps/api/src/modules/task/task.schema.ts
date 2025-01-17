@@ -111,7 +111,7 @@ export type FetchTaskInputSchema = z.infer<
   typeof FetchTaskInputSchema
 >;
 
-export const { schemas: routineSchemas, $ref } = buildJsonSchemas(
+export const { schemas: taskSchemas, $ref } = buildJsonSchemas(
   {
     TaskSchema,
     CreateTaskInputSchema,
@@ -119,5 +119,5 @@ export const { schemas: routineSchemas, $ref } = buildJsonSchemas(
     DeleteTaskInputSchema,
     UpdateTaskInputSchema,
   },
-  { $id: "RoutineSchemas" }
+  { $id: "TaskSchemas" }
 );
