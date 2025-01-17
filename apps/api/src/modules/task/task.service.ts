@@ -6,6 +6,7 @@ import {
   DeleteTaskWithIdInputSchema,
   FetchTaskInputSchema,
   UpdateTaskWithIdInputSchema,
+  UpdateTaskInputSchema,
 } from "./task.schema.js";
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {

@@ -44,7 +44,8 @@ const updateDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   const userId = req.user!.id;
 
   try {
-    return await taskService.updateTask({ userId, ...dailyTask, todoListId: null, });
+    return await taskService.updateTask(dailyTask
+    );
   } catch (err: any) {
     if (err instanceof RequestError) {
       return rep.status(err.status).send({ error: err.message });
