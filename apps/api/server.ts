@@ -9,7 +9,7 @@ import { projectsSchemas } from './src/modules/projects/projects.schema.js';
 import { goalsHandler } from './src/modules/goals/goals.routes.js';
 import { projectsHandler } from './src/modules/projects/projects.routes.js';
 import { routineHandler } from './src/modules/routine/routine.routes.js';
-import { routineSchemas } from './src/modules/routine/index.js';
+import { taskSchemas } from './src/modules/task/index.js';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -22,7 +22,7 @@ const server = Fastify({ logger: true })
 
 const main = async () => {
 
-  for (const schema of [...userSchemas, ...goalSchemas, ...projectsSchemas, ...routineSchemas]) {
+  for (const schema of [...userSchemas, ...goalSchemas, ...projectsSchemas, ...taskSchemas]) {
     server.addSchema(schema);
   }
 
