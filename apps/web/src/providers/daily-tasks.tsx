@@ -86,7 +86,7 @@ export const DailyTasksProvider = ({ token, children }) => {
   };
 
   useEffect(() => {
-    if (token) {
+    if (token && tasks.length === 0) {
       fetchTasks();
     }
   }, [token]);
