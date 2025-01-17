@@ -1,7 +1,7 @@
 import { Card } from "antd";
 import { clsx } from "clsx";
 
-import styles from "./menu.module.css";
+import styles from "./goals.module.css";
 
 interface MenuGoalsCardProps {
   title: string;
@@ -11,7 +11,7 @@ interface MenuGoalsCardProps {
   selected?: boolean;
 }
 
-export const MenuGoalsCard = ({
+export const GoalsCard = ({
   title,
   description,
   id,
@@ -26,7 +26,7 @@ export const MenuGoalsCard = ({
 
   return (
     <Card
-      className={clsx(styles["goals-card"], selected && styles.selected)}
+      className={clsx(styles["card"], selected && styles.selected)}
       title={title}
       extra={<a href="#">More</a>}
       key={id}

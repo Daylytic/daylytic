@@ -8,12 +8,6 @@ export interface ActionDataProps {
 }
 
 export const Action = () => {
-  //   const { action, setAction } = useMenuController();
-
-  //   if (action === undefined) {
-  //     return;
-  //   }
-
   const { getMenu, getContent } = usePanel();
   const content = getContent();
 
@@ -28,5 +22,4 @@ export const Action = () => {
       {ActiveComponent ? <ActiveComponent id={content}/> : <></>}
     </Sider>
   );
-  //   return <>Witaj</>;
 };

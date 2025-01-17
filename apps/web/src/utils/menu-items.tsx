@@ -6,10 +6,10 @@ import {
   CalendarOutlined,
 } from "@ant-design/icons";
 import { Badge } from "antd";
-import { Routine } from "components/panel/action/routine/routine";
-import { ContentGoals } from "components/panel/content/content-goals";
-import { ContentRoutine } from "components/panel/content/routine/routine";
-import { MenuGeneralItem } from "components/panel/menu/menu-general-item";
+import { Routine as RoutineAction } from "components/panel/action/routine";
+import { Goals as GoalsContent } from "components/panel/content/goals";
+import { Routine as RoutineContent } from "components/panel/content/routine";
+import { GeneralItem } from "components/panel/menu/general";
 
 export const MENU_KEYS = {
   DASHBOARD: "dashboard",
@@ -26,15 +26,15 @@ export const CONTENT_KEYS = {
 
 export const ContentMap = {
   [MENU_KEYS.DASHBOARD]: null,
-  [MENU_KEYS.ROUTINE]: ContentRoutine,
+  [MENU_KEYS.ROUTINE]: RoutineContent,
   [MENU_KEYS.UPCOMING]: null,
   [MENU_KEYS.CALENDAR]: null,
-  [MENU_KEYS.GOALS]: ContentGoals,
+  [MENU_KEYS.GOALS]: GoalsContent,
 };
 
 export const ActionMap = {
   [MENU_KEYS.DASHBOARD]: null,
-  [MENU_KEYS.ROUTINE]: Routine,
+  [MENU_KEYS.ROUTINE]: RoutineAction,
   [MENU_KEYS.UPCOMING]: null,
   [MENU_KEYS.CALENDAR]: null,
   [MENU_KEYS.GOALS]: null,
@@ -43,14 +43,14 @@ export const ActionMap = {
 export const getGeneralMenuItems = () => [
   {
     key: MENU_KEYS.DASHBOARD,
-    label: <MenuGeneralItem text="Dashboard" />,
+    label: <GeneralItem text="Dashboard" />,
     icon: <ScheduleOutlined />,
   },
   {
     //Routine PLUS if finished routine, green timer means a lot of time left, yellow means less time left, red means little to no time left
     key: MENU_KEYS.ROUTINE,
     label: (
-      <MenuGeneralItem
+      <GeneralItem
         text="Routine"
         badge={
           <Badge count={<ClockCircleOutlined style={{ color: "#f5222d" }} />} />
@@ -61,12 +61,12 @@ export const getGeneralMenuItems = () => [
   },
   {
     key: MENU_KEYS.UPCOMING,
-    label: <MenuGeneralItem text="Upcoming" />,
+    label: <GeneralItem text="Upcoming" />,
     icon: <ForwardOutlined />,
   },
   {
     key: MENU_KEYS.CALENDAR,
-    label: <MenuGeneralItem text="Calendar" />,
+    label: <GeneralItem text="Calendar" />,
     icon: <CalendarOutlined />,
   },
 ];

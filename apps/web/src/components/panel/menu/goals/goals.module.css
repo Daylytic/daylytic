@@ -1,0 +1,28 @@
+#wrapper {
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.card {
+    width: 100%;
+    background-color: var(--ant-color-white);
+    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
+    cursor: pointer;
+}
+
+.card.selected {
+    background-color: var(--ant-menu-item-selected-bg);
+    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
+}
+
+.card:hover:not(.selected) {
+    background-color: var(--ant-menu-item-hover-bg);
+    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
+}
+
+.card.selected,
+.card.selected *:not(a) {
+    color: var(--ant-menu-item-selected-color) !important;
+}

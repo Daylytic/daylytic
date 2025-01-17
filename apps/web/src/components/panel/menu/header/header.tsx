@@ -1,14 +1,14 @@
 import { SettingOutlined } from "@ant-design/icons";
 import { Flex, Button, theme, Typography } from "antd";
 import logo from "assets/svgs/logo.svg";
-import styles from "./menu.module.css";
+import styles from "./header.module.css";
 import clsx from "clsx";
 
 const { Title } = Typography;
 
-export const MenuHeader = () => {
+export const Header = () => {
   const {
-    token: { fontSizeHeading4, paddingXS },
+    token: { paddingXS },
   } = theme.useToken();
 
   return (
