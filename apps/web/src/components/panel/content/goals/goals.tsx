@@ -1,17 +1,9 @@
 import {
-    Button,
-    Checkbox,
-    Flex,
-    Input,
-    List,
-    Tag,
     theme,
     Typography,
   } from "antd";
   import { Content } from "antd/es/layout/layout";
-  import { PlusOutlined } from "@ant-design/icons";
   import { faker } from "@faker-js/faker";
-  import { CONTENT_KEYS } from "utils/menu-items";
   
   const { Title } = Typography;
   
@@ -21,7 +13,7 @@ import {
     tags: string[];
   }
   
-  export const ContentGoals = () => {
+  export const Goals = () => {
   
     const {
       token: { colorWhite, borderRadiusLG, paddingMD, paddingXS, paddingXXS },
