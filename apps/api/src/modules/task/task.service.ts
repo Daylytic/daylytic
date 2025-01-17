@@ -6,6 +6,7 @@ import {
   DeleteTaskWithIdInputSchema,
   FetchTaskInputSchema,
   UpdateTaskWithIdInputSchema,
+  UpdateTaskInputSchema,
 } from "./task.schema.js";
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
@@ -32,46 +33,89 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
     await prisma.task.delete({
       where: data,
     });
+
+    await prisma.tag.deleteMany({
+      where: {
+        tasks: {
+          none: {}, // Select tags that are not associated with any tasks
+        },
+      },
+    });
   } catch (err) {
     throw new RequestError("Problem occured while deleting task", 500);
   }
 };
 
-const updateTask = async (data: UpdateTaskWithIdInputSchema) => {
+const updateTask = async (data: UpdateTaskInputSchema) => {
   try {
-    let tagsToDisconnect = [] as string[];
-    let tagsToConnect = [] as string[];
+    // Extract the tags from the incoming data
+    const incomingTags = data.tags!;
 
-    if (data.tagIds != undefined) {
-      const currentTagIds = data.tagIds;
+    // Fetch current task's tags
+    const currentTask = await prisma.task.findUnique({
+      where: { id: data.id },
+      include: { tags: true },
+    });
 
-      // Determine which tags to disconnect and connect
-
-      tagsToDisconnect = data.tagIds.filter(
-        (tagId) => !data.tagIds!.includes(tagId)
-      );
-      tagsToConnect = data.tagIds!.filter(
-        (tagId) => !currentTagIds.includes(tagId)
-      );
+    if (!currentTask) {
+      throw new RequestError(`Task with id ${data.id} not found`, 404);
     }
 
+    // Get current tag IDs
+    const currentTags = currentTask.tags;
+
+    // Prepare to find existing tags
+    const tagsToCreate = [];
+    const tagsToConnect = [];
+
+    for (const incomingTag of incomingTags) {
+      const existingTag = await prisma.tag.findFirst({
+        where: {
+          name: incomingTag.name,
+          color: incomingTag.color,
+        },
+      });
+
+      if (existingTag) {
+        tagsToConnect.push({ id: existingTag.id });
+      } else {
+        tagsToCreate.push(incomingTag);
+      }
+    }
+
+    // Determine tags to disconnect
+    const incomingTagIdentifiers = incomingTags.map(
+      (tag) => `${tag.name}-${tag.color}`
+    );
+
+    const tagsToDisconnect = currentTags.filter(
+      (currentTag) =>
+        !incomingTagIdentifiers.includes(`${currentTag.name}-${currentTag.color}`)
+    );
+
+    // Update the task
     await prisma.task.update({
       where: {
         id: data.id,
-        userId: data.userId,
       },
       data: {
-        title: data.title,
-        description: data.description,
-        isCompleted: data.isCompleted,
+        ...data,
         tags: {
-          disconnect: tagsToDisconnect.map(tagId => ({ id: tagId })), // Remove unneeded tags
-          connect: tagsToConnect.map(tagId => ({ id: tagId })), // Add new tags
-        }
+          // Create new tags
+          create: tagsToCreate,
+
+          // Connect existing tags
+          connect: tagsToConnect,
+
+          // Disconnect tags that are no longer present
+          disconnect: tagsToDisconnect.map((tag) => ({ id: tag.id })),
+        },
       },
     });
+
+    return { message: "Task updated successfully" };
   } catch (err) {
-    throw new RequestError("Problem occured while updating task", 500);
+    throw new RequestError(`Problem occurred while updating task: ${err}`, 500);
   }
 };
 

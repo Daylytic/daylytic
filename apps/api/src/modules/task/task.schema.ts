@@ -30,6 +30,13 @@ export const TagNameSchema = z.string();
 
 // Base
 
+export const TagSchema = z.object({
+  id: IdSchema,
+  name: TagNameSchema,
+  color: z.string(),
+  tasks: z.array(z.string()).optional(), // Array of task IDs,
+})
+
 export const TaskSchema = z.object({
   id: IdSchema, // Unique ID for the task
   taskType: TaskType, // Specifies the owner type (User or ToDoList)
@@ -42,15 +49,9 @@ export const TaskSchema = z.object({
   deadline: z.date().nullable(), // Optional deadline
   todoListId: IdSchema.nullable(), // Relation field to ToDoList
   userId: IdSchema.nullable(), // Relation field to User
-  tagIds: z.array(IdSchema).optional(), // References to tag IDs
+  // tagIds: z.array(IdSchema).optional(), // References to tag IDs
+  tags: z.array(TagSchema).optional(), // References to tag IDs
 });
-
-export const TagSchema = z.object({
-  id: IdSchema,
-  name: TagNameSchema,
-  color: z.string(),
-  tasks: z.array(z.string()).optional(), // Array of task IDs,
-})
 
 // Create Task Schemas
 
@@ -111,7 +112,7 @@ export type FetchTaskInputSchema = z.infer<
   typeof FetchTaskInputSchema
 >;
 
-export const { schemas: routineSchemas, $ref } = buildJsonSchemas(
+export const { schemas: taskSchemas, $ref } = buildJsonSchemas(
   {
     TaskSchema,
     CreateTaskInputSchema,
@@ -119,5 +120,5 @@ export const { schemas: routineSchemas, $ref } = buildJsonSchemas(
     DeleteTaskInputSchema,
     UpdateTaskInputSchema,
   },
-  { $id: "RoutineSchemas" }
+  { $id: "TaskSchemas" }
 );

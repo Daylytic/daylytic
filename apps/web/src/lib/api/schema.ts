@@ -226,7 +226,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-3"]["FetchDailyTasksResponseSchema"];
+                        "application/json": components["schemas"]["def-3"]["FetchTasksResponseSchema"];
                     };
                 };
             };
@@ -243,7 +243,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["UpdateDailyTaskInputSchema"];
+                    "application/json": components["schemas"]["def-3"]["UpdateTaskInputSchema"];
                 };
             };
             responses: {
@@ -270,7 +270,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["CreateDailyTaskInputSchema"];
+                    "application/json": components["schemas"]["def-3"]["CreateTaskInputSchema"];
                 };
             };
             responses: {
@@ -297,7 +297,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["DeleteDailyTaskInputSchema"];
+                    "application/json": components["schemas"]["def-3"]["DeleteTaskInputSchema"];
                 };
             };
             responses: {
@@ -384,7 +384,7 @@ export interface components {
                 projectId: string;
             };
         };
-        /** RoutineSchemas */
+        /** TaskSchemas */
         "def-3": {
             TaskSchema: {
                 id: string;
@@ -405,22 +405,23 @@ export interface components {
                 updatedAt: string;
                 deadline: string | null;
                 todoListId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
-                todoList?: unknown | null;
                 userId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
-                user?: unknown | null;
-                tags?: unknown[];
-                recurrencePattern: null | string;
-                recurrenceEndDate: string | null;
+                tags?: {
+                    id: components["schemas"]["def-3"]["TaskSchema"]["id"];
+                    name: string;
+                    color: string;
+                    tasks?: string[];
+                }[];
             };
-            CreateDailyTaskInputSchema: {
+            CreateTaskInputSchema: {
                 title: components["schemas"]["def-3"]["TaskSchema"]["title"];
                 taskType: components["schemas"]["def-3"]["TaskSchema"]["taskType"];
             };
-            FetchDailyTasksResponseSchema: components["schemas"]["def-3"]["TaskSchema"][];
-            DeleteDailyTaskInputSchema: {
+            FetchTasksResponseSchema: components["schemas"]["def-3"]["TaskSchema"][];
+            DeleteTaskInputSchema: {
                 id: components["schemas"]["def-3"]["TaskSchema"]["id"];
             };
-            UpdateDailyTaskInputSchema: {
+            UpdateTaskInputSchema: {
                 id: components["schemas"]["def-3"]["TaskSchema"]["id"];
                 taskType: components["schemas"]["def-3"]["TaskSchema"]["taskType"];
                 priority?: components["schemas"]["def-3"]["TaskSchema"]["priority"];
@@ -430,12 +431,7 @@ export interface components {
                 createdAt?: components["schemas"]["def-3"]["TaskSchema"]["createdAt"];
                 updatedAt: components["schemas"]["def-3"]["TaskSchema"]["updatedAt"];
                 deadline: components["schemas"]["def-3"]["TaskSchema"]["deadline"];
-                todoListId: components["schemas"]["def-3"]["TaskSchema"]["todoListId"];
-                todoList?: components["schemas"]["def-3"]["TaskSchema"]["todoList"];
-                user?: components["schemas"]["def-3"]["TaskSchema"]["user"];
                 tags?: components["schemas"]["def-3"]["TaskSchema"]["tags"];
-                recurrencePattern: components["schemas"]["def-3"]["TaskSchema"]["recurrencePattern"];
-                recurrenceEndDate: components["schemas"]["def-3"]["TaskSchema"]["recurrenceEndDate"];
             };
         };
     };

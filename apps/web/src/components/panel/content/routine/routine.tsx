@@ -1,22 +1,31 @@
 import { Input, List, message, Spin, theme, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { PlusOutlined } from "@ant-design/icons";
-import { faker } from "@faker-js/faker";
 
 import styles from "./routine.module.css";
 import { RoutineCard } from "./routine-card";
 import clsx from "clsx";
-import { useCookies } from "react-cookie";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDailyTasks } from "providers/daily-tasks";
 
 const { Title } = Typography;
 
+export interface Tag {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export interface Task {
   id: string;
+  priority: number;
   title: string;
   description: string;
+  tags: Tag[];
   isCompleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deadline: string;
 }
 
 export const ContentRoutine = () => {
