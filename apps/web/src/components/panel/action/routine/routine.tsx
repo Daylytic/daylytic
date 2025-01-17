@@ -1,9 +1,6 @@
 import Title from "antd/es/typography/Title";
-import { ActionDataProps } from "../action";
-import { generateTasks } from "utils/utils";
 import {
   Button,
-  Cascader,
   Col,
   DatePicker,
   Divider,
@@ -17,11 +14,9 @@ import {
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { goals } from "@daylytic/shared/constants";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
 import { useDailyTasks } from "providers/daily-tasks";
 import { useEffect, useState } from "react";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import cuid from "cuid";
 import type { SelectProps } from "antd";
