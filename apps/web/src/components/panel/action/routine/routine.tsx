@@ -38,6 +38,8 @@ const tagInputStyle: React.CSSProperties = {
 };
 
 const tagRender: TagRender = (props) => {
+  console.log("POROPS");
+  console.log(props)
   const { label, value, closable, onClose } = props;
   const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
     event.preventDefault();
@@ -183,6 +185,7 @@ export const Routine = ({ id }) => {
                 mode="multiple"
                 tagRender={tagRender}
                 style={{ width: "100%" }}
+                defaultValue={[tags.map((tag) => tag.id)]}
                 options={[
                   ...tags.map((tag) => {
                     return { key: tag.id, value: tag.id, label: tag.name };
@@ -190,11 +193,9 @@ export const Routine = ({ id }) => {
                 ]}
                 onChange={(value, selectedOptions) => {
                   console.log([value, selectedOptions]);
-                  const foundTag = tags.find((tag) => tag.id === value[0]);
-
-                  if (foundTag) {
-                    handleTaskChange("tags", [...task.tags, foundTag]);
-                  }
+                  // const foundTag = tags.find((tag) => tag.id === value[0]);
+                  console.log("update!!!")
+                  handleTaskChange("tags", selectedOptions);
                 }}
                 dropdownRender={dropdownRender}
                 placeholder="Please select"
