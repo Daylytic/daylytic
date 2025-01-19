@@ -174,11 +174,11 @@ export const Routine = ({ id }) => {
         <Row>
           <Col span={18} push={6}>
             <Flex gap="4px 0" wrap style={{ width: "100%" }}>
-              {task.tags.map((tag) => (
+              {/* {task.tags.map((tag) => (
                 <Tag bordered={false} closable color={tag.color}>
                   {tag.name}
                 </Tag>
-              ))}
+              ))} */}
               <Select
                 mode="multiple"
                 tagRender={tagRender}
