@@ -26,10 +26,7 @@ export const RoutineCard = (item: Task) => {
         description={
           <Button
             type="text"
-            onClick={() => {
-              navigate(`/panel/routine/${item.id}`);
-              // setAction(CONTENT_KEYS.ROUTINE);
-            }}
+            onClick={() => navigate(`/panel/routine/${item.id}`)}
             className={styles.button}
           >
             <Flex
