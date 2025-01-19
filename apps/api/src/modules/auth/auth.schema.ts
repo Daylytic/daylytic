@@ -21,7 +21,7 @@ const UserSchema = z.object({
 });
 
 export const GoogleAccountSchema = z.object({
-  id: IdSchema,
+  id: z.string(),
   email: z
     .string({
       required_error: "Email is required",
