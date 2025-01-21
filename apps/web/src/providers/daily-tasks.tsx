@@ -4,6 +4,8 @@ import { client } from "services/api-client";
 
 interface DailyTasksContextType {
   tasks: Task[];
+  selectedTask: Task | undefined;
+  setSelectedTask: (task: Task | undefined) => void;
   createTask: (title: string) => Promise<Task>;
   deleteTask: (id: string) => Promise<void>;
   fetchTasks: () => Promise<void>;
@@ -17,6 +19,7 @@ const DailyTasksContext = React.createContext<
 // Provider Component
 export const DailyTasksProvider = ({ token, children }) => {
   const [tasks, setTasks] = useState<any[]>([]);
+  const [selectedTask, setSelectedTask] = useState<Task | undefined>();
 
   const fetchTasks = async () => {
     try {
@@ -90,7 +93,15 @@ export const DailyTasksProvider = ({ token, children }) => {
 
   return (
     <DailyTasksContext.Provider
-      value={{ tasks, fetchTasks, createTask, deleteTask, updateTask }}
+      value={{
+        tasks,
+        fetchTasks,
+        createTask,
+        deleteTask,
+        updateTask,
+        selectedTask,
+        setSelectedTask,
+      }}
     >
       {children}
     </DailyTasksContext.Provider>

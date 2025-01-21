@@ -1,5 +1,5 @@
 import { Flex } from "antd";
-import styles from "./goals.module.css";
+import styles from "./general.module.css";
 
 interface MenuGeneralItemProps {
   text: string;

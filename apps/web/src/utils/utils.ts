@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { Task } from "components/panel/content/routine/routine";
+import { Task } from "types/task";
 
 let generatedTasks = [] as Task[];
 
