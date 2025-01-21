@@ -11,12 +11,15 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import { useDailyTasks } from "providers/daily-tasks";
+import { CreateTagModal } from "../../modal/create-tag-modal";
+import { useState } from "react";
 import styles from "./routine.module.css";
 
 type TagRender = SelectProps["tagRender"];
 
-export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value: boolean) => void}) => {
+export const RoutineOptions = () => {
   const { tasks, setSelectedTask, selectedTask } = useDailyTasks();
+  const [open, setOpen] = useState(false);
 
   const tags = [...tasks, selectedTask!].flatMap((task) => task.tags);
 
@@ -64,6 +67,7 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
 
   return (
     <>
+      <CreateTagModal setOpen={setOpen} open={open} />
       <Row>
         <Col span={18} push={6}>
           <DatePicker
