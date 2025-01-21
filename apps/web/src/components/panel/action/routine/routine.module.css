@@ -1,0 +1,34 @@
+#actions-wrapper {
+  justify-content: center;
+  width: 100%;
+}
+
+.action {
+  width: 50%;
+}
+
+#task-description {
+    height: 90px;
+    resize: none;
+    margin-bottom: 30px;
+}
+
+.dropdown-divider {
+    margin: 0;
+}
+
+#dropdown-button {
+    width: 100%;
+}
+
+#tags-wrapper {
+    width: 100%;
+}
+
+#tags-select {
+    width: 100%;
+}
+
+.tag {
+    margin-inline-end: 4;
+}

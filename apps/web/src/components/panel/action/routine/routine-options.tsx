@@ -11,22 +11,27 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import { useDailyTasks } from "providers/daily-tasks";
+import { CreateTagModal } from "../../modal/create-tag-modal";
+import { useState } from "react";
+import styles from "./routine.module.css";
 
 type TagRender = SelectProps["tagRender"];
 
-export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value: boolean) => void}) => {
+export const RoutineOptions = () => {
   const { tasks, setSelectedTask, selectedTask } = useDailyTasks();
+  const [open, setOpen] = useState(false);
 
   const tags = [...tasks, selectedTask!].flatMap((task) => task.tags);
 
   const dropdownRender = (menus: React.ReactNode) => (
     <div>
       {menus}
-      <Divider style={{ margin: 0 }} />
+      <Divider className={styles["dropdown-divider"]} />
       <Button
         type="text"
-        style={{ width: "100%" }}
+        id={styles["dropdown-button"]}
         onClick={() => {
+
           setOpen(!open);
         }}
       >
@@ -49,11 +54,11 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
 
     return (
       <Tag
-        color={tag!.color ?? "grey"}
+        color={tag!.color ?? null}
         onMouseDown={onPreventMouseDown}
         closable={closable}
         onClose={onClose}
-        style={{ marginInlineEnd: 4 }}
+        className={styles.tag}
       >
         {label}
       </Tag>
@@ -62,6 +67,7 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
 
   return (
     <>
+      <CreateTagModal setOpen={setOpen} open={open} />
       <Row>
         <Col span={18} push={6}>
           <DatePicker
@@ -87,11 +93,11 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
       </Row>
       <Row>
         <Col span={18} push={6}>
-          <Flex gap="4px 0" wrap style={{ width: "100%" }}>
+          <Flex gap="4px 0" wrap id={styles["tags-wrapper"]}>
             <Select
               mode="multiple"
               tagRender={tagRender}
-              style={{ width: "100%" }}
+              id={styles["tags-select"]}
               value={selectedTask!.tags.map((tag) => tag.id)}
               options={[
                 ...tags.map((tag) => {
