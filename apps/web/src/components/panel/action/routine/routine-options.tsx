@@ -11,6 +11,7 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import { useDailyTasks } from "providers/daily-tasks";
+import styles from "./routine.module.css";
 
 type TagRender = SelectProps["tagRender"];
 
@@ -22,11 +23,12 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
   const dropdownRender = (menus: React.ReactNode) => (
     <div>
       {menus}
-      <Divider style={{ margin: 0 }} />
+      <Divider className={styles["dropdown-divider"]} />
       <Button
         type="text"
-        style={{ width: "100%" }}
+        id={styles["dropdown-button"]}
         onClick={() => {
+
           setOpen(!open);
         }}
       >
@@ -53,7 +55,7 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
         onMouseDown={onPreventMouseDown}
         closable={closable}
         onClose={onClose}
-        style={{ marginInlineEnd: 4 }}
+        className={styles.tag}
       >
         {label}
       </Tag>
@@ -87,11 +89,11 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
       </Row>
       <Row>
         <Col span={18} push={6}>
-          <Flex gap="4px 0" wrap style={{ width: "100%" }}>
+          <Flex gap="4px 0" wrap id={styles["tags-wrapper"]}>
             <Select
               mode="multiple"
               tagRender={tagRender}
-              style={{ width: "100%" }}
+              id={styles["tags-select"]}
               value={selectedTask!.tags.map((tag) => tag.id)}
               options={[
                 ...tags.map((tag) => {
