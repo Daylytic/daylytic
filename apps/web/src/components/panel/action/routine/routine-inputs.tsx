@@ -1,4 +1,4 @@
-import { goals } from "@daylytic/shared/constants";
+import { TASK_DESCRIPTION_MAX_LENGTH, TASK_DESCRIPTION_MIN_LENGTH, TASK_TITLE_MAX_LENGTH, TASK_TITLE_MIN_LENGTH } from "@daylytic/shared/constants";
 import { Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useDailyTasks } from "providers/daily-tasks";
@@ -9,7 +9,8 @@ export const RoutineInputs = () => {
   return (
     <>
       <Input
-        maxLength={goals.MAX_GOAL_TITLE_LENGTH}
+        maxLength={TASK_TITLE_MAX_LENGTH}
+        minLength={TASK_TITLE_MIN_LENGTH}
         placeholder="Enter title"
         showCount
         value={selectedTask!.title}
@@ -20,7 +21,8 @@ export const RoutineInputs = () => {
       />
       <TextArea
         showCount
-        maxLength={goals.MAX_GOAL_DESCRIPTION_LENGTH}
+        maxLength={TASK_DESCRIPTION_MAX_LENGTH}
+        minLength={TASK_DESCRIPTION_MIN_LENGTH}
         placeholder="Enter description"
         style={{ height: "90px", resize: "none", marginBottom: "30px" }}
         value={selectedTask!.description}
