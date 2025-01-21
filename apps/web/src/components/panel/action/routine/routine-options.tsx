@@ -49,7 +49,7 @@ export const RoutineOptions = ({open, setOpen} : {open: boolean, setOpen: (value
 
     return (
       <Tag
-        color={tag!.color ?? "grey"}
+        color={tag!.color ?? null}
         onMouseDown={onPreventMouseDown}
         closable={closable}
         onClose={onClose}
