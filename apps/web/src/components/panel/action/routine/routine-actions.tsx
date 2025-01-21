@@ -2,16 +2,17 @@ import { Col, Button, Flex, Popconfirm } from "antd";
 import { useDailyTasks } from "providers/daily-tasks";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import styles from "./routine.module.css";
 
 export const RoutineActions = () => {
   const [loading, setLoading] = useState(false);
   const { updateTask, selectedTask, deleteTask } = useDailyTasks();
   const navigate = useNavigate();
 
-  return <Flex gap={"5px"} justify="center" style={{ width: "100%" }}>
-    <Col flex={1}>
+  return <Flex gap={"small"} id={styles["actions-wrapper"]}>
+    <Col className={styles.action}>
       <Popconfirm
-        title="Are you sure delete this task?"
+        title="Are you sure to delete this task?"
         okText="Yes"
         cancelText="No"
         onConfirm={async () => {
@@ -23,7 +24,7 @@ export const RoutineActions = () => {
       </Popconfirm>
     </Col>
 
-    <Col flex={1}>
+    <Col className={styles.action}>
       <Button
         block
         type="primary"
@@ -31,7 +32,6 @@ export const RoutineActions = () => {
         onClick={async () => {
           setLoading(true);
           try {
-            console.log(selectedTask);
             await updateTask(selectedTask!);
             setLoading(false);
           } catch (err) {
