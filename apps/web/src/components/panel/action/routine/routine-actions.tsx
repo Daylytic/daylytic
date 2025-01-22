@@ -3,44 +3,48 @@ import { useDailyTasks } from "providers/daily-tasks";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import styles from "./routine.module.css";
+import { useTaskEditor } from "providers/task-editor";
 
 export const RoutineActions = () => {
   const [loading, setLoading] = useState(false);
-  const { updateTask, selectedTask, deleteTask } = useDailyTasks();
+  const { updateTask, deleteTask } = useDailyTasks();
+  const { selectedTask } = useTaskEditor();
   const navigate = useNavigate();
 
-  return <Flex gap={"small"} id={styles["actions-wrapper"]}>
-    <Col className={styles.action}>
-      <Popconfirm
-        title="Are you sure to delete this task?"
-        okText="Yes"
-        cancelText="No"
-        onConfirm={async () => {
-          await deleteTask(selectedTask!.id);
-          navigate("/panel/routine");
-        }}
-      >
-        <Button block>Delete Task</Button>
-      </Popconfirm>
-    </Col>
+  return (
+    <Flex gap={"small"} id={styles["actions-wrapper"]}>
+      <Col className={styles.action}>
+        <Popconfirm
+          title="Are you sure to delete this task?"
+          okText="Yes"
+          cancelText="No"
+          onConfirm={async () => {
+            await deleteTask(selectedTask!.id);
+            navigate("/panel/routine");
+          }}
+        >
+          <Button block>Delete Task</Button>
+        </Popconfirm>
+      </Col>
 
-    <Col className={styles.action}>
-      <Button
-        block
-        type="primary"
-        loading={loading}
-        onClick={async () => {
-          setLoading(true);
-          try {
-            await updateTask(selectedTask!);
-            setLoading(false);
-          } catch (err) {
-            setLoading(false);
-          }
-        }}
-      >
-        Save Task
-      </Button>
-    </Col>
-  </Flex>;
+      <Col className={styles.action}>
+        <Button
+          block
+          type="primary"
+          loading={loading}
+          onClick={async () => {
+            setLoading(true);
+            try {
+              await updateTask(selectedTask!);
+              setLoading(false);
+            } catch (err) {
+              setLoading(false);
+            }
+          }}
+        >
+          Save Task
+        </Button>
+      </Col>
+    </Flex>
+  );
 };
