@@ -14,11 +14,13 @@ import { useDailyTasks } from "providers/daily-tasks";
 import { CreateTagModal } from "../../modal/create-tag-modal";
 import { useState } from "react";
 import styles from "./routine.module.css";
+import { useTaskEditor } from "providers/task-editor";
 
 type TagRender = SelectProps["tagRender"];
 
 export const RoutineOptions = () => {
-  const { tasks, setSelectedTask, selectedTask } = useDailyTasks();
+  const { tasks } = useDailyTasks();
+  const { selectedTask, setSelectedTask } = useTaskEditor();
   const [open, setOpen] = useState(false);
 
   const tags = [...tasks, selectedTask!].flatMap((task) => task.tags);
@@ -31,7 +33,6 @@ export const RoutineOptions = () => {
         type="text"
         id={styles["dropdown-button"]}
         onClick={() => {
-
           setOpen(!open);
         }}
       >
@@ -106,8 +107,8 @@ export const RoutineOptions = () => {
               onChange={(value, selectedOptions) => {
                 console.log([value, selectedOptions]);
                 console.log("update!!!");
-                if(!selectedOptions) {
-                    return;
+                if (!selectedOptions) {
+                  return;
                 }
                 console.log(selectedOptions);
                 // selectedTask!.tags = selectedOptions;
