@@ -1,14 +1,15 @@
 import Title from "antd/es/typography/Title";
 import { Flex } from "antd";
 import { useDailyTasks } from "providers/daily-tasks";
-import { useEffect, useState } from "react";
-import { CreateTagModal } from "../../modal/create-tag-modal";
+import { useEffect } from "react";
 import { RoutineInputs } from "./routine-inputs";
 import { RoutineOptions } from "./routine-options";
 import { RoutineActions } from "./routine-actions";
+import { useTaskEditor } from "providers/task-editor";
 
 export const Routine = ({ id }) => {
-  const { tasks, setSelectedTask, selectedTask } = useDailyTasks();
+  const { tasks } = useDailyTasks();
+  const { selectedTask, setSelectedTask } = useTaskEditor();
 
   useEffect(() => {
     if (!selectedTask && tasks.length > 0) {
@@ -27,13 +28,11 @@ export const Routine = ({ id }) => {
   return (
     <>
       <Title level={2}>Task</Title>
-      <Flex vertical justify="space-between">
-        <Flex vertical gap={"small"}>
-          <RoutineInputs />
-          <RoutineOptions />
-        </Flex>
-        <RoutineActions />
+      <Flex vertical gap={"small"}>
+        <RoutineInputs />
+        <RoutineOptions />
       </Flex>
+      <RoutineActions />
     </>
   );
 };

@@ -1,10 +1,11 @@
 #actions-wrapper {
-  justify-content: center;
-  width: 100%;
+    margin-top: auto;
+    justify-content: center;
+    width: 100%;
 }
 
 .action {
-  width: 50%;
+    width: 50%;
 }
 
 #task-description {
