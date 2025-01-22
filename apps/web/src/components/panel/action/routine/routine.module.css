@@ -26,7 +26,11 @@
     width: 100%;
 }
 
-#tags-select {
+.date-picker {
+    width: 100%;
+}
+
+.tags-select {
     width: 100%;
 }
 
