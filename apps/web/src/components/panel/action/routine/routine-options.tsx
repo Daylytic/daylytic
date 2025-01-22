@@ -74,17 +74,16 @@ export const RoutineOptions = () => {
             value={
               selectedTask!.deadline ? dayjs(selectedTask!.deadline) : null
             }
-            onChange={
-              (date) => {
-                const isoDate = date?.toISOString() || null;
-                if(isoDate === null) {
-                    return;
-                }
-
-                selectedTask!.deadline = isoDate;
-                setSelectedTask(selectedTask);
+            className={styles["date-picker"]}
+            onChange={(date) => {
+              const isoDate = date?.toISOString() || null;
+              if (isoDate === null) {
+                return;
               }
-            }
+
+              selectedTask!.deadline = isoDate;
+              setSelectedTask(selectedTask);
+            }}
           />
         </Col>
         <Col span={6} pull={18}>
@@ -97,7 +96,7 @@ export const RoutineOptions = () => {
             <Select
               mode="multiple"
               tagRender={tagRender}
-              id={styles["tags-select"]}
+              className={styles["tags-select"]}
               value={selectedTask!.tags.map((tag) => tag.id)}
               options={[
                 ...tags.map((tag) => {
