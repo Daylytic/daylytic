@@ -4,7 +4,11 @@ import { RequestError } from "utils/error.js";
 import { analyticsService } from "modules/analytics/analytics.service.js";
 import { routineDataService } from "modules/analytics/routine/routine.service.js";
 import { taskService } from "modules/task/task.service.js";
-import { CreateTaskInputSchema, DeleteTaskInputSchema, UpdateTaskInputSchema } from "modules/task/task.schema.js";
+import {
+  CreateTaskInputSchema,
+  DeleteTaskInputSchema,
+  UpdateTaskInputSchema,
+} from "modules/task/task.schema.js";
 
 const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   const userId = req.user!.id;
@@ -41,11 +45,9 @@ const getDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
 
 const updateDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   const dailyTask = req.body as UpdateTaskInputSchema;
-  const userId = req.user!.id;
 
   try {
-    return await taskService.updateTask(dailyTask
-    );
+    return await taskService.updateTask(dailyTask);
   } catch (err: any) {
     if (err instanceof RequestError) {
       return rep.status(err.status).send({ error: err.message });
@@ -78,11 +80,13 @@ const initializeDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
 
   // Fetch analytics and last routine reset data
   const analytics = await analyticsService.getAnalytics({ userId: user.id });
-  const lastRoutineResetUTC = (await routineDataService.getRoutineData({ analyticsId: analytics.id })).lastRoutineReset;
+  const lastRoutineResetUTC = (
+    await routineDataService.getRoutineData({ analyticsId: analytics.id })
+  ).lastRoutineReset;
 
   // Normalize dates to user's time zone and strip time components
   const normalizeToDate = (date: Date, timeZone: string) => {
-    const localDate = new Date(date.toLocaleString('en-US', { timeZone }));
+    const localDate = new Date(date.toLocaleString("en-US", { timeZone }));
     return new Date(localDate.setHours(0, 0, 0, 0)); // Reset time to midnight
   };
 
