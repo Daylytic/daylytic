@@ -1,11 +1,11 @@
 import { TASK_DESCRIPTION_MAX_LENGTH, TASK_DESCRIPTION_MIN_LENGTH, TASK_TITLE_MAX_LENGTH, TASK_TITLE_MIN_LENGTH } from "@daylytic/shared/constants";
 import { Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { useDailyTasks } from "providers/daily-tasks";
 import styles from "./routine.module.css";
+import { useTaskEditor } from "providers/task-editor";
 
 export const RoutineInputs = () => {
-  const { selectedTask, setSelectedTask } = useDailyTasks();
+      const { selectedTask, setSelectedTask } = useTaskEditor();
 
   return (
     <>

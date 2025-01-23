@@ -1,33 +1,51 @@
 import { faker } from "@faker-js/faker";
-import { Col, ColorPicker, ColorPickerProps, Divider, Input, Modal, Row, theme } from "antd";
+import {
+  Col,
+  ColorPicker,
+  ColorPickerProps,
+  Divider,
+  Input,
+  Modal,
+  Row,
+  theme,
+} from "antd";
 import cuid from "cuid";
-import { blue, green, presetPalettes, red } from '@ant-design/colors';
+import { blue, green, presetPalettes, red } from "@ant-design/colors";
 import { useDailyTasks } from "providers/daily-tasks";
+import { useState } from "react";
+import { useTaskEditor } from "providers/task-editor";
 
-type Presets = Required<ColorPickerProps>['presets'][number];
+type Presets = Required<ColorPickerProps>["presets"][number];
 
-function genPresets(presets = presetPalettes) {
-  return Object.entries(presets).map<Presets>(([label, colors]) => ({ label, colors, key: label }));
+interface CreateTagProps {
+  color: string;
+  setColor: (color: string) => void;
 }
 
-const HorizontalLayoutDemo = () => {
-  const { token } = theme.useToken();
+function genPresets(presets = presetPalettes) {
+  return Object.entries(presets).map<Presets>(([label, colors]) => ({
+    label,
+    colors,
+    key: label,
+  }));
+}
 
+const CreateTag = ({ color, setColor }: CreateTagProps) => {
   const presets = genPresets({
     red,
     green,
     blue,
   });
 
-  const customPanelRender: ColorPickerProps['panelRender'] = (
+  const customPanelRender: ColorPickerProps["panelRender"] = (
     _,
-    { components: { Picker, Presets } },
+    { components: { Picker, Presets } }
   ) => (
     <Row justify="space-between" wrap={false}>
       <Col span={12}>
         <Presets />
       </Col>
-      <Divider type="vertical" style={{ height: 'auto' }} />
+      <Divider type="vertical" style={{ height: "auto" }} />
       <Col flex="auto">
         <Picker />
       </Col>
@@ -36,10 +54,11 @@ const HorizontalLayoutDemo = () => {
 
   return (
     <ColorPicker
-      defaultValue={token.colorPrimary}
+      defaultValue={color}
       styles={{ popupOverlayInner: { width: 480 } }}
       presets={presets}
       panelRender={customPanelRender}
+      onChange={(color) => setColor(color.toHexString())}
     />
   );
 };
@@ -51,11 +70,13 @@ export const CreateTagModal = ({
   open: boolean;
   setOpen: (value: boolean) => void;
 }) => {
-  const { setSelectedTask, selectedTask } = useDailyTasks();
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("");
+  const { selectedTask, setSelectedTask } = useTaskEditor();
 
   return (
     <Modal
-      title="Vertically centered modal dialog"
+      title="Create New Tag"
       centered
       open={open}
       onOk={() => {
@@ -64,16 +85,21 @@ export const CreateTagModal = ({
           ...selectedTask!.tags,
           {
             id: cuid(),
-            name: faker.animal.petName(),
-            color: faker.color.rgb(),
+            name: name,
+            color: color,
           },
         ];
         setSelectedTask(selectedTask);
       }}
       onCancel={() => setOpen(false)}
     >
-      <Input placeholder="Name of the tag" />
-      <HorizontalLayoutDemo />
+      <Input
+        placeholder="Name"
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
+      />
+      <CreateTag color={color} setColor={setColor} />
     </Modal>
   );
 };

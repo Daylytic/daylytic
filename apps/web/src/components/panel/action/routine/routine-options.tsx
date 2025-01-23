@@ -14,11 +14,13 @@ import { useDailyTasks } from "providers/daily-tasks";
 import { CreateTagModal } from "../../modal/create-tag-modal";
 import { useState } from "react";
 import styles from "./routine.module.css";
+import { useTaskEditor } from "providers/task-editor";
 
 type TagRender = SelectProps["tagRender"];
 
 export const RoutineOptions = () => {
-  const { tasks, setSelectedTask, selectedTask } = useDailyTasks();
+  const { tasks } = useDailyTasks();
+  const { selectedTask, setSelectedTask } = useTaskEditor();
   const [open, setOpen] = useState(false);
 
   const tags = [...tasks, selectedTask!].flatMap((task) => task.tags);
@@ -31,7 +33,6 @@ export const RoutineOptions = () => {
         type="text"
         id={styles["dropdown-button"]}
         onClick={() => {
-
           setOpen(!open);
         }}
       >
@@ -74,17 +75,16 @@ export const RoutineOptions = () => {
             value={
               selectedTask!.deadline ? dayjs(selectedTask!.deadline) : null
             }
-            onChange={
-              (date) => {
-                const isoDate = date?.toISOString() || null;
-                if(isoDate === null) {
-                    return;
-                }
-
-                selectedTask!.deadline = isoDate;
-                setSelectedTask(selectedTask);
+            className={styles["date-picker"]}
+            onChange={(date) => {
+              const isoDate = date?.toISOString() || null;
+              if (isoDate === null) {
+                return;
               }
-            }
+
+              selectedTask!.deadline = isoDate;
+              setSelectedTask(selectedTask);
+            }}
           />
         </Col>
         <Col span={6} pull={18}>
@@ -97,7 +97,7 @@ export const RoutineOptions = () => {
             <Select
               mode="multiple"
               tagRender={tagRender}
-              id={styles["tags-select"]}
+              className={styles["tags-select"]}
               value={selectedTask!.tags.map((tag) => tag.id)}
               options={[
                 ...tags.map((tag) => {
@@ -107,8 +107,8 @@ export const RoutineOptions = () => {
               onChange={(value, selectedOptions) => {
                 console.log([value, selectedOptions]);
                 console.log("update!!!");
-                if(!selectedOptions) {
-                    return;
+                if (!selectedOptions) {
+                  return;
                 }
                 console.log(selectedOptions);
                 // selectedTask!.tags = selectedOptions;
