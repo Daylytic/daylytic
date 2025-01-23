@@ -99,6 +99,7 @@ enum Priority {
 
 model Task {
   id          String    @id @default(cuid()) // Unique ID for the task
+  position    Int
   taskType    TaskType // Specifies the owner type (User or ToDoList)
   priority    Priority? // Allows for custom ordering
   title       String // Title of the task
@@ -112,6 +113,10 @@ model Task {
   userId      String? // Relation field to ToDoList
   user        User?     @relation(fields: [userId], references: [id])
   tags        Tag[]     @relation("TaskTags")
+  
+  // Ensure unique positions in either a TodoList or a User's routine
+  @@unique([todoListId, position])
+  @@unique([userId, position])
 }
 
 model Tag {
