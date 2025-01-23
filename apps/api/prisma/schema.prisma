@@ -89,10 +89,18 @@ enum TaskType {
   TODOLIST
 }
 
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+  OPTIONAL
+}
+
 model Task {
   id          String    @id @default(cuid()) // Unique ID for the task
   taskType    TaskType // Specifies the owner type (User or ToDoList)
-  priority    Int       @default(0) // Allows for custom ordering
+  priority    Priority? // Allows for custom ordering
   title       String // Title of the task
   description String?
   isCompleted Boolean   @default(false) // Task completion status

@@ -9,6 +9,7 @@ import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
 export const TaskType = z.enum(["ROUTINE", "TODOLIST"]);
+export const Priority = z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"]).nullable();
 
 export const TitleSchema = z
   .string()
@@ -40,7 +41,7 @@ export const TagSchema = z.object({
 export const TaskSchema = z.object({
   id: IdSchema, // Unique ID for the task
   taskType: TaskType, // Specifies the owner type (User or ToDoList)
-  priority: z.number().int().default(0), // Allows for custom ordering
+  priority: Priority, // Allows for custom ordering
   title: TitleSchema, // Title of the task
   description: DescriptionSchema, // Optional description
   isCompleted: z.boolean().default(false), // Task completion status
