@@ -11,8 +11,15 @@ import {
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   try {
+    const maxPosition = await prisma.task.aggregate({
+      where: { userId: data.userId },
+      _max: { position: true },
+    });
+  
+    const newPosition = (maxPosition._max.position ?? -1) + 1;
+    
     return await prisma.task.create({
-      data: data,
+      data: {...data, position: newPosition},
     });
   } catch (err) {
     throw new RequestError("Problem occured while creating task", 500);
