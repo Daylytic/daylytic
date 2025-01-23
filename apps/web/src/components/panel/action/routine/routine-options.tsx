@@ -8,6 +8,7 @@ import {
   Tag,
   Button,
   Divider,
+  Input,
 } from "antd";
 import dayjs from "dayjs";
 import { useDailyTasks } from "providers/daily-tasks";
@@ -121,6 +122,14 @@ export const RoutineOptions = () => {
         </Col>
         <Col span={6} pull={18}>
           Tags
+        </Col>
+      </Row>
+      <Row>
+        <Col span={18} push={6}>
+          <Input placeholder="1"  />
+        </Col>
+        <Col span={6} pull={18}>
+          Priority
         </Col>
       </Row>
     </>
