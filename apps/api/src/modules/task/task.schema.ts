@@ -84,7 +84,7 @@ const ResetTaskInputSchema = z.object({
 });
 
 // Update Task Schema
-const UpdateTaskInputSchema = TaskSchema.omit({ userId: true, todoListId: true, });
+const UpdateTaskInputSchema = TaskSchema.omit({ userId: true, todoListId: true, updatedAt: true, createdAt: true, });
 const UpdateTaskWithIdInputSchema = TaskSchema;
 
 export type Task = z.infer<typeof TaskSchema>;
