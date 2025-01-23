@@ -8,6 +8,7 @@ import {
   UpdateTaskWithIdInputSchema,
   UpdateTaskInputSchema,
 } from "./task.schema.js";
+import { convertToTimeZoneISO8601 } from "utils/date.js";
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   try {
@@ -107,6 +108,7 @@ const updateTask = async (data: UpdateTaskInputSchema) => {
       },
       data: {
         ...data,
+        updatedAt: convertToTimeZoneISO8601(),
         tags: {
           // Create new tags
           create: tagsToCreate,
