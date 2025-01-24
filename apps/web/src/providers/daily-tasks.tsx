@@ -1,6 +1,14 @@
 import { Task } from "types/task";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { client } from "services/api-client";
+import { debounce } from "utils/utils";
 
 interface DailyTasksContextType {
   tasks: Task[];
@@ -9,7 +17,7 @@ interface DailyTasksContextType {
   createTask: (title: string) => Promise<Task>;
   deleteTask: (id: string) => Promise<void>;
   fetchTasks: () => Promise<void>;
-  updateTask: (task: Task) => Promise<Task>;
+  updateTask: (task: Task) => Promise<void>;
 }
 
 const DailyTasksContext = React.createContext<
@@ -72,6 +80,45 @@ export const DailyTasksProvider = ({ token, children }) => {
   const updateTask = async (task: Task) => {
     try {
       const taskIndex = tasks.findIndex(
+        (existingTask) => task.id === existingTask.id
+      );
+      const lastSavedTask = tasks[taskIndex];
+
+      setTasks((prevTasks) => {
+        if (taskIndex === -1) {
+          // If the task doesn't exist, return the current tasks unmodified
+          return prevTasks;
+        }
+        // Create a new array with the updated task
+        const updatedTasks = [...prevTasks];
+        updatedTasks[taskIndex] = task;
+        return updatedTasks;
+      });
+
+      // Optimized debounced save function
+      debounce(async (updatedTask: Task) => {
+        // Compare the updated task with the last saved version
+        if (
+          updatedTask.title === lastSavedTask.current.title &&
+          updatedTask.description === lastSavedTask.current.description
+        ) {
+          console.log("No changes to save");
+          return; // Skip saving if there are no changes
+        }
+
+        await client.PUT("/routine/", {
+          params: {
+            header: { authorization: `Bearer ${token}` },
+          },
+          body: {
+            ...task,
+            taskType: "ROUTINE",
+          },
+        });
+      }, 3000); // Delay of 1 second
+
+      // await fetchTasks(); // Refresh tasks after creating
+      // return data as Task;
     } catch (error) {
       console.error("Failed to update task:", error);
       throw error;
