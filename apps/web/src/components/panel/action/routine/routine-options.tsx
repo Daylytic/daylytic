@@ -131,7 +131,7 @@ export const RoutineOptions = () => {
       </Row>
       <Row>
         <Col span={18} push={6}>
-          <Input placeholder="1"  />
+          <Input placeholder="1" />
         </Col>
         <Col span={6} pull={18}>
           Priority
