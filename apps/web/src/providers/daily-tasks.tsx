@@ -42,7 +42,9 @@ export const DailyTasksProvider = ({ token, children }) => {
         },
         body: { title, taskType: "ROUTINE" },
       });
-      await fetchTasks(); // Refresh tasks after creating
+
+      setTasks((prevTasks) => [...prevTasks, data as Task]);
+
       return data as Task;
     } catch (error) {
       console.error("Failed to create task:", error);
@@ -51,6 +53,8 @@ export const DailyTasksProvider = ({ token, children }) => {
   };
 
   const deleteTask = async (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+
     try {
       const { data } = await client.DELETE("/routine/", {
         params: {
@@ -58,7 +62,6 @@ export const DailyTasksProvider = ({ token, children }) => {
         },
         body: { id },
       });
-      await fetchTasks(); // Refresh tasks after deleting
       return data;
     } catch (error) {
       console.error("Failed to delete task:", error);
@@ -68,17 +71,7 @@ export const DailyTasksProvider = ({ token, children }) => {
 
   const updateTask = async (task: Task) => {
     try {
-      const { data } = await client.PUT("/routine/", {
-        params: {
-          header: { authorization: `Bearer ${token}` },
-        },
-        body: {
-          ...task,
-          taskType: "ROUTINE",
-        },
-      });
-      await fetchTasks(); // Refresh tasks after creating
-      return data as Task;
+      const taskIndex = tasks.findIndex(
     } catch (error) {
       console.error("Failed to update task:", error);
       throw error;
