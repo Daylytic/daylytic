@@ -82,43 +82,49 @@ export const DailyTasksProvider = ({ token, children }) => {
       const taskIndex = tasks.findIndex(
         (existingTask) => task.id === existingTask.id
       );
-      const lastSavedTask = tasks[taskIndex];
 
       setTasks((prevTasks) => {
         if (taskIndex === -1) {
-          // If the task doesn't exist, return the current tasks unmodified
           return prevTasks;
         }
-        // Create a new array with the updated task
+
         const updatedTasks = [...prevTasks];
-        updatedTasks[taskIndex] = task;
+        updatedTasks[taskIndex] = { ...updatedTasks[taskIndex], ...task };
         return updatedTasks;
       });
 
-      // Optimized debounced save function
-      debounce(async (updatedTask: Task) => {
-        // Compare the updated task with the last saved version
-        if (
-          updatedTask.title === lastSavedTask.current.title &&
-          updatedTask.description === lastSavedTask.current.description
-        ) {
-          console.log("No changes to save");
-          return; // Skip saving if there are no changes
-        }
 
+      if (debouncedUpdates[task.id]) {
+        clearTimeout(debouncedUpdates[task.id]); 
+      }
+
+      const timeoutId = setTimeout(async () => {
+        const latestTasks = latestTasksRef.current;
+        const taskToUpdate = latestTasks.find(
+          (existingTask) => existingTask.id === task.id
+        );
+
+        if (taskToUpdate) {
+          try {
         await client.PUT("/routine/", {
           params: {
             header: { authorization: `Bearer ${token}` },
           },
           body: {
-            ...task,
+                ...taskToUpdate,
             taskType: "ROUTINE",
           },
         });
-      }, 3000); // Delay of 1 second
+            console.log(
+              `Task ${task.id} updated successfully in the database.`
+            );
+          } catch (error) {
+            console.error(`Failed to update task ${task.id}:`, error);
+          }
+        }
+      }, 3000); // Wait for 3 seconds before saving to database
 
-      // await fetchTasks(); // Refresh tasks after creating
-      // return data as Task;
+      setDebouncedUpdates((prev) => ({ ...prev, [task.id]: timeoutId })); // Track timeout for this task
     } catch (error) {
       console.error("Failed to update task:", error);
       throw error;
