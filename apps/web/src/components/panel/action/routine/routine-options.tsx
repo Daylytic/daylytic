@@ -16,6 +16,7 @@ import { CreateTagModal } from "../../modal/create-tag-modal";
 import { useState } from "react";
 import styles from "./routine.module.css";
 import { useTaskEditor } from "providers/task-editor";
+import { Tag } from "types/task";
 
 type TagRender = SelectProps["tagRender"];
 
@@ -24,7 +25,7 @@ export const RoutineOptions = () => {
   const { selectedTask, setSelectedTask } = useTaskEditor();
   const [open, setOpen] = useState(false);
 
-  const tags = [...tasks, selectedTask!].flatMap((task) => task.tags);
+  const tags = [...tasks].flatMap((task) => task.tags);
 
   const dropdownRender = (menus: React.ReactNode) => (
     <div>
