@@ -5,8 +5,9 @@ import styles from "./routine.module.css";
 import { useTaskEditor } from "providers/task-editor";
 
 export const RoutineInputs = () => {
-      const { selectedTask, setSelectedTask } = useTaskEditor();
+  const { selectedTask, setSelectedTask } = useTaskEditor();
 
+  console.log(selectedTask);
   return (
     <>
       <Input
@@ -14,10 +15,15 @@ export const RoutineInputs = () => {
         minLength={TASK_TITLE_MIN_LENGTH}
         placeholder="Enter title"
         showCount
-        value={selectedTask!.title}
+        value={selectedTask?.title || ""}
         onChange={(e) => {
-          selectedTask!.title = e.target.value;
-          setSelectedTask(selectedTask);
+          if (selectedTask) {
+            // Create a new object to ensure state updates
+            setSelectedTask({
+              ...selectedTask,
+              title: e.target.value,
+            });
+          }
         }}
       />
       <TextArea
@@ -26,10 +32,15 @@ export const RoutineInputs = () => {
         minLength={TASK_DESCRIPTION_MIN_LENGTH}
         placeholder="Enter description"
         id={styles["task-description"]}
-        value={selectedTask!.description}
+        value={selectedTask?.description || ""}
         onChange={(e) => {
-          selectedTask!.description = e.target.value;
-          setSelectedTask(selectedTask);
+          if (selectedTask) {
+            // Create a new object to ensure state updates
+            setSelectedTask({
+              ...selectedTask,
+              description: e.target.value,
+            });
+          }
         }}
       />
     </>
