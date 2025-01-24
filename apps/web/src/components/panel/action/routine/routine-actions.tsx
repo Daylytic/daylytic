@@ -19,7 +19,7 @@ export const RoutineActions = () => {
           okText="Yes"
           cancelText="No"
           onConfirm={async () => {
-            await deleteTask(selectedTask!.id);
+            deleteTask(selectedTask!.id);
             navigate("/panel/routine");
           }}
         >
@@ -35,7 +35,7 @@ export const RoutineActions = () => {
           onClick={async () => {
             setLoading(true);
             try {
-              await updateTask(selectedTask!);
+              updateTask(selectedTask!);
               setLoading(false);
             } catch (err) {
               setLoading(false);
