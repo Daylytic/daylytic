@@ -5,7 +5,7 @@ import {
   Flex,
   Select,
   SelectProps,
-  Tag,
+  Tag as AntTag,
   Button,
   Divider,
   Input,
@@ -55,7 +55,7 @@ export const RoutineOptions = () => {
     }
 
     return (
-      <Tag
+      <AntTag
         color={tag!.color ?? null}
         onMouseDown={onPreventMouseDown}
         closable={closable}
@@ -63,7 +63,7 @@ export const RoutineOptions = () => {
         className={styles.tag}
       >
         {label}
-      </Tag>
+      </AntTag>
     );
   };
 
