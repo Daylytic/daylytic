@@ -3,6 +3,6 @@
 - Login streak
 - Daily todo list
 - Panel with dashboard, daily todo list, and then goals.
-- Trailer of the site
 - Notepad
 - Different themes
+- Different view mode for goals -> projects and todo tasks
