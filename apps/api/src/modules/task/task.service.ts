@@ -44,14 +44,6 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
     await prisma.task.delete({
       where: data,
     });
-
-    await prisma.tag.deleteMany({
-      where: {
-        tasks: {
-          none: {}, // Select tags that are not associated with any tasks
-        },
-      },
-    });
   } catch (err) {
     throw new RequestError("Problem occured while deleting task", 500);
   }
