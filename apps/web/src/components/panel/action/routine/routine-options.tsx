@@ -103,7 +103,7 @@ export const RoutineOptions = () => {
               value={selectedTask!.tags.map((tag) => tag.id)}
               options={[
                 ...tags.map((tag) => {
-                  return { value: tag.id, label: tag.name };
+                  return { id: tag.id, color: tag.color, value: tag.id, name: tag.name,label: tag.name };
                 }),
               ]}
               onChange={(value, selectedOptions) => {
@@ -113,6 +113,10 @@ export const RoutineOptions = () => {
                   return;
                 }
                 console.log(selectedOptions);
+                selectedTask!.tags = selectedOptions as Tag[];
+                setSelectedTask(selectedTask);
+                // selectedTask!.tags = se;
+                // setSelectedTask(selectedTask);
                 // selectedTask!.tags = selectedOptions;
                 // handleTaskChange("tags", selectedOptions);
               }}
