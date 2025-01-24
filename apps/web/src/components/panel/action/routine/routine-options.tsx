@@ -21,7 +21,7 @@ import { Tag } from "types/task";
 type TagRender = SelectProps["tagRender"];
 
 export const RoutineOptions = () => {
-  const { tasks } = useDailyTasks();
+  const { tasks, updateTask } = useDailyTasks();
   const { selectedTask, setSelectedTask } = useTaskEditor();
   const [open, setOpen] = useState(false);
 
@@ -86,6 +86,7 @@ export const RoutineOptions = () => {
 
               selectedTask!.deadline = isoDate;
               setSelectedTask(selectedTask);
+              updateTask(selectedTask!);
             }}
           />
         </Col>
@@ -107,18 +108,12 @@ export const RoutineOptions = () => {
                 }),
               ]}
               onChange={(value, selectedOptions) => {
-                console.log([value, selectedOptions]);
-                console.log("update!!!");
                 if (!selectedOptions) {
                   return;
                 }
-                console.log(selectedOptions);
                 selectedTask!.tags = selectedOptions as Tag[];
                 setSelectedTask(selectedTask);
-                // selectedTask!.tags = se;
-                // setSelectedTask(selectedTask);
-                // selectedTask!.tags = selectedOptions;
-                // handleTaskChange("tags", selectedOptions);
+                updateTask(selectedTask!);
               }}
               dropdownRender={dropdownRender}
               placeholder="Please select"
