@@ -21,6 +21,9 @@ const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
     
     return await prisma.task.create({
       data: {...data, position: newPosition},
+      include: {
+        tags: true,
+      }
     });
   } catch (err) {
     throw new RequestError("Problem occured while creating task", 500);
