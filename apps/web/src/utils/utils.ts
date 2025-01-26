@@ -26,3 +26,7 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
         timeoutId = setTimeout(() => func(...args), delay);
     };
 }
+
+export function timeout(delay: number) {
+    return new Promise( res => setTimeout(res, delay) );
+}

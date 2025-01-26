@@ -3,11 +3,12 @@ import { Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import styles from "./routine.module.css";
 import { useTaskEditor } from "providers/task-editor";
+import { useDailyTasks } from "providers/daily-tasks";
 
 export const RoutineInputs = () => {
+  const { updateTask } = useDailyTasks();
   const { selectedTask, setSelectedTask } = useTaskEditor();
 
-  console.log(selectedTask);
   return (
     <>
       <Input
@@ -18,11 +19,13 @@ export const RoutineInputs = () => {
         value={selectedTask?.title || ""}
         onChange={(e) => {
           if (selectedTask) {
-            // Create a new object to ensure state updates
-            setSelectedTask({
+            const newTask = {
               ...selectedTask,
-              title: e.target.value,
-            });
+              description: e.target.value,
+            };
+
+            setSelectedTask(newTask);
+            updateTask(newTask);
           }
         }}
       />
@@ -35,11 +38,13 @@ export const RoutineInputs = () => {
         value={selectedTask?.description || ""}
         onChange={(e) => {
           if (selectedTask) {
-            // Create a new object to ensure state updates
-            setSelectedTask({
+            const newTask = {
               ...selectedTask,
               description: e.target.value,
-            });
+            };
+
+            setSelectedTask(newTask);
+            updateTask(newTask);
           }
         }}
       />
