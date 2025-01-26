@@ -337,7 +337,7 @@ export interface components {
                 timeZone: string;
             };
             GoogleAccountSchema: {
-                id: components["schemas"]["def-0"]["UserSchema"]["id"];
+                id: string;
                 /** Format: email */
                 email: string;
                 name: string;
@@ -390,8 +390,8 @@ export interface components {
                 id: string;
                 /** @enum {string} */
                 taskType: "ROUTINE" | "TODOLIST";
-                /** @default 0 */
-                priority: number;
+                priority: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL") | null;
+                position: null | number;
                 title: string;
                 description: string | null;
                 /** @default false */
@@ -424,12 +424,11 @@ export interface components {
             UpdateTaskInputSchema: {
                 id: components["schemas"]["def-3"]["TaskSchema"]["id"];
                 taskType: components["schemas"]["def-3"]["TaskSchema"]["taskType"];
-                priority?: components["schemas"]["def-3"]["TaskSchema"]["priority"];
+                priority: components["schemas"]["def-3"]["TaskSchema"]["priority"];
+                position: components["schemas"]["def-3"]["TaskSchema"]["position"];
                 title: components["schemas"]["def-3"]["TaskSchema"]["title"];
                 description: components["schemas"]["def-3"]["TaskSchema"]["description"];
                 isCompleted?: components["schemas"]["def-3"]["TaskSchema"]["isCompleted"];
-                createdAt?: components["schemas"]["def-3"]["TaskSchema"]["createdAt"];
-                updatedAt: components["schemas"]["def-3"]["TaskSchema"]["updatedAt"];
                 deadline: components["schemas"]["def-3"]["TaskSchema"]["deadline"];
                 tags?: components["schemas"]["def-3"]["TaskSchema"]["tags"];
             };

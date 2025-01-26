@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import { client } from "services/api-client";
-import { debounce } from "utils/utils";
+import { debounce, timeout } from "utils/utils";
 
 interface DailyTasksContextType {
   tasks: Task[];
@@ -28,6 +28,43 @@ const DailyTasksContext = React.createContext<
 export const DailyTasksProvider = ({ token, children }) => {
   const [tasks, setTasks] = useState<any[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
+  const [debouncedUpdates, setDebouncedUpdates] = useState<
+    Record<string, NodeJS.Timeout>
+  >({});
+  const latestTasksRef = useRef(tasks);
+
+  useEffect(() => {
+    latestTasksRef.current = tasks;
+  }, [tasks]);
+
+  const recalculatePositions = (tasks: Task[]): Task[] => {
+    return tasks
+      .sort((a, b) => a.position - b.position) // Sort by position
+      .map((task, index) => ({ ...task, position: index })); // Reassign positions
+  };
+
+  const moveTaskAndRecalculate = (
+    taskId: string,
+    newPosition: number
+  ): Task[] => {
+    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+    if (taskIndex === -1) {
+      throw new Error(`Task with ID ${taskId} not found`);
+    }
+  
+    const taskToMove = tasks[taskIndex];
+    const filteredTasks = tasks.filter((task) => task.id !== taskId); // Remove the task to move
+  
+    const reorderedTasks = [
+      ...filteredTasks.slice(0, newPosition),
+      { ...taskToMove, position: newPosition }, // Insert the task at the new position
+      ...filteredTasks.slice(newPosition),
+    ];
+  
+    // Recalculate positions to ensure they are sequential
+    return recalculatePositions(reorderedTasks);
+  };
+  
 
   const fetchTasks = async () => {
     try {
@@ -52,6 +89,7 @@ export const DailyTasksProvider = ({ token, children }) => {
       });
 
       setTasks((prevTasks) => [...prevTasks, data as Task]);
+      setTasks(recalculatePositions(tasks));
 
       return data as Task;
     } catch (error) {
@@ -70,6 +108,7 @@ export const DailyTasksProvider = ({ token, children }) => {
         },
         body: { id },
       });
+      setTasks(recalculatePositions(tasks));
       return data;
     } catch (error) {
       console.error("Failed to delete task:", error);
@@ -106,15 +145,15 @@ export const DailyTasksProvider = ({ token, children }) => {
 
         if (taskToUpdate) {
           try {
-        await client.PUT("/routine/", {
-          params: {
-            header: { authorization: `Bearer ${token}` },
-          },
-          body: {
+            await client.PUT("/routine/", {
+              params: {
+                header: { authorization: `Bearer ${token}` },
+              },
+              body: {
                 ...taskToUpdate,
-            taskType: "ROUTINE",
-          },
-        });
+                taskType: "ROUTINE",
+              },
+            });
             console.log(
               `Task ${task.id} updated successfully in the database.`
             );

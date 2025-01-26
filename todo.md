@@ -6,3 +6,4 @@
 - Notepad
 - Different themes
 - Different view mode for goals -> projects and todo tasks
+- Preview of the tag
