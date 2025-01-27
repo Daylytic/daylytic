@@ -34,13 +34,13 @@ export const RoutineCard = ({ item }: { item: Task }) => {
               <Title level={4} className={styles["button-title"]}>
                 {item.title}
               </Title>
-              {item.description !== "" ? (
+              {/* {item.description !== "" ? (
                 <p className={styles["button-description"]}>
                   {item.description}
                 </p>
               ) : (
                 <></>
-              )}
+              )} */}
               <Flex gap="4px 0" wrap className={styles["button-tags"]}>
                 {item.tags.map((tag) => (
                   <Tag color={tag.color}>{tag.name}</Tag>
