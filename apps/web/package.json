@@ -17,6 +17,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@faker-js/faker": "^9.3.0",
     "@fastify/postgres": "^6.0.1",
+    "@mdxeditor/editor": "^3.21.0",
     "@react-oauth/google": "^0.12.1",
     "@types/pg": "^8.11.10",
     "antd": "^5.22.7",
