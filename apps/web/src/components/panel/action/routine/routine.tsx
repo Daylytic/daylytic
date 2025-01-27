@@ -10,14 +10,9 @@ export const Routine = ({ id }) => {
   const { tasks, selectedTask, setSelectedTask } = useDailyTasks();
 
   useEffect(() => {
-    if (!selectedTask && tasks.length > 0) {
-      const task = tasks.find((task) => task.id === id);
-      setSelectedTask(task);
-      // return () => {
-      //   setSelectedTask(undefined); // Reset selectedTask when the component unmounts
-      // };
-    }
-  }, [selectedTask, tasks, setSelectedTask]);
+    const task = tasks.find((task) => task.id === id);
+    setSelectedTask(task);
+  }, [id]);
 
   if (!selectedTask) {
     return <></>;
