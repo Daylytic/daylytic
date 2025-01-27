@@ -3,12 +3,10 @@ import { useDailyTasks } from "providers/daily-tasks";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import styles from "./routine.module.css";
-import { useTaskEditor } from "providers/task-editor";
 
 export const RoutineActions = () => {
   const [loading, setLoading] = useState(false);
-  const { updateTask, deleteTask } = useDailyTasks();
-  const { selectedTask } = useTaskEditor();
+  const { updateTask, deleteTask, selectedTask } = useDailyTasks();
   const navigate = useNavigate();
 
   return (
