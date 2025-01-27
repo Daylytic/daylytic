@@ -19,7 +19,7 @@ export const RoutineInputs = () => {
           if (selectedTask) {
             const newTask = {
               ...selectedTask,
-              description: e.target.value,
+              title: e.target.value,
             };
 
             setSelectedTask(newTask);
