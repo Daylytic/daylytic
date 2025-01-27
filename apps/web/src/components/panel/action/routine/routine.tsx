@@ -5,6 +5,9 @@ import { useEffect } from "react";
 import { RoutineInputs } from "./routine-inputs";
 import { RoutineOptions } from "./routine-options";
 import { RoutineActions } from "./routine-actions";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { RoutineSettings } from "./routine-settings";
+import styles from "./routine.module.css";
 
 export const Routine = ({ id }) => {
   const { tasks, selectedTask, setSelectedTask } = useDailyTasks();
@@ -19,13 +22,9 @@ export const Routine = ({ id }) => {
   }
 
   return (
-    <>
-      <Title level={2}>Task</Title>
-      <Flex vertical gap={"small"}>
-        <RoutineInputs />
-        <RoutineOptions />
-      </Flex>
-      <RoutineActions />
-    </>
+    <Flex vertical id={styles["wrapper"]}>
+      <RoutineInputs />
+      <RoutineSettings />
+    </Flex>
   );
 };
