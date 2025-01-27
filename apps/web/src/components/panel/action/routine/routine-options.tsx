@@ -15,14 +15,13 @@ import { useDailyTasks } from "providers/daily-tasks";
 import { CreateTagModal } from "../../modal/create-tag-modal";
 import { useState } from "react";
 import styles from "./routine.module.css";
-import { useTaskEditor } from "providers/task-editor";
 import { Tag } from "types/task";
 
 type TagRender = SelectProps["tagRender"];
 
 export const RoutineOptions = () => {
-  const { tasks, updateTask } = useDailyTasks();
-  const { selectedTask, setSelectedTask } = useTaskEditor();
+  const { token } = theme.useToken();
+  const { tasks, updateTask, selectedTask, setSelectedTask } = useDailyTasks();
   const [open, setOpen] = useState(false);
 
   const tags = [...tasks].flatMap((task) => task.tags);

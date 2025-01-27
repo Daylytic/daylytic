@@ -5,11 +5,9 @@ import { useEffect } from "react";
 import { RoutineInputs } from "./routine-inputs";
 import { RoutineOptions } from "./routine-options";
 import { RoutineActions } from "./routine-actions";
-import { useTaskEditor } from "providers/task-editor";
 
 export const Routine = ({ id }) => {
-  const { tasks } = useDailyTasks();
-  const { selectedTask, setSelectedTask } = useTaskEditor();
+  const { tasks, selectedTask, setSelectedTask } = useDailyTasks();
 
   useEffect(() => {
     if (!selectedTask && tasks.length > 0) {
