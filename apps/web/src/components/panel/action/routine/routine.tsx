@@ -1,11 +1,7 @@
-import Title from "antd/es/typography/Title";
 import { Flex } from "antd";
 import { useDailyTasks } from "providers/daily-tasks";
 import { useEffect } from "react";
 import { RoutineInputs } from "./routine-inputs";
-import { RoutineOptions } from "./routine-options";
-import { RoutineActions } from "./routine-actions";
-import { InfoCircleOutlined } from "@ant-design/icons";
 import { RoutineSettings } from "./routine-settings";
 import styles from "./routine.module.css";
 
