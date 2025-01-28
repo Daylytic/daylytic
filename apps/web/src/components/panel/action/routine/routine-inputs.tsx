@@ -30,7 +30,7 @@ const items: DescriptionsProps['items'] = [
 ];
 
 export const RoutineInputs = () => {
-  const { updateTask, selectedTask, setSelectedTask } = useDailyTasks();
+  const { selectedTask } = useDailyTasks();
 
   return (
     <Flex vertical>
@@ -51,26 +51,6 @@ export const RoutineInputs = () => {
         </Popover>
       </Flex>
       <Editor />
-      {/* <TextArea
-        variant="borderless"
-        // maxLength={TASK_DESCRIPTION_MAX_LENGTH}
-        minLength={TASK_DESCRIPTION_MIN_LENGTH}
-        placeholder="Enter description"
-        id={styles["task-description"]}
-        style={{height: "20vh"}}
-        value={selectedTask?.description || ""}
-        onChange={(e) => {
-          if (selectedTask) {
-            const newTask = {
-              ...selectedTask,
-              description: e.target.value,
-            };
-
-            setSelectedTask(newTask);
-            updateTask(newTask);
-          }
-        }}
-      /> */}
     </Flex>
   );
 };
