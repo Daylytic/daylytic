@@ -43,7 +43,6 @@ export const InsertSandpack = () => {
       >
         <Button
           type="text"
-          size="small"
           icon={
             <Flex justify="center" align="center" style={{ display: "flex" }}>
               {iconComponentFor("sandpack")}

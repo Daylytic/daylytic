@@ -53,7 +53,6 @@ export const InsertAdmonition = () => {
       >
         <Button
           type="text"
-          size="small"
           icon={
             <Flex justify="center" align="center" style={{ display: "flex" }}>
               {iconComponentFor("admonition")}
