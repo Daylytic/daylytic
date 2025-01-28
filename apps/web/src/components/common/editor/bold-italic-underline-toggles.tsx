@@ -16,14 +16,14 @@ import {
   applyFormat$,
   useTranslation,
 } from "@mdxeditor/editor";
-import { Button, Tooltip } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Button, Flex, Tooltip } from "antd";
+import { BoldOutlined, ItalicOutlined, SearchOutlined, StrikethroughOutlined, UnderlineOutlined } from "@ant-design/icons";
 
 interface FormatButtonProps {
   format: number;
   addTitle: string;
   removeTitle: string;
-  icon: IconKey;
+  icon: React.ReactNode;
   formatName: TextFormatType;
 }
 
@@ -34,9 +34,8 @@ const FormatButton: React.FC<FormatButtonProps> = ({
   icon,
   formatName,
 }) => {
-  const [currentFormat, iconComponentFor] = useCellValues(
+  const [currentFormat] = useCellValues(
     currentFormat$,
-    iconComponentFor$
   );
   const applyFormat = usePublisher(applyFormat$);
   const active = (currentFormat & format) !== 0;
@@ -44,8 +43,10 @@ const FormatButton: React.FC<FormatButtonProps> = ({
   return (
     <Tooltip title={active ? removeTitle : addTitle}>
       <Button
-        variant={active ? "text" : undefined}
-        icon={iconComponentFor(icon)}
+        type={active ? "default" : "text"}
+        icon={<Flex justify="center" align="center" style={{display: "flex"}}>
+          {icon}
+        </Flex>}
         onClick={() => {
           applyFormat(formatName);
         }}
@@ -69,13 +70,13 @@ export const BoldItalicUnderlineToggles: React.FC<
 
   const showAllButtons = typeof options === "undefined";
   return (
-    <div>
+    <Flex justify="center" align="center" style={{display: "flex"}}>
       {showAllButtons || options.includes("Bold") ? (
         <FormatButton
           format={IS_BOLD}
           addTitle={t("toolbar.bold", "Bold")}
           removeTitle={t("toolbar.removeBold", "Remove bold")}
-          icon="format_bold"
+          icon={<BoldOutlined />}
           formatName="bold"
         />
       ) : null}
@@ -84,7 +85,7 @@ export const BoldItalicUnderlineToggles: React.FC<
           format={IS_ITALIC}
           addTitle={t("toolbar.italic", "Italic")}
           removeTitle={t("toolbar.removeItalic", "Remove italic")}
-          icon="format_italic"
+          icon={<ItalicOutlined />}
           formatName="italic"
         />
       ) : null}
@@ -93,11 +94,11 @@ export const BoldItalicUnderlineToggles: React.FC<
           format={IS_UNDERLINE}
           addTitle={t("toolbar.underline", "Underline")}
           removeTitle={t("toolbar.removeUnderline", "Remove underline")}
-          icon="format_underlined"
+          icon={<UnderlineOutlined />}
           formatName="underline"
         />
       ) : null}
-    </div>
+    </Flex>
   );
 };
 
@@ -112,17 +113,21 @@ export interface StrikeThroughSupSubTogglesProps {
 export const StrikeThroughSupSubToggles: React.FC<
   StrikeThroughSupSubTogglesProps
 > = ({ options }) => {
+  const [currentFormat, iconComponentFor] = useCellValues(
+    currentFormat$,
+    iconComponentFor$
+  );
   const t = useTranslation();
   const showAllButtons = typeof options === "undefined";
 
   return (
-    <div>
+    <Flex justify="center" align="center" style={{display: "flex"}}>
       {showAllButtons || options.includes("Strikethrough") ? (
         <FormatButton
           format={IS_STRIKETHROUGH}
           addTitle={t("toolbar.strikethrough", "Strikethrough")}
           removeTitle={t("toolbar.removeStrikethrough", "Remove strikethrough")}
-          icon="strikeThrough"
+          icon={<StrikethroughOutlined />}
           formatName="strikethrough"
         />
       ) : null}
@@ -131,7 +136,7 @@ export const StrikeThroughSupSubToggles: React.FC<
           format={IS_SUPERSCRIPT}
           addTitle={t("toolbar.superscript", "Superscript")}
           removeTitle={t("toolbar.removeSuperscript", "Remove superscript")}
-          icon="superscript"
+          icon={iconComponentFor("superscript")}
           formatName="superscript"
         />
       ) : null}
@@ -140,10 +145,10 @@ export const StrikeThroughSupSubToggles: React.FC<
           format={IS_SUBSCRIPT}
           addTitle={t("toolbar.subscript", "Subscript")}
           removeTitle={t("toolbar.removeSubscript", "Remove subscript")}
-          icon="subscript"
+          icon={iconComponentFor("subscript")}
           formatName="subscript"
         />
       ) : null}
-    </div>
+    </Flex>
   );
 };
