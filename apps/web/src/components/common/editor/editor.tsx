@@ -5,13 +5,13 @@ import {
   codeMirrorPlugin,
   directivesPlugin,
   headingsPlugin,
-  InsertAdmonition,
   listsPlugin,
   markdownShortcutPlugin,
   MDXEditor,
   quotePlugin,
   SandpackConfig,
   sandpackPlugin,
+  tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
 } from "@mdxeditor/editor";
@@ -28,6 +28,7 @@ import { CodeToggle } from "./code-toggle";
 import { InsertCodeBlock } from "./insert-code-block";
 import { InsertSandpack } from "./insert-sandpack";
 import "assets/styles/mdx.css";
+import { InsertAdmonition } from "./insert-admonition";
 
 const defaultSnippetContent = `
 export default function App() {
@@ -60,21 +61,22 @@ const Editor = () => {
   return (
     <MDXEditor
       markdown="Hello world"
-      className="global-mdx-theme ant-menu-item ant-menu-item-active ant-menu-item-selected" 
+      className="global-mdx-theme" 
       plugins={[
         headingsPlugin(),
         listsPlugin(),
         quotePlugin(),
         thematicBreakPlugin(),
         markdownShortcutPlugin(),
+        tablePlugin(),
         codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
         sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
         directivesPlugin({ directiveDescriptors: [AdmonitionDirectiveDescriptor] }),
         codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS' } }),
         toolbarPlugin({
-          toolbarClassName: "my-classname",
+          toolbarClassName: "toolbar-wrapper",
           toolbarContents: () => (
-            <>
+            <div className="toolbar-content">
               <UndoRedo />
               <Divider type="vertical" />
               <BoldItalicUnderlineToggles />
@@ -92,7 +94,7 @@ const Editor = () => {
               <InsertSandpack />
               <Divider type="vertical" />
               <InsertAdmonition />
-            </>
+            </div>
           ),
         }),
       ]}
