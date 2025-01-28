@@ -1,4 +1,3 @@
-import React from "react";
 import { useCellValue, usePublisher } from "@mdxeditor/gurx";
 import { insertCodeBlock$, iconComponentFor$, useTranslation } from "@mdxeditor/editor";
 import { Tooltip, Button, Flex } from "antd";

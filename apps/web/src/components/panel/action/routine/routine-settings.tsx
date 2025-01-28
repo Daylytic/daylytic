@@ -1,28 +1,27 @@
 import {
-  ClockCircleOutlined,
-  DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
   FlagOutlined,
-  MoreOutlined,
   TagsOutlined,
 } from "@ant-design/icons";
-import { Button, Flex, Tag } from "antd";
+import { Button, Flex } from "antd";
+import styles from "./routine.module.css";
 
-export const RoutineSettings = () => {
-  return (
-    <Flex gap="small" style={{width: "100%", display: "flex", backgroundColor: "white"}}>
-      <Button type="default" icon={<EditOutlined />} style={{flex: 1}}>
-        Text Format
-      </Button>
-      <Button type="default" icon={<TagsOutlined />} style={{flex: 1}}>
-        Tags
-      </Button>
+export const RoutineSettings = () => (
+  <Flex
+    gap="small"
+    id={styles.settings}
+  >
+    <Button type="default" icon={<EditOutlined />} className={styles["settings-button"]}>
+      Text Format
+    </Button>
+    <Button type="default" icon={<TagsOutlined />} className={styles["settings-button"]}>
+      Tags
+    </Button>
 
-      <Button type="default" icon={<FlagOutlined />} style={{flex: 1}}>
-        Priority
-      </Button>
-      <Button icon={<EllipsisOutlined />} shape="circle"></Button>
-    </Flex>
-  );
-};
+    <Button type="default" icon={<FlagOutlined />} className={styles["settings-button"]}>
+      Priority
+    </Button>
+    <Button icon={<EllipsisOutlined />} />
+  </Flex>
+);

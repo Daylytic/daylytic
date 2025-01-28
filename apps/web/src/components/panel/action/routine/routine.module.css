@@ -4,43 +4,12 @@
     justify-content: space-between;
 }
 
-#actions-wrapper {
-    margin-top: auto;
-    justify-content: center;
+#settings {
     width: 100%;
+    display: flex;
+    /* background-color: blue; */
 }
 
-.action {
-    width: 50%;
-}
-
-#task-description {
-    resize: none;
-    max-height: 100%;
-    overflow: scroll;
-    margin-bottom: 30px;
-}
-
-.dropdown-divider {
-    margin: 0;
-}
-
-#dropdown-button {
-    width: 100%;
-}
-
-#tags-wrapper {
-    width: 100%;
-}
-
-.date-picker {
-    width: 100%;
-}
-
-.tags-select {
-    width: 100%;
-}
-
-.tag {
-    margin-inline-end: 4;
+.settings-button {
+    flex: 1;
 }

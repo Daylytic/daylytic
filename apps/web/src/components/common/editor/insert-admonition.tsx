@@ -7,7 +7,7 @@ import {
 import { useCellValue, usePublisher } from "@mdxeditor/gurx";
 import { Button, Dropdown, Flex, Menu, Tooltip } from "antd";
 import type { MenuProps } from "antd";
-import React from "react";
+import { useMemo } from "react";
 
 export const ADMONITION_TYPES = [
   "note",
@@ -28,7 +28,7 @@ export const InsertAdmonition = () => {
   const iconComponentFor = useCellValue(iconComponentFor$);
   const t = useTranslation();
 
-  const menuItems: MenuProps["items"] = React.useMemo(() => {
+  const menuItems: MenuProps["items"] = useMemo(() => {
     const labels = admonitionLabelsMap(t);
     return ADMONITION_TYPES.map((type) => ({
       key: type,
@@ -53,7 +53,6 @@ export const InsertAdmonition = () => {
       >
         <Button
           type="text"
-          size="small"
           icon={
             <Flex justify="center" align="center" style={{ display: "flex" }}>
               {iconComponentFor("admonition")}
