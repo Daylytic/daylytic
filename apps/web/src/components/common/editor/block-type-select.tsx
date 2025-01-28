@@ -42,6 +42,7 @@ export const BlockTypeSelect = () => {
     <Tooltip title={t('toolbar.blockTypeSelect.selectBlockTypeTooltip', 'Select block type')}>
       <Select
         value={currentBlockType}
+        variant="borderless"
         onChange={(value) => {
           const blockType = value as BlockType
           switch (blockType) {
