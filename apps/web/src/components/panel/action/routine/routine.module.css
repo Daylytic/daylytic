@@ -1,12 +1,12 @@
 #wrapper {
     height: 100%;
     display: flex;
-    justify-content: space-between;
 }
 
 #settings {
     width: 100%;
     display: flex;
+    margin-bottom: var(--ant-margin-xs);
     /* background-color: blue; */
 }
 
