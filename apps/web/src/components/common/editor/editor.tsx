@@ -62,6 +62,7 @@ const Editor = () => {
     <MDXEditor
       markdown="Hello world"
       className="global-mdx-theme" 
+      contentEditableClassName="content-editable"
       plugins={[
         headingsPlugin(),
         listsPlugin(),
