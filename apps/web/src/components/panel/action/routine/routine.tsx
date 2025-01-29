@@ -1,9 +1,9 @@
 import { Flex } from "antd";
 import { useDailyTasks } from "providers/daily-tasks";
 import { useEffect } from "react";
-import { RoutineInputs } from "./routine-inputs";
 import { RoutineSettings } from "./routine-settings";
 import styles from "./routine.module.css";
+import { RoutineHeader } from "./routine-header";
 import Editor from "components/common/editor/editor";
 
 export const Routine = ({ id }) => {
@@ -20,7 +20,7 @@ export const Routine = ({ id }) => {
 
   return (
     <Flex vertical id={styles["wrapper"]}>
-      <RoutineInputs />
+      <RoutineHeader />
       <RoutineSettings />
       <Editor />
     </Flex>
