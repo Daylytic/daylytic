@@ -8,11 +8,22 @@ import {
   UpdateTaskWithIdInputSchema,
   UpdateTaskInputSchema,
 } from "./task.schema.js";
+import { convertToTimeZoneISO8601 } from "utils/date.js";
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   try {
+    const maxPosition = await prisma.task.aggregate({
+      where: { userId: data.userId },
+      _max: { position: true },
+    });
+  
+    const newPosition = (maxPosition._max.position ?? -1) + 1;
+    
     return await prisma.task.create({
-      data: data,
+      data: {...data, position: newPosition},
+      include: {
+        tags: true,
+      }
     });
   } catch (err) {
     throw new RequestError("Problem occured while creating task", 500);
@@ -32,14 +43,6 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
   try {
     await prisma.task.delete({
       where: data,
-    });
-
-    await prisma.tag.deleteMany({
-      where: {
-        tasks: {
-          none: {}, // Select tags that are not associated with any tasks
-        },
-      },
     });
   } catch (err) {
     throw new RequestError("Problem occured while deleting task", 500);
@@ -100,6 +103,7 @@ const updateTask = async (data: UpdateTaskInputSchema) => {
       },
       data: {
         ...data,
+        updatedAt: convertToTimeZoneISO8601(),
         tags: {
           // Create new tags
           create: tagsToCreate,

@@ -1,3 +1,5 @@
+export type Priority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL" | null; 
+
 export interface Tag {
   id: string;
   name: string;
@@ -6,7 +8,8 @@ export interface Tag {
 
 export interface Task {
   id: string;
-  priority: number;
+  priority: Priority;
+  position: number;
   title: string;
   description: string;
   tags: Tag[];

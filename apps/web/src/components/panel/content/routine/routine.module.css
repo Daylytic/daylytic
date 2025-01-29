@@ -12,6 +12,7 @@
 #tasks-list {
     overflow-y: auto;
     max-height: 100%;
+    height: 100%;
     width: 100%;
 }
 
@@ -19,8 +20,16 @@
     margin: var(--ant-list-item-padding);
 }
 
+.checkbox-wrapper {
+    display: flex;
+    align-items: start !important;
+    justify-content: center;
+    padding-top: 8px;
+}
+
 .checkbox {
-    padding-block: var(--ant-padding-xxs);
+    /* padding-block: var(--ant-padding-xxs); */
+
 }
 
 .button {
@@ -41,6 +50,7 @@
 .button-title {
     text-align: left;
     white-space: normal;
+    margin-bottom: 0 !important;
 }
 
 .button-description {

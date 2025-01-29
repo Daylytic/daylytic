@@ -6,12 +6,12 @@ import { Task } from "types/task";
 
 const { Title } = Typography;
 
-export const RoutineCard = ({item} : {item: Task}) => {
+export const RoutineCard = ({ item }: { item: Task }) => {
   const navigate = useNavigate();
   const { updateTask } = useDailyTasks();
 
   return (
-    <List.Item style={{ position: "relative" }}>
+    <List.Item style={{ position: "relative", flex: "1" }}>
       <List.Item.Meta
         avatar={
           <Checkbox
@@ -23,6 +23,7 @@ export const RoutineCard = ({item} : {item: Task}) => {
             }}
           ></Checkbox>
         }
+        className={styles["checkbox-wrapper"]}
         description={
           <Button
             type="text"
@@ -33,7 +34,13 @@ export const RoutineCard = ({item} : {item: Task}) => {
               <Title level={4} className={styles["button-title"]}>
                 {item.title}
               </Title>
-              <p className={styles["button-description"]}>{item.description}</p>
+              {/* {item.description !== "" ? (
+                <p className={styles["button-description"]}>
+                  {item.description}
+                </p>
+              ) : (
+                <></>
+              )} */}
               <Flex gap="4px 0" wrap className={styles["button-tags"]}>
                 {item.tags.map((tag) => (
                   <Tag color={tag.color}>{tag.name}</Tag>

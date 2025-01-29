@@ -2,7 +2,6 @@ import Sider from "antd/es/layout/Sider";
 import styles from "./action.module.css";
 import { usePanel } from "../../../hooks/use-panel";
 import { ActionMap } from "utils/menu-items";
-import { TaskEditorProvider } from "providers/task-editor";
 
 export interface ActionDataProps {
   id: string;
@@ -20,9 +19,7 @@ export const Action = () => {
 
   return (
     <Sider width={500} id={styles.sider}>
-      <TaskEditorProvider>
-        {ActiveComponent ? <ActiveComponent id={content} /> : <></>}
-      </TaskEditorProvider>
+      {ActiveComponent ? <ActiveComponent id={content} /> : <></>}
     </Sider>
   );
 };

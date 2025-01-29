@@ -1,16 +1,54 @@
 import { List } from "antd";
 import { useDailyTasks } from "providers/daily-tasks";
 import { RoutineCard } from "./routine-card";
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { restrictToVerticalAxis, restrictToParentElement  } from "@dnd-kit/modifiers";
+import { arrayMove } from "@dnd-kit/sortable";
 import styles from "./routine.module.css";
+import { SortableRoutineCard } from "components/common/sortable-item";
 
 export const RoutineList = () => {
-  const { tasks } = useDailyTasks();
+  const { tasks, updateTask } = useDailyTasks();
+  const sortedTasks = tasks.sort((a, b) => a.position - b.position);
+
+  const handleDragEnd = ({ active, over }) => {
+    if (active.id !== over?.id) {
+      const oldIndex = sortedTasks.findIndex((task) => task.id === active.id);
+      const newIndex = sortedTasks.findIndex((task) => task.id === over?.id);
+
+      const updatedTasks = arrayMove(sortedTasks, oldIndex, newIndex);
+
+      const reorderedTasks = updatedTasks.map((task, index) => ({
+        ...task,
+        position: index,
+      }));
+
+      reorderedTasks.forEach((task) => {
+        updateTask(task);
+      })
+    }
+  };
+
   return (
-    <List
-      itemLayout="vertical"
-      dataSource={tasks}
-      id={styles["tasks-list"]}
-      renderItem={(item) => <RoutineCard key={item.id} item={item} />}
-    />
+    <DndContext
+      collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis, restrictToParentElement ]}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={sortedTasks.map((task) => task.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <List
+          itemLayout="vertical"
+          dataSource={sortedTasks}
+          id={styles["tasks-list"]}
+          renderItem={(item) => (
+            <SortableRoutineCard key={item.id} item={item} />
+          )}
+        />
+      </SortableContext>
+    </DndContext>
   );
 };
