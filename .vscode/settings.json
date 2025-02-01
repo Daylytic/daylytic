@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "eslint.format.enable": true,
+    "prettier.requireConfig": true,
+    "eslint.probe": ["typescript", "typescriptreact"],
+  }
