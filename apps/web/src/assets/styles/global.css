@@ -26,7 +26,7 @@
     /* For Firefox */
 
     box-sizing: border-box;
-    
+
     margin: 0;
     font-family: "Poppins";
 }
@@ -98,4 +98,34 @@ section {
 
 .ant-descriptions .ant-descriptions-view table {
     width: auto;
+}
+
+.ant-typography-edit-content {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.ant-typography-edit-content textarea {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    resize: none !important;
+    box-shadow: none !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    height: auto !important;
+}
+
+.ant-typography-edit-content {
+  left: 0 !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Ensure text alignment matches original */
+.ant-typography-edit-content textarea {
+  text-align: inherit !important; /* Match original alignment */
+  margin-left: 0 !important;
+  padding-left: 0 !important;
 }
