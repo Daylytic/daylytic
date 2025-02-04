@@ -1,0 +1,42 @@
+.wrapper {
+    width: 100% !important;
+    display: flex;
+    border-width: var(--ant-line-width);
+    border-style: var(--ant-line-type);
+    border-radius: var(--ant-border-radius);
+    border-color: transparent;
+
+}
+
+.text {
+    display: flex;
+    align-items: end;
+    margin-bottom: 0 !important;
+    min-width: 0px;
+    padding: 0 !important;
+
+
+}
+
+.textarea {
+    resize: none;
+    width: 100% !important;
+    height: min-content;
+    min-width: 0px !important;
+    overflow: hidden;
+    outline: none !important;
+    border: none !important;
+    background-color: unset;
+}
+
+.wrapper :global(.anticon) {
+    opacity: 0;
+}
+
+.wrapper:hover :global(.anticon) {
+    opacity: 1;
+}
+
+.border {
+    border-color: var(--ant-color-error) !important;
+}
