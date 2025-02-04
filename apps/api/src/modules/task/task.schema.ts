@@ -51,7 +51,7 @@ export const TaskSchema = z.object({
   todoListId: IdSchema.nullable(), // Relation field to ToDoList
   userId: IdSchema.nullable(), // Relation field to User
   // tagIds: z.array(IdSchema).optional(), // References to tag IDs
-  tags: z.array(TagSchema).optional(), // References to tag IDs
+  tags: z.array(TagSchema), // References to tag IDs
 });
 
 // Create Task Schemas
