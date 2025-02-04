@@ -17,9 +17,13 @@
     background: transparent;
 }
 
-*, *::before, *::after {
-    scrollbar-width: thin !important; /* For Firefox */
-    scrollbar-color: #eaeaea transparent; /* For Firefox */
+*,
+*::before,
+*::after {
+    scrollbar-width: thin !important;
+    /* For Firefox */
+    scrollbar-color: #eaeaea transparent;
+    /* For Firefox */
 
     box-sizing: border-box;
     
