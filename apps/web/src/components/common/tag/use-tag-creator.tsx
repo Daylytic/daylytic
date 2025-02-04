@@ -1,13 +1,17 @@
-import { theme, ColorPickerProps, Row } from "antd";
-import { useTags } from "providers/tag";
+import { ColorPickerProps, Row } from "antd";
+import { useTags } from "~/providers/tag";
 import { useState } from "react";
-import { generatePresets, pallets } from "utils/color";
+import { Tag } from "~/types/task";
+import { generatePresets, pallets } from "~/utils/color";
 
-export const useTagCreator = () => {
-  const { token } = theme.useToken();
-  const { createTag } = useTags();
-  const [inputValue, setInputValue] = useState("");
-  const [color, setColor] = useState(token.colorPrimary);
+interface UseTagManagerProp {
+  tag?: Tag;
+}
+
+export const useTagManager = ({ tag }: UseTagManagerProp) => {
+  const { createTag, updateTag } = useTags();
+  const [inputValue, setInputValue] = useState(tag?.name ?? "");
+  const [color, setColor] = useState(pallets["General"][0]);
   const [loading, setLoading] = useState(false);
   const presets = generatePresets(pallets);
   const colorPickerPanel: ColorPickerProps["panelRender"] = (_, { components: { Presets } }) => (
@@ -21,9 +25,18 @@ export const useTagCreator = () => {
       return;
     }
 
+    const name = inputValue.trim();
+
     setLoading(true);
 
-    await createTag(inputValue.trim(), color);
+    if (tag) {
+      tag.name = name;
+      tag.color = color;
+      await updateTag(tag);
+    } else {
+      await createTag(inputValue.trim(), color);
+      setInputValue("");
+    }
 
     setLoading(false);
   };

@@ -1,9 +1,14 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button, ColorPicker, Input, Space } from "antd";
-import { useTagCreator } from "components/common/tag/use-tag-creator";
-import {styles} from ".";
+import { useTagManager } from "~/components/common/tag/use-tag-creator";
+import { styles } from ".";
+import { Tag } from "~/types/task";
 
-export const TagCreator = () => {
+interface TagManagerProp {
+  tag?: Tag;
+}
+
+export const TagManager = ({ tag }: TagManagerProp) => {
   const {
     handleInputChange,
     handleInputConfirm,
@@ -13,14 +18,13 @@ export const TagCreator = () => {
     setColor,
     loading,
     inputValue,
-  } = useTagCreator();
+  } = useTagManager({ tag });
 
   return (
     <Space.Compact className={styles["tag-creator"]}>
       <ColorPicker
         disabled={loading}
-        defaultValue={color}
-        styles={{ popupOverlayInner: { width: 480 } }}
+        defaultValue={tag ? tag.color : color}
         presets={presets}
         panelRender={colorPickerPanel}
         onChange={(color) => setColor(color.toHexString())}
@@ -36,7 +40,7 @@ export const TagCreator = () => {
       <Button
         loading={loading}
         type="primary"
-        icon={<PlusOutlined />}
+        icon={tag ? <SaveOutlined /> : <PlusOutlined />}
         onClick={handleInputConfirm}
       />
     </Space.Compact>

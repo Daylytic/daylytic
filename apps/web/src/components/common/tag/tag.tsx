@@ -1,8 +1,8 @@
 import { generate } from "@ant-design/colors";
 import { Tag as AntTag } from "antd";
-import { Tag as TagModel } from "types/task";
+import { Tag as TagModel } from "~/types/task";
 import { styles } from ".";
-import { adjustColor } from "utils/color";
+import { adjustColor } from "~/utils/color";
 import clsx from "clsx";
 
 interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -40,6 +40,7 @@ export const Tag = ({
       {...rest}
     >
       {tag.name}
+      {rest.children}
     </AntTag>
   );
 };
