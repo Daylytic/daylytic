@@ -1,5 +1,4 @@
 #content {
-    background: var(--ant-color-white);
     border-radius: var(--ant-border-radius-lg);
     padding: var(--ant-padding-md);
     width: 100%;
@@ -40,8 +39,7 @@
 }
 
 .avatar {
-    margin-block: calc(var(--ant-padding-xxs) + 1px); /* Adding the border 1px from button text idk what is it doing there ¯\(ツ)/¯ */
-    /* height: 24px; */
+    margin-block: calc(var(--ant-padding-xxs) + 1px); /* Adding the border 1px from button text idk what it is doing there ¯\(ツ)/¯ */
     height: calc(var(--ant-font-size) * var(--ant-line-height));
 }
 
@@ -92,7 +90,6 @@
     width: 100%;
     display: flex;
     margin-bottom: var(--ant-margin-xs);
-    /* background-color: blue; */
 }
 
 .tags-divider {
@@ -130,3 +127,47 @@
     display: flex;
     justify-content: flex-start;
 }
+
+.task-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+}
+
+.task-card-dragged {
+    opacity: 0.5;
+}
+
+.task-card-button {
+    min-height: var(--ant-control-height);
+    height: auto;
+    width:100%;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+.task-card-button-details-wrapper {
+    padding-block: var(--ant-padding-xxs);
+}
+
+.task-card-button-title {
+    text-align: left;
+    white-space: normal;
+    margin-bottom: 0 !important;
+    line-height: var(--ant-line-height) !important;
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    gap: var(--ant-padding-xs);
+    height: 100%;
+    overflow-y: auto;
+    padding-block: calc(var(--ant-padding-xs) / 2 + 4px);
+  }

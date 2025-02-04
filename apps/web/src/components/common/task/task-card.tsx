@@ -1,69 +1,71 @@
-import { List, Checkbox, Button, Flex, Typography } from "antd";
-import { Tag as TagModel, Task } from "types/task";
-import { HolderOutlined } from "@ant-design/icons";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { Checkbox, Button, Flex, CheckboxChangeEvent } from "antd";
+import { Tag as TagModel, Task } from "~/types/task";
 import { styles } from ".";
-import { Tag } from "components/common/tag";
-
-const { Title } = Typography;
+import { Tag } from "~/components/common/tag";
+import clsx from "clsx";
+import { useParams } from "react-router";
+import { useSelectedTask } from "~/providers/selected-task";
+import { useTaskCard } from "~/components/common/task/use-task-card";
+import { DropIndicator } from "~/components/common/drop-indicator/drop-indicator";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Tag as AntTag } from "antd";
+import { timeFormat } from "~/utils/date";
+import dayjs from "dayjs";
+import React from "react";
 
 interface TaskCardProps {
-  orderable: boolean;
   item: Task;
-  onClick: () => void;
-  onCheckboxChange: () => Promise<void>;
   tags: TagModel[];
+  dnd?: boolean;
+  onTaskClick: (task: Task) => void;
+  onCheckboxChange: ((e: CheckboxChangeEvent) => void) | undefined;
+  showDelete?: boolean;
+  onDelete?: (task: Task) => void;
 }
 
-export const TaskCard = ({ orderable, item, onClick, onCheckboxChange, tags }: TaskCardProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    setActivatorNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item.id });
+export const TaskCard = React.memo(
+  ({ item, tags, onCheckboxChange, onTaskClick, dnd, showDelete, onDelete }: TaskCardProps) => {
+    const { selectedTask } = useSelectedTask();
+    const { taskId } = useParams();
+    const dndData = useTaskCard({
+      item,
+      selectedTask,
+      enabled: dnd,
+    });
 
-  const cardStyles = orderable
-    ? {
-        transform: CSS.Translate.toString(transform),
-        transition,
-        opacity: isDragging ? 0.5 : 1,
-      }
-    : {};
-
-  return (
-    <List.Item
-      // Use sortable ref and attributes only if orderable.
-      ref={orderable ? setNodeRef : undefined}
-      style={cardStyles}
-      className={styles.card}
-      {...(orderable ? attributes : {})}
-    >
-      <List.Item.Meta
-        avatar={
-          <Flex gap="small" justify="center" align="center" className={styles.avatar}>
-            {/* Render grabber only for orderable cards */}
-            {orderable && (
-              <HolderOutlined ref={setActivatorNodeRef} className={styles.grabber} {...listeners} />
-            )}
+    const isSelected = selectedTask?.id === item.id;
+    const ref = dnd !== false ? dndData.ref! : undefined;
+    const dragging = dnd !== false ? dndData.dragging! : undefined;
+    const closestEdge = dnd !== false ? dndData.closestEdge! : undefined;
+    
+    return (
+      <li
+        ref={ref}
+        data-task-id={item.id}
+        className={clsx(styles["task-card"], dragging && styles["task-card-dragged"])}
+      >
+        <Button
+          type="text"
+          variant={isSelected && taskId ? "filled" : undefined}
+          color="primary"
+          onClick={() => onTaskClick(item)}
+          className={styles["task-card-button"]}
+        >
+          <Flex
+            align="start"
+            gap="small"
+            flex={1}
+            className={styles["task-card-button-details-wrapper"]}
+          >
             <Checkbox
-              className={styles.checkbox}
-              checked={item.isCompleted}
+              defaultChecked={item.isCompleted}
               onChange={onCheckboxChange}
+              onClick={(e) => e.stopPropagation()}
             />
-          </Flex>
-        }
-        className={styles["card-meta"]}
-        description={
-          <Button type="text" onClick={onClick} className={styles.button}>
-            <Flex flex={1} gap={12} wrap className={styles["button-details"]}>
-              <Title level={4} className={styles["button-title"]}>
-                {item.title}
-              </Title>
+            <Flex vertical className={styles["task-card-button-details"]}>
+              <span className={styles["task-card-button-title"]}>
+                {item.title} {item.deadline && <AntTag key={item.id}>{dayjs(item.deadline).format(timeFormat).toString()}</AntTag>}
+              </span>
               <Flex wrap gap="small">
                 {item.tagIds.map((tagId) => {
                   const tag = tags.find((tag) => tag.id === tagId);
@@ -72,9 +74,22 @@ export const TaskCard = ({ orderable, item, onClick, onCheckboxChange, tags }: T
                 })}
               </Flex>
             </Flex>
-          </Button>
-        }
-      />
-    </List.Item>
-  );
-};
+          </Flex>
+          {showDelete && (
+            <Button
+              type="link"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete?.(item);
+              }}
+              className={styles["task-card-delete-button"]}
+            />
+          )}
+        </Button>
+        {closestEdge && <DropIndicator edge={closestEdge} divider={true} />}
+      </li>
+    );
+  },
+);
