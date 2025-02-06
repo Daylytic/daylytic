@@ -1,5 +1,4 @@
 import { Layout as AntLayout } from "antd";
-import { Content } from "antd/es/layout/layout";
 import { LayoutProps } from "./layout";
 
 import styles from "./layout.module.css";
