@@ -1,0 +1,530 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ *
+ */
+
+/* Finished */
+.DaylyticTheme__quote {
+  padding-inline: 0.6em 0;
+  padding-block: 0;
+  border-inline-start: 4px solid rgba(100, 100, 100, 0.2);
+  opacity: 0.85;
+}
+
+.DaylyticTheme__code {
+  background-color: rgb(240, 242, 245);
+  font-family: Menlo, Consolas, Monaco, monospace;
+  display: block;
+  padding: 8px 8px 8px 52px;
+  line-height: 1.53;
+  font-size: 13px;
+  margin: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  position: relative;
+  tab-size: 2;
+}
+.DaylyticTheme__code:before {
+  content: attr(data-gutter);
+  position: absolute;
+  background-color: #eee;
+  left: 0;
+  top: 0;
+  border-right: 1px solid #ccc;
+  padding: 8px;
+  color: #777;
+  white-space: pre-wrap;
+  text-align: right;
+  min-width: 25px;
+}
+
+.DaylyticTheme__tokenComment {
+  color: slategray;
+}
+.DaylyticTheme__tokenPunctuation {
+  color: #999;
+}
+.DaylyticTheme__tokenProperty {
+  color: #905;
+}
+.DaylyticTheme__tokenSelector {
+  color: #690;
+}
+.DaylyticTheme__tokenOperator {
+  color: #9a6e3a;
+}
+.DaylyticTheme__tokenAttr {
+  color: #07a;
+}
+.DaylyticTheme__tokenVariable {
+  color: #e90;
+}
+.DaylyticTheme__tokenFunction {
+  color: #dd4a68;
+}
+
+/* Un-finished */
+
+ .DaylyticTheme__ltr {
+    text-align: left;
+  }
+  .DaylyticTheme__rtl {
+    text-align: right;
+  }
+
+
+  .DaylyticTheme__indent {
+    --lexical-indent-base-value: 40px;
+  }
+  .DaylyticTheme__textBold {
+    font-weight: bold;
+  }
+  .DaylyticTheme__textItalic {
+    font-style: italic;
+  }
+  .DaylyticTheme__textUnderline {
+    text-decoration: underline;
+  }
+  
+  .DaylyticTheme__textStrikethrough {
+    text-decoration: line-through;
+  }
+  
+  .DaylyticTheme__textUnderlineStrikethrough {
+    text-decoration: underline line-through;
+  }
+  
+  .DaylyticTheme__tabNode {
+    position: relative;
+    text-decoration: none;
+  }
+  
+  .DaylyticTheme__tabNode.DaylyticTheme__textUnderline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.15em;
+    border-bottom: 0.1em solid currentColor;
+  }
+  
+  .DaylyticTheme__tabNode.DaylyticTheme__textStrikethrough::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0.69em;
+    border-top: 0.1em solid currentColor;
+  }
+  
+  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::before,
+  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+  
+  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::before {
+    top: 0.69em;
+    border-top: 0.1em solid currentColor;
+  }
+  
+  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::after {
+    bottom: 0.05em;
+    border-bottom: 0.1em solid currentColor;
+  }
+  
+  .DaylyticTheme__textSubscript {
+    font-size: 0.8em;
+    vertical-align: sub !important;
+  }
+  .DaylyticTheme__textSuperscript {
+    font-size: 0.8em;
+    vertical-align: super;
+  }
+  .DaylyticTheme__textCode {
+    background-color: rgb(240, 242, 245);
+    padding: 1px 0.25rem;
+    font-family: Menlo, Consolas, Monaco, monospace;
+    font-size: 94%;
+  }
+  .DaylyticTheme__textLowercase {
+    text-transform: lowercase;
+  }
+  .DaylyticTheme__textUppercase {
+    text-transform: uppercase;
+  }
+  .DaylyticTheme__textCapitalize {
+    text-transform: capitalize;
+  }
+  .DaylyticTheme__hashtag {
+    background-color: rgba(88, 144, 255, 0.15);
+    border-bottom: 1px solid rgba(88, 144, 255, 0.3);
+  }
+  .DaylyticTheme__link {
+    color: rgb(33, 111, 219);
+    text-decoration: none;
+  }
+  .DaylyticTheme__link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .DaylyticTheme__blockCursor {
+    display: block;
+    pointer-events: none;
+    position: absolute;
+  }
+  .DaylyticTheme__blockCursor:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -2px;
+    width: 20px;
+    border-top: 1px solid black;
+    animation: CursorBlink 1.1s steps(2, start) infinite;
+  }
+  @keyframes CursorBlink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  .DaylyticTheme__tableScrollableWrapper {
+    overflow-x: auto;
+    margin: 0px 25px 30px 0px;
+  }
+  .DaylyticTheme__tableScrollableWrapper > .DaylyticTheme__table {
+    /* Remove the table's vertical margin and put it on the wrapper */
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .DaylyticTheme__tableAlignmentCenter {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .DaylyticTheme__tableAlignmentRight {
+    margin-left: auto;
+  }
+  .DaylyticTheme__table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    table-layout: fixed;
+    width: fit-content;
+    margin-top: 25px;
+    margin-bottom: 30px;
+  }
+  .DaylyticTheme__tableRowStriping tr:nth-child(even) {
+    background-color: #f2f5fb;
+  }
+  .DaylyticTheme__tableSelection *::selection {
+    background-color: transparent;
+  }
+  .DaylyticTheme__tableSelected {
+    outline: 2px solid rgb(60, 132, 244);
+  }
+  .DaylyticTheme__tableCell {
+    border: 1px solid #bbb;
+    width: 75px;
+    vertical-align: top;
+    text-align: start;
+    padding: 6px 8px;
+    position: relative;
+    outline: none;
+    overflow: auto;
+  }
+  /*
+    A firefox workaround to allow scrolling of overflowing table cell
+    ref: https://bugzilla.mozilla.org/show_bug.cgi?id=1904159
+  */
+  .DaylyticTheme__tableCell > * {
+    overflow: inherit;
+  }
+  .DaylyticTheme__tableCellResizer {
+    position: absolute;
+    right: -4px;
+    height: 100%;
+    width: 8px;
+    cursor: ew-resize;
+    z-index: 10;
+    top: 0;
+  }
+  .DaylyticTheme__tableCellHeader {
+    background-color: #f2f3f5;
+    text-align: start;
+  }
+  .DaylyticTheme__tableCellSelected {
+    caret-color: transparent;
+  }
+  .DaylyticTheme__tableCellSelected::after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: highlight;
+    mix-blend-mode: multiply;
+    content: '';
+    pointer-events: none;
+  }
+  .DaylyticTheme__tableAddColumns {
+    position: absolute;
+    background-color: #eee;
+    height: 100%;
+    animation: table-controls 0.2s ease;
+    border: 0;
+    cursor: pointer;
+  }
+  .DaylyticTheme__tableAddColumns:after {
+    /* background-image: url(../images/icons/plus.svg); TODO*/
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: block;
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+  }
+  .DaylyticTheme__tableAddColumns:hover,
+  .DaylyticTheme__tableAddRows:hover {
+    background-color: #c9dbf0;
+  }
+  .DaylyticTheme__tableAddRows {
+    position: absolute;
+    width: calc(100% - 25px);
+    background-color: #eee;
+    animation: table-controls 0.2s ease;
+    border: 0;
+    cursor: pointer;
+  }
+  .DaylyticTheme__tableAddRows:after {
+    /* background-image: url(../images/icons/plus.svg); TODO */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: block;
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+  }
+  @keyframes table-controls {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  .DaylyticTheme__tableCellResizeRuler {
+    display: block;
+    position: absolute;
+    width: 1px;
+    background-color: rgb(60, 132, 244);
+    height: 100%;
+    top: 0;
+  }
+  .DaylyticTheme__tableCellActionButtonContainer {
+    display: block;
+    right: 5px;
+    top: 6px;
+    position: absolute;
+    z-index: 4;
+    width: 20px;
+    height: 20px;
+  }
+  .DaylyticTheme__tableCellActionButton {
+    background-color: #eee;
+    display: block;
+    border: 0;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+    color: #222;
+    cursor: pointer;
+  }
+  .DaylyticTheme__tableCellActionButton:hover {
+    background-color: #ddd;
+  }
+  .DaylyticTheme__characterLimit {
+    display: inline;
+    background-color: #ffbbbb !important;
+  }
+  .DaylyticTheme__ol1 {
+    padding: 0;
+    margin: 0;
+    list-style-position: outside;
+  }
+  .DaylyticTheme__ol2 {
+    padding: 0;
+    margin: 0;
+    list-style-type: upper-alpha;
+    list-style-position: outside;
+  }
+  .DaylyticTheme__ol3 {
+    padding: 0;
+    margin: 0;
+    list-style-type: lower-alpha;
+    list-style-position: outside;
+  }
+  .DaylyticTheme__ol4 {
+    padding: 0;
+    margin: 0;
+    list-style-type: upper-roman;
+    list-style-position: outside;
+  }
+  .DaylyticTheme__ol5 {
+    padding: 0;
+    margin: 0;
+    list-style-type: lower-roman;
+    list-style-position: outside;
+  }
+  .DaylyticTheme__ul {
+    padding: 0;
+    margin: 0;
+    list-style-position: outside;
+  }
+  .DaylyticTheme__listItem {
+    margin: 0 32px;
+  }
+  .DaylyticTheme__listItemChecked,
+  .DaylyticTheme__listItemUnchecked {
+    position: relative;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-left: 24px;
+    padding-right: 24px;
+    list-style-type: none;
+    outline: none;
+  }
+  .DaylyticTheme__listItemChecked {
+    text-decoration: line-through;
+  }
+  .DaylyticTheme__listItemUnchecked:before,
+  .DaylyticTheme__listItemChecked:before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 0;
+    cursor: pointer;
+    display: block;
+    background-size: cover;
+    position: absolute;
+  }
+  .DaylyticTheme__listItemUnchecked[dir='rtl']:before,
+  .DaylyticTheme__listItemChecked[dir='rtl']:before {
+    left: auto;
+    right: 0;
+  }
+  .DaylyticTheme__listItemUnchecked:focus:before,
+  .DaylyticTheme__listItemChecked:focus:before {
+    box-shadow: 0 0 0 2px #a6cdfe;
+    border-radius: 2px;
+  }
+  .DaylyticTheme__listItemUnchecked:before {
+    border: 1px solid #999;
+    border-radius: 2px;
+  }
+  .DaylyticTheme__listItemChecked:before {
+    border: 1px solid rgb(61, 135, 245);
+    border-radius: 2px;
+    background-color: #3d87f5;
+    background-repeat: no-repeat;
+  }
+  .DaylyticTheme__listItemChecked:after {
+    content: '';
+    cursor: pointer;
+    border-color: #fff;
+    border-style: solid;
+    position: absolute;
+    display: block;
+    top: 6px;
+    width: 3px;
+    left: 7px;
+    right: 7px;
+    height: 6px;
+    transform: rotate(45deg);
+    border-width: 0 2px 2px 0;
+  }
+  .DaylyticTheme__nestedListItem {
+    list-style-type: none;
+  }
+  .DaylyticTheme__nestedListItem:before,
+  .DaylyticTheme__nestedListItem:after {
+    display: none;
+  }
+
+  .DaylyticTheme__mark {
+    background: rgba(255, 212, 0, 0.14);
+    border-bottom: 2px solid rgba(255, 212, 0, 0.3);
+    padding-bottom: 2px;
+  }
+  .DaylyticTheme__markOverlap {
+    background: rgba(255, 212, 0, 0.3);
+    border-bottom: 2px solid rgba(255, 212, 0, 0.7);
+  }
+  .DaylyticTheme__mark.selected {
+    background: rgba(255, 212, 0, 0.5);
+    border-bottom: 2px solid rgba(255, 212, 0, 1);
+  }
+  .DaylyticTheme__markOverlap.selected {
+    background: rgba(255, 212, 0, 0.7);
+    border-bottom: 2px solid rgba(255, 212, 0, 0.7);
+  }
+  .DaylyticTheme__embedBlock {
+    user-select: none;
+  }
+  .DaylyticTheme__embedBlockFocus {
+    outline: 2px solid rgb(60, 132, 244);
+  }
+  .DaylyticTheme__layoutContainer {
+    display: grid;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .DaylyticTheme__layoutItem {
+    border: 1px dashed #ddd;
+    padding: 8px 16px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .DaylyticTheme__autocomplete {
+    color: #ccc;
+  }
+  .DaylyticTheme__hr {
+    padding: 2px 2px;
+    border: none;
+    margin: 1em 0;
+    cursor: pointer;
+  }
+  .DaylyticTheme__hr:after {
+    content: '';
+    display: block;
+    height: 2px;
+    background-color: #ccc;
+    line-height: 2px;
+  }
+  .DaylyticTheme__hr.selected {
+    outline: 2px solid rgb(60, 132, 244);
+    user-select: none;
+  }
+  
+  .DaylyticTheme__specialText {
+    background-color: yellow;
+    font-weight: bold;
+  }
