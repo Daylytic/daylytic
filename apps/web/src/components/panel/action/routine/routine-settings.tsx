@@ -22,28 +22,35 @@ export const RoutineSettings = () => {
     }));
   }, []);
 
-  return <Flex gap="small" id={styles.settings}>
-    <Button
-      type="text"
-      icon={<CalendarOutlined />}
-      className={styles["settings-button"]}
-    >
-      Deadline
-    </Button>
-    <Button
-      type="text"
-      icon={<TagsOutlined />}
-      className={styles["settings-button"]}
-    >
-      Tags
-    </Button>
-    <Button
-      type="text"
-      icon={<FlagOutlined />}
-      className={styles["settings-button"]}
-    >
-      Priority
-    </Button>
+  return (
+    <Flex gap="small" id={styles.settings}>
+      <TimePicker
+        format={timeFormat}
+        variant="filled"
+        prefix={<CalendarOutlined />}
+        suffixIcon={<></>}
+        className={styles["button"]}
+        placeholder="Time"
+      ></TimePicker>
+      <Select
+        allowClear
+        prefix={<TagsOutlined />}
+        suffixIcon={<></>}
+        variant="filled"
+        className={styles["button"]}
+        options={[{ value: "lucy", label: "Lucy" }]}
+        placeholder="Tags"
+      />
+      <Select
+        allowClear
+        prefix={<FlagOutlined />}
+        suffixIcon={<></>}
+        variant="filled"
+        className={styles["button"]}
+        options={[{ value: "lucy", label: "Lucy" }]}
+        placeholder="Priority"
+      />
+
     <Dropdown
       menu={{
         items: menuItems,
