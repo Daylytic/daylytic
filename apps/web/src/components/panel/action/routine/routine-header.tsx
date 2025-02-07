@@ -3,26 +3,26 @@ import { Flex, Typography, Popover, Descriptions, Button, DescriptionsProps } fr
 import clsx from "clsx";
 import { useDailyTasks } from "providers/daily-tasks";
 
-const items: DescriptionsProps['items'] = [
+const items: DescriptionsProps["items"] = [
     {
-      key: '1',
-      label: 'Words',
-      children: '234',
+    key: "1",
+    label: "Words",
+    children: "234",
     },
     {
-      key: '2',
-      label: 'Characters',
-      children: '2437',
+    key: "2",
+    label: "Characters",
+    children: "2437",
     },
     {
-      key: '3',
-      label: 'Created',
-      children: '08:22 28th January 2025',
+    key: "3",
+    label: "Created",
+    children: "08:22 28th January 2025",
     },
     {
-      key: '4',
-      label: 'Updated',
-      children: '11:32 28th January 2025',
+    key: "4",
+    label: "Updated",
+    children: "11:32 28th January 2025",
     },
   ];
 
