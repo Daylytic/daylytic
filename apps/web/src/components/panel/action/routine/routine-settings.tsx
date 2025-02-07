@@ -1,14 +1,8 @@
-import {
-  CalendarOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  FlagOutlined,
-  TagsOutlined,
-} from "@ant-design/icons";
-import { Button, Dropdown, Flex, MenuProps } from "antd";
+import { CalendarOutlined, EllipsisOutlined, FlagOutlined, TagsOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Flex, MenuProps, Select, TimePicker } from "antd";
 import styles from "./routine.module.css";
-import { admonitionLabelsMap } from "@mdxeditor/editor";
 import { useMemo } from "react";
+import { timeFormat } from "utils/utils";
 
 export const OTHER_SETTINGS = ["delete", "duplicate"] as const;
 
@@ -50,15 +44,16 @@ export const RoutineSettings = () => {
         placeholder="Priority"
       />
 
-    <Dropdown
-      menu={{
-        items: menuItems,
-        style: { maxHeight: 300, overflowY: "auto" },
-      }}
-      trigger={["click"]}
-      placement="bottom"
-    >
-      <Button type="text" icon={<EllipsisOutlined />} />
-    </Dropdown>
-  </Flex>
+      <Dropdown
+        menu={{
+          items: menuItems,
+          style: { maxHeight: 300, overflowY: "auto" },
+        }}
+        trigger={["click"]}
+        placement="bottom"
+      >
+        <Button variant="filled" color="default" icon={<EllipsisOutlined />} />
+      </Dropdown>
+    </Flex>
+  );
 };
