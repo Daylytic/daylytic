@@ -13,3 +13,7 @@
 .settings-button {
     flex: 1;
 }
+
+.time-picker * {
+    color: var(--ant-button-text-text-color) !important;
+}
