@@ -17,8 +17,7 @@ export const RoutineSettings = () => {
     return OTHER_SETTINGS.map((type) => ({
       key: type,
       label: type,
-      onClick: () =>{}
-
+      onClick: () => {},
     }));
   }, []);
 
