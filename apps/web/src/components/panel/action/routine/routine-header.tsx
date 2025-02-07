@@ -39,7 +39,9 @@ export const RoutineHeader = () => {
             </Typography.Title>
             <Popover
                 placement="bottomLeft"
-                content={<Descriptions column={1} layout="vertical" items={items} style={{ width: "auto" }} />}
+        content={
+          <Descriptions column={1} layout="vertical" items={items} style={{ width: "auto" }} />
+        }
                 trigger={"click"}
             >
                 <Button icon={<InfoCircleOutlined />} type={"text"} />
