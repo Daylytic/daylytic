@@ -10,7 +10,8 @@
     /* background-color: blue; */
 }
 
-.settings-button {
+.button {
+    box-sizing: border-box;
     flex: 1;
 }
 
