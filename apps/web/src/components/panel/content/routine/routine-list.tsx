@@ -1,12 +1,11 @@
 import { List } from "antd";
-import { useDailyTasks } from "providers/daily-tasks";
-import { RoutineCard } from "./routine-card";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToParentElement  } from "@dnd-kit/modifiers";
 import { arrayMove } from "@dnd-kit/sortable";
 import styles from "./routine.module.css";
-import { SortableRoutineCard } from "components/common/sortable-item";
+import { useDailyTasks } from "providers/daily-tasks";
+import { RoutineCard } from "components/panel/content/routine/routine-card";
 
 export const RoutineList = () => {
   const { tasks, updateTask } = useDailyTasks();
@@ -45,7 +44,7 @@ export const RoutineList = () => {
           dataSource={sortedTasks}
           id={styles["tasks-list"]}
           renderItem={(item) => (
-            <SortableRoutineCard key={item.id} item={item} />
+            <RoutineCard key={item.id} item={item} />
           )}
         />
       </SortableContext>
