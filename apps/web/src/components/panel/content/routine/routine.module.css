@@ -20,16 +20,43 @@
     margin: var(--ant-list-item-padding);
 }
 
+.card {
+    position: relative;
+    flex: 1;
+}
+
+.card:hover .grabber {
+    opacity: 1;
+}
+
+.card-meta {
+    display: flex;
+    flex-direction: row;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.grabber {
+    cursor: grab;
+    display: flex;
+    opacity: 0;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100%;
+}
+
+.checkbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .checkbox-wrapper {
     display: flex;
     align-items: start !important;
     justify-content: center;
     padding-top: 8px;
-}
-
-.checkbox {
-    /* padding-block: var(--ant-padding-xxs); */
-
 }
 
 .button {
