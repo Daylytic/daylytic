@@ -23,7 +23,7 @@ export const RoutineCard = ({ item }: { item: Task }) => {
             }}
           ></Checkbox>
         }
-        className={styles["checkbox-wrapper"]}
+        className={styles["card-meta"]}
         description={
           <Button
             type="text"
