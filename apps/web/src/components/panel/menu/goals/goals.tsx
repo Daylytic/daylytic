@@ -24,7 +24,7 @@ export const Goals = () => {
         dataSource={goals}
         id={styles.wrapper}
         className={clsx("css-var-r1", "ant-menu-css-var")}
-        renderItem={(item, index) => (
+        renderItem={(item, _) => (
           <GoalsCard
             selected={getContent() === item.id}
             id={item.id}
