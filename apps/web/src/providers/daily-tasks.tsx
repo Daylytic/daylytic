@@ -43,27 +43,27 @@ export const DailyTasksProvider = ({ token, children }) => {
       .map((task, index) => ({ ...task, position: index })); // Reassign positions
   };
 
-  const moveTaskAndRecalculate = (
-    taskId: string,
-    newPosition: number
-  ): Task[] => {
-    const taskIndex = tasks.findIndex((task) => task.id === taskId);
-    if (taskIndex === -1) {
-      throw new Error(`Task with ID ${taskId} not found`);
-    }
+  // const moveTaskAndRecalculate = (
+  //   taskId: string,
+  //   newPosition: number
+  // ): Task[] => {
+  //   const taskIndex = tasks.findIndex((task) => task.id === taskId);
+  //   if (taskIndex === -1) {
+  //     throw new Error(`Task with ID ${taskId} not found`);
+  //   }
   
-    const taskToMove = tasks[taskIndex];
-    const filteredTasks = tasks.filter((task) => task.id !== taskId); // Remove the task to move
+  //   const taskToMove = tasks[taskIndex];
+  //   const filteredTasks = tasks.filter((task) => task.id !== taskId); // Remove the task to move
   
-    const reorderedTasks = [
-      ...filteredTasks.slice(0, newPosition),
-      { ...taskToMove, position: newPosition }, // Insert the task at the new position
-      ...filteredTasks.slice(newPosition),
-    ];
+  //   const reorderedTasks = [
+  //     ...filteredTasks.slice(0, newPosition),
+  //     { ...taskToMove, position: newPosition }, // Insert the task at the new position
+  //     ...filteredTasks.slice(newPosition),
+  //   ];
   
-    // Recalculate positions to ensure they are sequential
-    return recalculatePositions(reorderedTasks);
-  };
+  //   // Recalculate positions to ensure they are sequential
+  //   return recalculatePositions(reorderedTasks);
+  // };
   
 
   const fetchTasks = async () => {
