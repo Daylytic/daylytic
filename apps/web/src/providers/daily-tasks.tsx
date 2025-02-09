@@ -26,7 +26,7 @@ const DailyTasksContext = React.createContext<
 
 // Provider Component
 export const DailyTasksProvider = ({ token, children }) => {
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
   const [debouncedUpdates, setDebouncedUpdates] = useState<
     Record<string, NodeJS.Timeout>
