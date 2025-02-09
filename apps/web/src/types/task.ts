@@ -1,4 +1,4 @@
-export type Priority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL" | null; 
+export type Priority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL" | null;
 
 export interface Tag {
   id: string;
@@ -16,5 +16,5 @@ export interface Task {
   isCompleted: boolean;
   createdAt: string;
   updatedAt: string;
-  deadline: string;
+  deadline: string | null;
 }
