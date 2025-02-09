@@ -391,9 +391,9 @@ export interface components {
                 /** @enum {string} */
                 taskType: "ROUTINE" | "TODOLIST";
                 priority: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL") | null;
-                position: null | number;
+                position: number;
                 title: string;
-                description: string | null;
+                description: string;
                 /** @default false */
                 isCompleted: boolean;
                 /**
@@ -406,7 +406,7 @@ export interface components {
                 deadline: string | null;
                 todoListId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
                 userId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
-                tags?: {
+                tags: {
                     id: components["schemas"]["def-3"]["TaskSchema"]["id"];
                     name: string;
                     color: string;
@@ -430,7 +430,7 @@ export interface components {
                 description: components["schemas"]["def-3"]["TaskSchema"]["description"];
                 isCompleted?: components["schemas"]["def-3"]["TaskSchema"]["isCompleted"];
                 deadline: components["schemas"]["def-3"]["TaskSchema"]["deadline"];
-                tags?: components["schemas"]["def-3"]["TaskSchema"]["tags"];
+                tags: components["schemas"]["def-3"]["TaskSchema"]["tags"];
             };
         };
     };
