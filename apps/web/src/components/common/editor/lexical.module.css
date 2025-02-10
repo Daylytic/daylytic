@@ -1,4 +1,4 @@
-.editor-wrapper {
+.wrapper {
     height: 100%;
     overflow: hidden;
     box-sizing: border-box;
@@ -6,7 +6,7 @@
     flex-direction: column;
 }
 
-.editor-scroller {
+.scroller {
     min-height: 150px;
     max-height: 100%;
     overflow: auto;
