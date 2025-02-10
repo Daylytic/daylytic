@@ -1,21 +1,11 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- *
- */
-
-/* Finished */
-.DaylyticTheme__quote {
+.quote {
   padding-inline: 0.6em 0;
   padding-block: 0;
   border-inline-start: 4px solid rgba(100, 100, 100, 0.2);
   opacity: 0.85;
 }
 
-.DaylyticTheme__code {
+.code {
   background-color: rgb(240, 242, 245);
   font-family: Menlo, Consolas, Monaco, monospace;
   display: block;
@@ -29,7 +19,7 @@
   position: relative;
   tab-size: 2;
 }
-.DaylyticTheme__code:before {
+.code:before {
   content: attr(data-gutter);
   position: absolute;
   background-color: #eee;
@@ -43,68 +33,68 @@
   min-width: 25px;
 }
 
-.DaylyticTheme__tokenComment {
+.tokenComment {
   color: slategray;
 }
-.DaylyticTheme__tokenPunctuation {
+.tokenPunctuation {
   color: #999;
 }
-.DaylyticTheme__tokenProperty {
+.tokenProperty {
   color: #905;
 }
-.DaylyticTheme__tokenSelector {
+.tokenSelector {
   color: #690;
 }
-.DaylyticTheme__tokenOperator {
+.tokenOperator {
   color: #9a6e3a;
 }
-.DaylyticTheme__tokenAttr {
+.tokenAttr {
   color: #07a;
 }
-.DaylyticTheme__tokenVariable {
+.tokenVariable {
   color: #e90;
 }
-.DaylyticTheme__tokenFunction {
+.tokenFunction {
   color: #dd4a68;
 }
 
 /* Un-finished */
 
- .DaylyticTheme__ltr {
+ .ltr {
     text-align: left;
   }
-  .DaylyticTheme__rtl {
+  .rtl {
     text-align: right;
   }
 
 
-  .DaylyticTheme__indent {
+  .indent {
     --lexical-indent-base-value: 40px;
   }
-  .DaylyticTheme__textBold {
+  .textBold {
     font-weight: bold;
   }
-  .DaylyticTheme__textItalic {
+  .textItalic {
     font-style: italic;
   }
-  .DaylyticTheme__textUnderline {
+  .textUnderline {
     text-decoration: underline;
   }
   
-  .DaylyticTheme__textStrikethrough {
+  .textStrikethrough {
     text-decoration: line-through;
   }
   
-  .DaylyticTheme__textUnderlineStrikethrough {
+  .textUnderlineStrikethrough {
     text-decoration: underline line-through;
   }
   
-  .DaylyticTheme__tabNode {
+  .tabNode {
     position: relative;
     text-decoration: none;
   }
   
-  .DaylyticTheme__tabNode.DaylyticTheme__textUnderline::after {
+  .tabNode.textUnderline::after {
     content: '';
     position: absolute;
     left: 0;
@@ -113,7 +103,7 @@
     border-bottom: 0.1em solid currentColor;
   }
   
-  .DaylyticTheme__tabNode.DaylyticTheme__textStrikethrough::before {
+  .tabNode.textStrikethrough::before {
     content: '';
     position: absolute;
     left: 0;
@@ -122,65 +112,65 @@
     border-top: 0.1em solid currentColor;
   }
   
-  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::before,
-  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::after {
+  .tabNode.textUnderlineStrikethrough::before,
+  .tabNode.textUnderlineStrikethrough::after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
   }
   
-  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::before {
+  .tabNode.textUnderlineStrikethrough::before {
     top: 0.69em;
     border-top: 0.1em solid currentColor;
   }
   
-  .DaylyticTheme__tabNode.DaylyticTheme__textUnderlineStrikethrough::after {
+  .tabNode.textUnderlineStrikethrough::after {
     bottom: 0.05em;
     border-bottom: 0.1em solid currentColor;
   }
   
-  .DaylyticTheme__textSubscript {
+  .textSubscript {
     font-size: 0.8em;
     vertical-align: sub !important;
   }
-  .DaylyticTheme__textSuperscript {
+  .textSuperscript {
     font-size: 0.8em;
     vertical-align: super;
   }
-  .DaylyticTheme__textCode {
+  .textCode {
     background-color: rgb(240, 242, 245);
     padding: 1px 0.25rem;
     font-family: Menlo, Consolas, Monaco, monospace;
     font-size: 94%;
   }
-  .DaylyticTheme__textLowercase {
+  .textLowercase {
     text-transform: lowercase;
   }
-  .DaylyticTheme__textUppercase {
+  .textUppercase {
     text-transform: uppercase;
   }
-  .DaylyticTheme__textCapitalize {
+  .textCapitalize {
     text-transform: capitalize;
   }
-  .DaylyticTheme__hashtag {
+  .hashtag {
     background-color: rgba(88, 144, 255, 0.15);
     border-bottom: 1px solid rgba(88, 144, 255, 0.3);
   }
-  .DaylyticTheme__link {
+  .link {
     color: rgb(33, 111, 219);
     text-decoration: none;
   }
-  .DaylyticTheme__link:hover {
+  .link:hover {
     text-decoration: underline;
     cursor: pointer;
   }
-  .DaylyticTheme__blockCursor {
+  .blockCursor {
     display: block;
     pointer-events: none;
     position: absolute;
   }
-  .DaylyticTheme__blockCursor:after {
+  .blockCursor:after {
     content: '';
     display: block;
     position: absolute;
@@ -195,23 +185,23 @@
     }
   }
 
-  .DaylyticTheme__tableScrollableWrapper {
+  .tableScrollableWrapper {
     overflow-x: auto;
     margin: 0px 25px 30px 0px;
   }
-  .DaylyticTheme__tableScrollableWrapper > .DaylyticTheme__table {
+  .tableScrollableWrapper > .table {
     /* Remove the table's vertical margin and put it on the wrapper */
     margin-top: 0;
     margin-bottom: 0;
   }
-  .DaylyticTheme__tableAlignmentCenter {
+  .tableAlignmentCenter {
     margin-left: auto;
     margin-right: auto;
   }
-  .DaylyticTheme__tableAlignmentRight {
+  .tableAlignmentRight {
     margin-left: auto;
   }
-  .DaylyticTheme__table {
+  .table {
     border-collapse: collapse;
     border-spacing: 0;
     overflow-y: scroll;
@@ -221,16 +211,16 @@
     margin-top: 25px;
     margin-bottom: 30px;
   }
-  .DaylyticTheme__tableRowStriping tr:nth-child(even) {
+  .tableRowStriping tr:nth-child(even) {
     background-color: #f2f5fb;
   }
-  .DaylyticTheme__tableSelection *::selection {
+  .tableSelection *::selection {
     background-color: transparent;
   }
-  .DaylyticTheme__tableSelected {
+  .tableSelected {
     outline: 2px solid rgb(60, 132, 244);
   }
-  .DaylyticTheme__tableCell {
+  .tableCell {
     border: 1px solid #bbb;
     width: 75px;
     vertical-align: top;
@@ -244,10 +234,10 @@
     A firefox workaround to allow scrolling of overflowing table cell
     ref: https://bugzilla.mozilla.org/show_bug.cgi?id=1904159
   */
-  .DaylyticTheme__tableCell > * {
+  .tableCell > * {
     overflow: inherit;
   }
-  .DaylyticTheme__tableCellResizer {
+  .tableCellResizer {
     position: absolute;
     right: -4px;
     height: 100%;
@@ -256,14 +246,14 @@
     z-index: 10;
     top: 0;
   }
-  .DaylyticTheme__tableCellHeader {
+  .tableCellHeader {
     background-color: #f2f3f5;
     text-align: start;
   }
-  .DaylyticTheme__tableCellSelected {
+  .tableCellSelected {
     caret-color: transparent;
   }
-  .DaylyticTheme__tableCellSelected::after {
+  .tableCellSelected::after {
     position: absolute;
     left: 0;
     right: 0;
@@ -274,7 +264,7 @@
     content: '';
     pointer-events: none;
   }
-  .DaylyticTheme__tableAddColumns {
+  .tableAddColumns {
     position: absolute;
     background-color: #eee;
     height: 100%;
@@ -282,7 +272,7 @@
     border: 0;
     cursor: pointer;
   }
-  .DaylyticTheme__tableAddColumns:after {
+  .tableAddColumns:after {
     /* background-image: url(../images/icons/plus.svg); TODO*/
     background-size: contain;
     background-position: center;
@@ -296,11 +286,11 @@
     height: 100%;
     opacity: 0.4;
   }
-  .DaylyticTheme__tableAddColumns:hover,
-  .DaylyticTheme__tableAddRows:hover {
+  .tableAddColumns:hover,
+  .tableAddRows:hover {
     background-color: #c9dbf0;
   }
-  .DaylyticTheme__tableAddRows {
+  .tableAddRows {
     position: absolute;
     width: calc(100% - 25px);
     background-color: #eee;
@@ -308,7 +298,7 @@
     border: 0;
     cursor: pointer;
   }
-  .DaylyticTheme__tableAddRows:after {
+  .tableAddRows:after {
     /* background-image: url(../images/icons/plus.svg); TODO */
     background-size: contain;
     background-position: center;
@@ -330,7 +320,7 @@
       opacity: 1;
     }
   }
-  .DaylyticTheme__tableCellResizeRuler {
+  .tableCellResizeRuler {
     display: block;
     position: absolute;
     width: 1px;
@@ -338,7 +328,7 @@
     height: 100%;
     top: 0;
   }
-  .DaylyticTheme__tableCellActionButtonContainer {
+  .tableCellActionButtonContainer {
     display: block;
     right: 5px;
     top: 6px;
@@ -347,7 +337,7 @@
     width: 20px;
     height: 20px;
   }
-  .DaylyticTheme__tableCellActionButton {
+  .tableCellActionButton {
     background-color: #eee;
     display: block;
     border: 0;
@@ -357,52 +347,52 @@
     color: #222;
     cursor: pointer;
   }
-  .DaylyticTheme__tableCellActionButton:hover {
+  .tableCellActionButton:hover {
     background-color: #ddd;
   }
-  .DaylyticTheme__characterLimit {
+  .characterLimit {
     display: inline;
     background-color: #ffbbbb !important;
   }
-  .DaylyticTheme__ol1 {
+  .ol1 {
     padding: 0;
     margin: 0;
     list-style-position: outside;
   }
-  .DaylyticTheme__ol2 {
+  .ol2 {
     padding: 0;
     margin: 0;
     list-style-type: upper-alpha;
     list-style-position: outside;
   }
-  .DaylyticTheme__ol3 {
+  .ol3 {
     padding: 0;
     margin: 0;
     list-style-type: lower-alpha;
     list-style-position: outside;
   }
-  .DaylyticTheme__ol4 {
+  .ol4 {
     padding: 0;
     margin: 0;
     list-style-type: upper-roman;
     list-style-position: outside;
   }
-  .DaylyticTheme__ol5 {
+  .ol5 {
     padding: 0;
     margin: 0;
     list-style-type: lower-roman;
     list-style-position: outside;
   }
-  .DaylyticTheme__ul {
+  .ul {
     padding: 0;
     margin: 0;
     list-style-position: outside;
   }
-  .DaylyticTheme__listItem {
+  .listItem {
     margin: 0 32px;
   }
-  .DaylyticTheme__listItemChecked,
-  .DaylyticTheme__listItemUnchecked {
+  .listItemChecked,
+  .listItemUnchecked {
     position: relative;
     margin-left: 8px;
     margin-right: 8px;
@@ -411,11 +401,11 @@
     list-style-type: none;
     outline: none;
   }
-  .DaylyticTheme__listItemChecked {
+  .listItemChecked {
     text-decoration: line-through;
   }
-  .DaylyticTheme__listItemUnchecked:before,
-  .DaylyticTheme__listItemChecked:before {
+  .listItemUnchecked:before,
+  .listItemChecked:before {
     content: '';
     width: 16px;
     height: 16px;
@@ -426,27 +416,27 @@
     background-size: cover;
     position: absolute;
   }
-  .DaylyticTheme__listItemUnchecked[dir='rtl']:before,
-  .DaylyticTheme__listItemChecked[dir='rtl']:before {
+  .listItemUnchecked[dir='rtl']:before,
+  .listItemChecked[dir='rtl']:before {
     left: auto;
     right: 0;
   }
-  .DaylyticTheme__listItemUnchecked:focus:before,
-  .DaylyticTheme__listItemChecked:focus:before {
+  .listItemUnchecked:focus:before,
+  .listItemChecked:focus:before {
     box-shadow: 0 0 0 2px #a6cdfe;
     border-radius: 2px;
   }
-  .DaylyticTheme__listItemUnchecked:before {
+  .listItemUnchecked:before {
     border: 1px solid #999;
     border-radius: 2px;
   }
-  .DaylyticTheme__listItemChecked:before {
+  .listItemChecked:before {
     border: 1px solid rgb(61, 135, 245);
     border-radius: 2px;
     background-color: #3d87f5;
     background-repeat: no-repeat;
   }
-  .DaylyticTheme__listItemChecked:after {
+  .listItemChecked:after {
     content: '';
     cursor: pointer;
     border-color: #fff;
@@ -461,70 +451,70 @@
     transform: rotate(45deg);
     border-width: 0 2px 2px 0;
   }
-  .DaylyticTheme__nestedListItem {
+  .nestedListItem {
     list-style-type: none;
   }
-  .DaylyticTheme__nestedListItem:before,
-  .DaylyticTheme__nestedListItem:after {
+  .nestedListItem:before,
+  .nestedListItem:after {
     display: none;
   }
 
-  .DaylyticTheme__mark {
+  .mark {
     background: rgba(255, 212, 0, 0.14);
     border-bottom: 2px solid rgba(255, 212, 0, 0.3);
     padding-bottom: 2px;
   }
-  .DaylyticTheme__markOverlap {
+  .markOverlap {
     background: rgba(255, 212, 0, 0.3);
     border-bottom: 2px solid rgba(255, 212, 0, 0.7);
   }
-  .DaylyticTheme__mark.selected {
+  .mark.selected {
     background: rgba(255, 212, 0, 0.5);
     border-bottom: 2px solid rgba(255, 212, 0, 1);
   }
-  .DaylyticTheme__markOverlap.selected {
+  .markOverlap.selected {
     background: rgba(255, 212, 0, 0.7);
     border-bottom: 2px solid rgba(255, 212, 0, 0.7);
   }
-  .DaylyticTheme__embedBlock {
+  .embedBlock {
     user-select: none;
   }
-  .DaylyticTheme__embedBlockFocus {
+  .embedBlockFocus {
     outline: 2px solid rgb(60, 132, 244);
   }
-  .DaylyticTheme__layoutContainer {
+  .layoutContainer {
     display: grid;
     gap: 10px;
     margin: 10px 0;
   }
-  .DaylyticTheme__layoutItem {
+  .layoutItem {
     border: 1px dashed #ddd;
     padding: 8px 16px;
     min-width: 0;
     max-width: 100%;
   }
-  .DaylyticTheme__autocomplete {
+  .autocomplete {
     color: #ccc;
   }
-  .DaylyticTheme__hr {
+  .hr {
     padding: 2px 2px;
     border: none;
     margin: 1em 0;
     cursor: pointer;
   }
-  .DaylyticTheme__hr:after {
+  .hr:after {
     content: '';
     display: block;
     height: 2px;
     background-color: #ccc;
     line-height: 2px;
   }
-  .DaylyticTheme__hr.selected {
+  .hr.selected {
     outline: 2px solid rgb(60, 132, 244);
     user-select: none;
   }
   
-  .DaylyticTheme__specialText {
+  .specialText {
     background-color: yellow;
     font-weight: bold;
   }
