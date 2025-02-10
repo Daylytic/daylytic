@@ -1,9 +1,8 @@
 import { ConfigProvider } from "antd";
-import { Panel } from "pages/panel";
-import { Home } from "pages/home/home";
 import { Routes, Route, BrowserRouter } from "react-router";
 import { ScrollToHash } from "components/common/scroll-to-hash";
-import { PrivateRoute } from "pages/private-route";
+import { Home } from "pages/home";
+import { Panel } from "pages/panel";
 
 export const App = () => (
   <ConfigProvider

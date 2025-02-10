@@ -8,7 +8,6 @@
     "strict": true,
     "skipLibCheck": true,
     "lib": ["dom", "dom.iterable", "esnext"],
-    "baseUrl": "./src",
     // "paths": {
     //   "@src/*": ["./src*"],
     // },
@@ -20,6 +19,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "noImplicitAny": false,
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["./src/*"],
+      "lexical": ["node_modules/lexical/dist/index.d.ts"],
+      "@lexical/react": ["node_modules/@lexical/react/dist/index.d.ts"]
+    }
   },
   "include": ["src"]
 }

@@ -9,3 +9,6 @@
 - Preview of the tag
 - Right click functionality
 - Presets for the toolbox
+- Tutorial how to use shortcuts, editor, etc
+- Email notifications
+- Work timer
