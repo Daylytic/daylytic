@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { client } from "services/api-client";
 
 export const useGoals = (token: string) => {
+  // eslint-disable-next-line
   const [goals, setGoals] = useState<any[]>([]);
   const fetchGoals = async () => {
     const { data } = await client.GET("/goals/", {

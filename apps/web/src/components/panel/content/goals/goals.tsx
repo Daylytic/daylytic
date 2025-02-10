@@ -3,35 +3,14 @@ import {
     Typography,
   } from "antd";
   import { Content } from "antd/es/layout/layout";
-  import { faker } from "@faker-js/faker";
   
   const { Title } = Typography;
-  
-  interface Task {
-    title: string;
-    description: string;
-    tags: string[];
-  }
   
   export const Goals = () => {
   
     const {
-      token: { colorWhite, borderRadiusLG, paddingMD, paddingXS, paddingXXS },
+      token: { colorWhite, borderRadiusLG, paddingMD },
     } = theme.useToken();
-  
-    const generateTasks = (numberOfTasks: number): Task[] => {
-      return Array.from({ length: numberOfTasks }, () => ({
-        title: faker.lorem.words(5), // Generate a random title
-        description: faker.lorem.sentence({ min: 5, max: 15 }), // Generate a random description
-        tags: Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () =>
-          faker.lorem.word()
-        ), // Generate a random list of tags
-      }));
-    };
-  
-    // Example usage
-    const numberOfTasks = 7; // Change this number to generate more or fewer tasks
-    const tasks = generateTasks(numberOfTasks);
   
     return (
       <Content

@@ -10,6 +10,15 @@
     /* background-color: blue; */
 }
 
-.settings-button {
+.header-edit-icon {
+    color: var(--ant-color-primary-text);
+}
+
+.button {
+    box-sizing: border-box;
     flex: 1;
+}
+
+.time-picker * {
+    color: var(--ant-button-text-text-color) !important;
 }

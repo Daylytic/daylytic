@@ -1,106 +1,77 @@
-import { useState, useRef, useEffect } from "react";
-import {
-  AdmonitionDirectiveDescriptor,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  directivesPlugin,
-  headingsPlugin,
-  listsPlugin,
-  markdownShortcutPlugin,
-  MDXEditor,
-  quotePlugin,
-  SandpackConfig,
-  sandpackPlugin,
-  tablePlugin,
-  thematicBreakPlugin,
-  toolbarPlugin,
-} from "@mdxeditor/editor";
-import "@mdxeditor/editor/style.css";
-import Paragraph from "antd/es/typography/Paragraph";
-import { BoldItalicUnderlineToggles, StrikeThroughSupSubToggles } from "./bold-italic-underline-toggles";
-import { UndoRedo } from "./undo-redo";
-import { Divider } from "antd";
-import { BlockTypeSelect } from "./block-type-select";
-import { CreateLink } from "./create-link";
-import { InsertTable } from "./insert-table";
-import { InsertThematicBreak } from "./insert-thematic-break";
-import { CodeToggle } from "./code-toggle";
-import { InsertCodeBlock } from "./insert-code-block";
-import { InsertSandpack } from "./insert-sandpack";
-import "assets/styles/mdx.css";
-import { InsertAdmonition } from "./insert-admonition";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 
-const defaultSnippetContent = `
-export default function App() {
-  return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
-  );
-}
-`.trim()
+import "./editor.css";
+import ShortcutsPlugin from "components/common/editor/plugins/shortcuts";
+import ToolbarPlugin from "components/common/editor/plugins/toolbar";
+import { useState } from "react";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { CodeHighlightPlugin } from "components/common/editor/plugins/code-highlight";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
+import ContentEditable from "components/common/editor/ui/content-editable/content-editable";
+import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import FloatingLinkEditorPlugin from "components/common/editor/plugins/floating-link-editor";
+import LinkPlugin from "components/common/editor/plugins/link";
 
-const simpleSandpackConfig: SandpackConfig = {
-  defaultPreset: 'react',
-  presets: [
-    {
-      label: 'React',
-      name: 'react',
-      meta: 'live react',
-      sandpackTemplate: 'react',
-      sandpackTheme: 'light',
-      snippetFileName: '/App.js',
-      snippetLanguage: 'jsx',
-      initialSnippetContent: defaultSnippetContent
+export const Editor = () => {
+  const [editor] = useLexicalComposerContext();
+  const [activeEditor, setActiveEditor] = useState(editor);
+  const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
+  const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
+
+  const onRef = (_floatingAnchorElem: HTMLDivElement) => {
+    if (_floatingAnchorElem !== null) {
+      setFloatingAnchorElem(_floatingAnchorElem);
     }
-  ]
-}
+  };
 
-const Editor = () => {
   return (
-    <MDXEditor
-      markdown="Hello world"
-      className="global-mdx-theme" 
-      contentEditableClassName="content-editable"
-      plugins={[
-        headingsPlugin(),
-        listsPlugin(),
-        quotePlugin(),
-        thematicBreakPlugin(),
-        markdownShortcutPlugin(),
-        tablePlugin(),
-        codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
-        sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
-        directivesPlugin({ directiveDescriptors: [AdmonitionDirectiveDescriptor] }),
-        codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS' } }),
-        toolbarPlugin({
-          toolbarClassName: "toolbar-wrapper",
-          toolbarContents: () => (
-            <div className="toolbar-content">
-              <UndoRedo />
-              <Divider type="vertical" />
-              <BoldItalicUnderlineToggles />
-              <CodeToggle />
-              <Divider type="vertical" />
-              <StrikeThroughSupSubToggles />
-              <Divider type="vertical" />
-              <BlockTypeSelect />
-              <Divider type="vertical" />
-              <CreateLink />
-              <InsertTable />
-              <InsertThematicBreak />
-              <Divider type="vertical" />
-              <InsertCodeBlock />
-              <InsertSandpack />
-              <Divider type="vertical" />
-              <InsertAdmonition />
+    <>
+      <ToolbarPlugin
+        editor={editor}
+        activeEditor={activeEditor}
+        setActiveEditor={setActiveEditor}
+        setIsLinkEditMode={setIsLinkEditMode}
+      />
+      <RichTextPlugin
+        contentEditable={
+          <div className="editor-scroller">
+            <div className="editor css-var-rl ant-input-css-var" ref={onRef}>
+              <ContentEditable placeholder={"Type here your note..."} />
             </div>
-          ),
-        }),
-      ]}
-    />
+          </div>
+        }
+        ErrorBoundary={LexicalErrorBoundary}
+      />
+      <HistoryPlugin />
+      <MarkdownShortcutPlugin />
+      <CodeHighlightPlugin />
+      <ShortcutsPlugin editor={activeEditor} setIsLinkEditMode={setIsLinkEditMode} />
+      <LinkPlugin />
+
+      {/* Lists */}
+      <ListPlugin />
+      <CheckListPlugin />
+
+      {floatingAnchorElem && (
+        <>
+          {/* <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+          <CodeActionMenuPlugin anchorElem={floatingAnchorElem} /> */}
+          <FloatingLinkEditorPlugin
+            anchorElem={floatingAnchorElem}
+            isLinkEditMode={isLinkEditMode}
+            setIsLinkEditMode={setIsLinkEditMode}
+          />
+          {/* <TableCellActionMenuPlugin anchorElem={floatingAnchorElem} cellMerge={true} />
+          <TableHoverActionsPlugin anchorElem={floatingAnchorElem} />
+          <FloatingTextFormatToolbarPlugin
+            anchorElem={floatingAnchorElem}
+            setIsLinkEditMode={setIsLinkEditMode}
+          /> */}
+        </>
+      )}
+    </>
   );
 };
-
-export default Editor;

@@ -22,7 +22,6 @@ export const DescriptionSchema = z
   .string()
   .max(TASK_DESCRIPTION_MAX_LENGTH)
   .min(TASK_DESCRIPTION_MIN_LENGTH)
-  .nullable()
   .refine((value) => value === null || (value.length >= TASK_DESCRIPTION_MIN_LENGTH && value.length <= TASK_DESCRIPTION_MAX_LENGTH), {
     message: `Description must be null or have a length between ${TASK_DESCRIPTION_MIN_LENGTH} and ${TASK_DESCRIPTION_MAX_LENGTH}.`,
   });
@@ -52,7 +51,7 @@ export const TaskSchema = z.object({
   todoListId: IdSchema.nullable(), // Relation field to ToDoList
   userId: IdSchema.nullable(), // Relation field to User
   // tagIds: z.array(IdSchema).optional(), // References to tag IDs
-  tags: z.array(TagSchema).optional(), // References to tag IDs
+  tags: z.array(TagSchema), // References to tag IDs
 });
 
 // Create Task Schemas

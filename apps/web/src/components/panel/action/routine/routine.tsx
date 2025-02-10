@@ -1,10 +1,10 @@
 import { Flex } from "antd";
-import { useDailyTasks } from "providers/daily-tasks";
 import { useEffect } from "react";
 import { RoutineSettings } from "./routine-settings";
 import styles from "./routine.module.css";
 import { RoutineHeader } from "./routine-header";
-import Editor from "components/common/editor/editor";
+import { useDailyTasks } from "providers/daily-tasks";
+import { Lexical } from "components/common/editor/lexical";
 
 export const Routine = ({ id }) => {
   const { tasks, selectedTask, setSelectedTask } = useDailyTasks();
@@ -22,7 +22,7 @@ export const Routine = ({ id }) => {
     <Flex vertical id={styles["wrapper"]}>
       <RoutineHeader />
       <RoutineSettings />
-      <Editor />
+      <Lexical />
     </Flex>
   );
 };
