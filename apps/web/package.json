@@ -7,7 +7,11 @@
     "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
+    "prettier:fix": "prettier --write src"
   },
   "dependencies": {
     "@ant-design/colors": "^7.2.0",
@@ -17,18 +21,22 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@faker-js/faker": "^9.3.0",
     "@fastify/postgres": "^6.0.1",
-    "@mdxeditor/editor": "^3.21.0",
+    "@lexical/react": "^0.23.1",
+    "@lexical/selection": "^0.23.1",
     "@react-oauth/google": "^0.12.1",
     "@types/pg": "^8.11.10",
     "antd": "^5.22.7",
     "clsx": "^2.1.1",
     "cuid": "^3.0.0",
     "dayjs": "^1.11.13",
+    "lexical": "^0.23.1",
     "openapi-fetch": "^0.13.4",
     "openapi-typescript": "^7.5.2",
     "react": "^18.3.1",
     "react-cookie": "^7.2.2",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
+    "react-markdown": "^9.0.3",
     "react-router": "^7.1.1",
     "react-scripts": "^5.0.1"
   },
@@ -36,7 +44,14 @@
     "@types/node": "^20",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.1",
-    "typescript": "5.5.4"
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.4.2",
+    "typescript": "5.5.4",
+    "typescript-eslint": "^8.22.0"
   },
   "browserslist": {
     "production": [
