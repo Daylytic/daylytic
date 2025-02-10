@@ -1,14 +1,5 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 import { IS_APPLE } from "utils/environment";
 
-//disable eslint sorting rule for quick reference to shortcuts
 export const SHORTCUTS = Object.freeze({
   // (Ctrl|⌘) + (Alt|Option) + <key> shortcuts
   NORMAL: IS_APPLE ? '⌘+Opt+0' : 'Ctrl+Alt+0',
