@@ -5,7 +5,7 @@ import { TaskNodes } from "components/common/editor/nodes/nodes";
 import { theme } from "./themes/daylytic-theme";
 import styles from "./lexical.module.css";
 
-function onError(error) {
+const onError = (error) => {
   console.error(error);
 }
 
