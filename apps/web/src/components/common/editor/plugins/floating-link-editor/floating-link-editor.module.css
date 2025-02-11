@@ -1,0 +1,32 @@
+.editor {
+    width: 100%;
+    /* padding-block: 4px;
+    padding-inline: 15px; */
+    height: var(--ant-menu-item-height);
+    padding-block: var(--ant-button-padding-block);
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+  }
+  
+  .link {
+    width: 100%;
+    padding: 0px;
+  }
+  
+  .wrapper {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    max-width: 300px;
+    width: 100%;
+    opacity: 0;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    transition: opacity 0.5s;
+    will-change: transform;
+  
+  }
