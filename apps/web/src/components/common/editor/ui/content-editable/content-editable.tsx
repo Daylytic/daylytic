@@ -1,6 +1,6 @@
 import type {JSX} from 'react';
 
-import './content-editable.css';
+import styles from './content-editable.module.css';
 
 import {ContentEditable} from '@lexical/react/LexicalContentEditable';
 import * as React from 'react';
@@ -19,10 +19,10 @@ export const LexicalContentEditable = ({
 }: LexicalContentEditableProps): JSX.Element =>  {
   return (
     <ContentEditable
-      className={clsx(className ?? "ContentEditable__root")}
+      className={clsx(className ?? styles.wrapper)}
       aria-placeholder={placeholder}
       placeholder={
-        <div className={placeholderClassName ?? 'ContentEditable__placeholder'}>
+        <div className={placeholderClassName ?? styles.placeholder}>
           {placeholder}
         </div>
       }
