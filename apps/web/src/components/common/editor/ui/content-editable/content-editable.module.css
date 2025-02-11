@@ -1,0 +1,22 @@
+.wrapper {
+  border: 0;
+  display: block;
+  position: relative;
+  outline: 0;
+  min-height: 150px;
+}
+
+.placeholder {
+  font-family: var(--ant-font-family);
+  line-height: var(--ant-line-height-lg);
+  font-size: var(--ant-input-input-font-size-lg);
+  color: #a9a9a9;
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  top: 0px;
+  user-select: none;
+  white-space: nowrap;
+  display: inline-block;
+  pointer-events: none;
+}
