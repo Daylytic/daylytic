@@ -4,7 +4,7 @@ import { RoutineSettings } from "./routine-settings";
 import styles from "./routine.module.css";
 import { RoutineHeader } from "./routine-header";
 import { useDailyTasks } from "providers/daily-tasks";
-import { Lexical } from "components/common/editor/lexical";
+import { Lexical } from "components/common/editor";
 
 export const Routine = ({ id }) => {
   const { tasks, selectedTask, setSelectedTask } = useDailyTasks();

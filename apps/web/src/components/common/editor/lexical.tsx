@@ -1,10 +1,11 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ToolbarContext } from "components/common/editor/context/toolbar";
 import { Editor } from "components/common/editor";
-import { TaskNodes } from "components/common/editor/nodes/task";
+import { TaskNodes } from "components/common/editor/nodes/nodes";
 import { theme } from "./themes/daylytic-theme";
+import styles from "./lexical.module.css";
 
-function onError(error) {
+const onError = (error) => {
   console.error(error);
 }
 
@@ -17,7 +18,7 @@ export const Lexical = () => {
   };
 
   return (
-    <div className="editor-wrapper">
+    <div className={styles.wrapper}>
       <LexicalComposer initialConfig={initialConfig}>
         <ToolbarContext>
           <Editor />
