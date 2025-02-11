@@ -6,17 +6,17 @@ import {ContentEditable} from '@lexical/react/LexicalContentEditable';
 import * as React from 'react';
 import clsx from 'clsx';
 
-type Props = {
+type LexicalContentEditableProps = {
   className?: string;
   placeholderClassName?: string;
   placeholder: string;
 };
 
-export default function LexicalContentEditable({
+export const LexicalContentEditable = ({
   className,
   placeholder,
   placeholderClassName,
-}: Props): JSX.Element {
+}: LexicalContentEditableProps): JSX.Element =>  {
   return (
     <ContentEditable
       className={clsx(className ?? "ContentEditable__root")}
