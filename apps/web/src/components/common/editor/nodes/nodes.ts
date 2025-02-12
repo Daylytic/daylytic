@@ -6,6 +6,7 @@ import {ListItemNode, ListNode} from '@lexical/list';
 import {MarkNode} from '@lexical/mark';
 import {OverflowNode} from '@lexical/overflow';
 import {HeadingNode, QuoteNode} from '@lexical/rich-text';
+import {HorizontalRuleNode} from '@lexical/react/LexicalHorizontalRuleNode';
 
 export const TaskNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -18,4 +19,5 @@ export const TaskNodes: Array<Klass<LexicalNode>> = [
   LinkNode,
   OverflowNode,
   MarkNode,
+  HorizontalRuleNode,
 ];
