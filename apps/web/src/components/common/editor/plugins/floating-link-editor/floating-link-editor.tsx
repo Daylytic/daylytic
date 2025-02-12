@@ -1,4 +1,4 @@
-import styles from "./index.module.css";
+import styles from "./floating-link-editor.module.css";
 
 import { $createLinkNode, $isAutoLinkNode, $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
