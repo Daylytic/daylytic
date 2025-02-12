@@ -45,8 +45,6 @@ import {
   formatCheckList,
   formatCode,
   formatQuote,
-  updateFontSize,
-  UpdateFontSizeType,
   clearFormatting,
 } from "components/common/editor/plugins/toolbar/utils";
 import { sanitizeUrl } from "utils/url";
