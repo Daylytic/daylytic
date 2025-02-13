@@ -8,3 +8,12 @@ export class RequestError extends Error {
         Object.setPrototypeOf(this, RequestError.prototype);
     }
 }
+
+export const handleControllerError = (err: any, rep: FastifyReply) => {
+  if (err instanceof RequestError) {
+    return rep.status(err.status).send({ error: err.message });
+  }
+
+  console.error(err);
+  rep.status(500).send();
+};
