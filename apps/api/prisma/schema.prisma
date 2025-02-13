@@ -14,31 +14,16 @@ datasource db {
 }
 
 model User {
-  id         String     @unique @default(cuid()) // Unique ID for the user
-  email      String     @unique // Email must be unique
+  id         String     @unique @default(cuid())
+  email      String     @unique
   name       String
   picture    String
-  createdAt  DateTime   @default(now()) // Timestamp of account creation
-  lastSeenAt DateTime   @default(now()) // Last login time
+  createdAt  DateTime   @default(now())
+  lastSeenAt DateTime   @default(now())
   timeZone   String
-  goals      Goal[] // One user can have multiple goals
   sessions   Session[]
   dailyTasks Task[]
   analytics  Analytics?
-}
-
-model Analytics {
-  id          String       @id @default(cuid()) // Unique ID for the goal
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String       @unique
-  routineData RoutineData? @relation // Optional RoutineData link
-}
-
-model RoutineData {
-  id               String    @id @default(cuid())
-  analytics        Analytics @relation(fields: [analyticsId], references: [id])
-  analyticsId      String    @unique
-  lastRoutineReset DateTime  @default(now())
 }
 
 model Session {
@@ -48,40 +33,18 @@ model Session {
   validUntil DateTime @default(dbgenerated("now() + interval '7 days'"))
 }
 
-model Goal {
-  id          String    @id @default(cuid()) // Unique ID for the goal
-  title       String // Title of the goal
-  description String // Optional description
-  deadline    DateTime? // Optional deadline for the goal
-  progress    Float     @default(0) // Progress percentage (0 to 100)
-  createdAt   DateTime  @default(now()) // Creation timestamp
-  updatedAt   DateTime  @updatedAt // Auto-updated when modified
-  userId      String // Relation field to User
-  user        User      @relation(fields: [userId], references: [id])
-  projects    Project[] // One goal can have multiple projects
+model Analytics {
+  id          String       @id @default(cuid())
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @unique
+  routineData RoutineData? @relation
 }
 
-model Project {
-  id          String     @id @default(cuid()) // Unique ID for the project
-  title       String // Title of the project
-  description String // Optional description
-  deadline    DateTime // Optional deadline for the project
-  progress    Float      @default(0) // Progress percentage (0 to 100)
-  createdAt   DateTime   @default(now()) // Creation timestamp
-  updatedAt   DateTime   @updatedAt // Auto-updated when modified
-  goalId      String // Relation field to Goal
-  goal        Goal       @relation(fields: [goalId], references: [id])
-  todoLists   ToDoList[] // One project can have multiple to-do lists
-}
-
-model ToDoList {
-  id        String   @id @default(cuid()) // Unique ID for the to-do list
-  title     String // Title of the to-do list
-  createdAt DateTime @default(now()) // Creation timestamp
-  updatedAt DateTime @updatedAt // Auto-updated when modified
-  projectId String // Relation field to Project
-  project   Project  @relation(fields: [projectId], references: [id])
-  tasks     Task[] // One to-do list can have multiple tasks
+model RoutineData {
+  id               String    @id @default(cuid())
+  analytics        Analytics @relation(fields: [analyticsId], references: [id])
+  analyticsId      String    @unique
+  lastRoutineReset DateTime  @default(now())
 }
 
 enum TaskType {
@@ -98,39 +61,29 @@ enum Priority {
 }
 
 model Task {
-  id          String    @id @default(cuid()) // Unique ID for the task
+  id          String    @id @default(cuid())
   position    Int
-  taskType    TaskType // Specifies the owner type (User or ToDoList)
-  priority    Priority? // Allows for custom ordering
-  title       String // Title of the task
+  taskType    TaskType
+  priority    Priority?
+  title       String
   description String?
-  isCompleted Boolean   @default(false) // Task completion status
-  createdAt   DateTime  @default(now()) // Creation timestamp
-  updatedAt   DateTime  @updatedAt // Auto-updated when modified
+  isCompleted Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   deadline    DateTime?
-  todoListId  String? // Relation field to ToDoList
-  todoList    ToDoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade) // Cascade delete here
+  // todoListId  String? // Relation field to ToDoList
+  // todoList    ToDoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade) // Cascade delete here
   userId      String? // Relation field to ToDoList
   user        User?     @relation(fields: [userId], references: [id])
   tags        Tag[]     @relation("TaskTags")
-  
-  // Ensure unique positions in either a TodoList or a User's routine
-  @@unique([todoListId, position])
+
+  // @@unique([todoListId, position])
   @@unique([userId, position])
 }
 
 model Tag {
-  id    String @id @default(cuid()) // Unique ID for the tag
-  name  String // Name of the tag
-  color String // Color of the tag
+  id    String @id @default(cuid())
+  name  String
+  color String
   tasks Task[] @relation("TaskTags")
 }
-
-// model DailyTask {
-//   id          String  @id @default(cuid()) // Unique ID for the task
-//   title       String // Title of the task
-//   description String?
-//   isCompleted Boolean @default(false)
-//   userId      String // Relation field to ToDoList
-//   user        User    @relation(fields: [userId], references: [id])
-// }
