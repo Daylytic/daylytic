@@ -4,10 +4,7 @@ import swaggerUi from '@fastify/swagger-ui';
 import postgres from '@fastify/postgres'; // Use import instead of requird
 import { authHandler } from './src/modules/auth/index.js'; // Ensure the extension is included
 import { Session, User, userSchemas } from './src/modules/auth/auth.schema.js';
-import { goalSchemas } from './src/modules/goals/goals.schema.js';
-import { projectsSchemas } from './src/modules/projects/projects.schema.js';
-import { goalsHandler } from './src/modules/goals/goals.routes.js';
-import { projectsHandler } from './src/modules/projects/projects.routes.js';
+
 import { routineHandler } from './src/modules/routine/routine.routes.js';
 import { taskSchemas } from './src/modules/task/index.js';
 
@@ -22,7 +19,7 @@ const server = Fastify({ logger: true })
 
 const main = async () => {
 
-  for (const schema of [...userSchemas, ...goalSchemas, ...projectsSchemas, ...taskSchemas]) {
+  for (const schema of [...userSchemas, ...taskSchemas]) {
     server.addSchema(schema);
   }
 
@@ -85,8 +82,6 @@ const main = async () => {
   })
 
   server.register(authHandler, { prefix: "/oauth2" });
-  server.register(goalsHandler, { prefix: "/goals" });
-  server.register(projectsHandler, { prefix: "/projects" });
   server.register(routineHandler, {prefix: "/routine"});
   try {
     await server.listen({ port: 8084 })
