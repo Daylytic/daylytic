@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { routineService } from "./routine.service.js";
-import { RequestError } from "utils/error.js";
+import { handleControllerError, RequestError } from "utils/error.js";
 import { analyticsService } from "modules/analytics/analytics.service.js";
 import { routineDataService } from "modules/analytics/routine/routine.service.js";
 import { taskService } from "modules/task/task.service.js";
@@ -21,12 +21,7 @@ const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
       taskType: "ROUTINE",
     });
   } catch (err) {
-    if (err instanceof RequestError) {
-      return rep.status(err.status).send({ error: err.message });
-    }
-
-    console.error(err);
-    rep.status(500).send();
+    handleControllerError(err, rep);
   }
 };
 
@@ -35,12 +30,7 @@ const getDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     return await taskService.getTasks({ userId: userId });
   } catch (err) {
-    if (err instanceof RequestError) {
-      return rep.status(err.status).send({ error: err.message });
-    }
-
-    console.error(err);
-    rep.status(500).send();
+    handleControllerError(err, rep);
   }
 };
 
@@ -50,12 +40,7 @@ const updateDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     return await taskService.updateTask(dailyTask);
   } catch (err: any) {
-    if (err instanceof RequestError) {
-      return rep.status(err.status).send({ error: err.message });
-    }
-
-    console.error(err);
-    rep.status(500).send();
+    handleControllerError(err, rep);
   }
 };
 
@@ -66,12 +51,7 @@ const deleteDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     return await taskService.deleteTask({ userId, id });
   } catch (err: any) {
-    if (err instanceof RequestError) {
-      return rep.status(err.status).send({ error: err.message });
-    }
-
-    console.error(err);
-    rep.status(500).send();
+    handleControllerError(err, rep);
   }
 };
 
