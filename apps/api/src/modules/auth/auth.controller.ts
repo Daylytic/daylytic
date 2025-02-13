@@ -50,6 +50,14 @@ const authenticate = async (req: FastifyRequest, rep: FastifyReply) => {
     const { user, session } = await authService.getAuthenticationProfile({
       token: token,
     });
+
+    const now = Date.now();
+
+    if(session.validUntil.getTime() <= now) {
+      authService.deleteSession(session);
+      throw new RequestError("Session has expired.", 401);
+    }
+
     await analyticsService.initializeAnalytics({ userId: user.id });
 
     req.user = await authService.updateLastSeen({ id: user.id });
