@@ -22,7 +22,8 @@ model User {
   lastSeenAt DateTime   @default(now())
   timeZone   String
   sessions   Session[]
-  dailyTasks Task[]
+  routine    Task[]
+  tags       Tag[]
   analytics  Analytics?
 }
 
@@ -66,7 +67,7 @@ model Task {
   taskType    TaskType
   priority    Priority?
   title       String
-  description String?
+  content     Json
   isCompleted Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
