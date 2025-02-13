@@ -26,7 +26,7 @@ const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
       }
     });
   } catch (err) {
-    throw new RequestError("Problem occured while creating task", 500);
+    throw new RequestError("Problem occured while creating task", 500, err);
   }
 };
 
@@ -45,7 +45,7 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
       where: data,
     });
   } catch (err) {
-    throw new RequestError("Problem occured while deleting task", 500);
+    throw new RequestError("Problem occured while deleting task", 500, err);
   }
 };
 
@@ -61,7 +61,7 @@ const updateTask = async (data: UpdateTaskInputSchema) => {
     });
 
     if (!currentTask) {
-      throw new RequestError(`Task with id ${data.id} not found`, 404);
+      throw new RequestError(`Task with id ${data.id} not found`, 404, undefined);
     }
 
     // Get current tag IDs
@@ -119,7 +119,7 @@ const updateTask = async (data: UpdateTaskInputSchema) => {
 
     return { message: "Task updated successfully" };
   } catch (err) {
-    throw new RequestError(`Problem occurred while updating task: ${err}`, 500);
+    throw new RequestError(`Problem occurred while updating task`, 500, err);
   }
 };
 
