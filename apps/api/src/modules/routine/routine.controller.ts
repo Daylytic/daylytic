@@ -11,9 +11,10 @@ import {
 } from "modules/task/task.schema.js";
 
 const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
-  const userId = req.user!.id;
-  const { title } = req.body as CreateTaskInputSchema;
   try {
+    const userId = req.user!.id;
+    const { title } = req.body as CreateTaskInputSchema;
+
     return await taskService.createTask({
       title: title,
       userId: userId,
