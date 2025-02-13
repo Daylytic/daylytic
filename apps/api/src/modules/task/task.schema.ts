@@ -1,10 +1,9 @@
 import {
-  TASK_DESCRIPTION_MAX_LENGTH,
-  TASK_DESCRIPTION_MIN_LENGTH,
   TASK_TITLE_MAX_LENGTH,
   TASK_TITLE_MIN_LENGTH,
 } from "@daylytic/shared/constants";
 import { buildJsonSchemas } from "fastify-zod";
+import { TagSchema } from "modules/tag/index.js";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
@@ -18,54 +17,44 @@ export const TitleSchema = z
     message: `Title must have a length between ${TASK_TITLE_MIN_LENGTH} and ${TASK_TITLE_MAX_LENGTH}.`,
   });
 
-export const DescriptionSchema = z
-  .string()
-  .max(TASK_DESCRIPTION_MAX_LENGTH)
-  .min(TASK_DESCRIPTION_MIN_LENGTH)
-  .refine((value) => value === null || (value.length >= TASK_DESCRIPTION_MIN_LENGTH && value.length <= TASK_DESCRIPTION_MAX_LENGTH), {
-    message: `Description must be null or have a length between ${TASK_DESCRIPTION_MIN_LENGTH} and ${TASK_DESCRIPTION_MAX_LENGTH}.`,
-  });
-
-export const TagNameSchema = z.string();
+export const ContentSchema: z.ZodType<unknown> = z.lazy(() => z.union([
+  z.number(),
+  z.string(),
+  z.null(),
+  z.boolean(),
+  z.array(ContentSchema),
+  z.record(ContentSchema),
+]));
 
 // Base
 
-export const TagSchema = z.object({
-  id: IdSchema,
-  name: TagNameSchema,
-  color: z.string(),
-  tasks: z.array(z.string()).optional(), // Array of task IDs,
-})
-
 export const TaskSchema = z.object({
-  id: IdSchema, // Unique ID for the task
-  taskType: TaskType, // Specifies the owner type (User or ToDoList)
-  priority: Priority, // Allows for custom ordering
+  id: IdSchema,
   position: z.number(),
-  title: TitleSchema, // Title of the task
-  description: DescriptionSchema, // Optional description
-  isCompleted: z.boolean().default(false), // Task completion status
-  createdAt: z.date().default(new Date()), // Creation timestamp
-  updatedAt: z.date(), // Auto-updated when modified
-  deadline: z.date().nullable(), // Optional deadline
-  todoListId: IdSchema.nullable(), // Relation field to ToDoList
-  userId: IdSchema.nullable(), // Relation field to User
-  // tagIds: z.array(IdSchema).optional(), // References to tag IDs
+  taskType: TaskType, // Specifies the owner type (User or ToDoList)
+  priority: Priority,
+  title: TitleSchema,
+  content: ContentSchema,
+  isCompleted: z.boolean().default(false),
+  createdAt: z.date().default(new Date()),
+  updatedAt: z.date(),
+  deadline: z.date().nullable(),
+  // todoListId: IdSchema.nullable(),
+  userId: IdSchema.nullable(),
   tags: z.array(TagSchema), // References to tag IDs
 });
 
 // Create Task Schemas
-
 const CreateTaskInputSchema = TaskSchema.pick({ title: true, taskType: true });
 const CreateTaskWithIdSchema = CreateTaskInputSchema.extend({
-  userId: IdSchema.optional(),
-  todoListId: IdSchema.optional(),
+  userId: IdSchema.nullable(),
+  // todoListId: IdSchema.optional(),
 });
 
 // Fetch Tasks Schema
 const FetchTaskInputSchema = z.object({
-  userId: IdSchema.optional(),
-  todoListId: IdSchema.optional(),
+  userId: IdSchema.nullable(),
+  // todoListId: IdSchema.optional(),
 });
 const FetchTasksResponseSchema = z.array(TaskSchema);
 
@@ -74,8 +63,8 @@ const DeleteTaskInputSchema = z.object({
   id: IdSchema,
 });
 const DeleteTaskWithIdInputSchema = DeleteTaskInputSchema.extend({
-  userId: IdSchema.optional(),
-  todoListId: IdSchema.optional(),
+  userId: IdSchema.nullable(),
+  // todoListId: IdSchema.optional(),
 });
 
 // Reset Task Schema
@@ -84,7 +73,7 @@ const ResetTaskInputSchema = z.object({
 });
 
 // Update Task Schema
-const UpdateTaskInputSchema = TaskSchema.omit({ userId: true, todoListId: true, updatedAt: true, createdAt: true, });
+const UpdateTaskInputSchema = TaskSchema.omit({ userId: true, /*todoListId: true,*/ updatedAt: true, createdAt: true, });
 const UpdateTaskWithIdInputSchema = TaskSchema;
 
 export type Task = z.infer<typeof TaskSchema>;
