@@ -82,8 +82,10 @@ model Task {
 }
 
 model Tag {
-  id    String @id @default(cuid())
-  name  String
-  color String
-  tasks Task[] @relation("TaskTags")
+  id     String  @id @default(cuid())
+  name   String
+  color  String
+  tasks  Task[]  @relation("TaskTags")
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 }
