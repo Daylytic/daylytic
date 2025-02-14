@@ -7,7 +7,7 @@ import { z } from "zod";
 const SessionSchema = z.object({
   token: z.string(),
   userId: IdSchema,
-  validUntil: z.date(),
+  validUntil: z.date().optional(),
 });
 
 const UserSchema = z.object({
