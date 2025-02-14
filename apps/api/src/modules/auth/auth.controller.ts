@@ -43,7 +43,7 @@ const authenticate = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new RequestError("Unauthorized", 401);
+        throw new RequestError("Unauthorized", 401, null);
     }
 
     const token = authHeader.split(" ")[1];
@@ -53,9 +53,9 @@ const authenticate = async (req: FastifyRequest, rep: FastifyReply) => {
 
     const now = Date.now();
 
-    if(session.validUntil.getTime() <= now) {
+    if(session.validUntil!.getTime() <= now) {
       authService.deleteSession(session);
-      throw new RequestError("Session has expired.", 401);
+      throw new RequestError("Session has expired.", 401, null);
     }
 
     await analyticsService.initializeAnalytics({ userId: user.id });
