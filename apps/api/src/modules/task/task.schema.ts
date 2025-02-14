@@ -17,7 +17,7 @@ export const TitleSchema = z
     message: `Title must have a length between ${TASK_TITLE_MIN_LENGTH} and ${TASK_TITLE_MAX_LENGTH}.`,
   });
 
-export const ContentSchema: z.ZodType<unknown> = z.lazy(() => z.union([
+export const ContentSchema: z.ZodType<any> = z.lazy(() => z.union([
   z.number(),
   z.string(),
   z.null(),
