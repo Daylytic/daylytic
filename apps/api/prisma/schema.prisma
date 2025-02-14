@@ -76,17 +76,17 @@ model Task {
   // todoList    ToDoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade) // Cascade delete here
   userId      String? // Relation field to ToDoList
   user        User?     @relation(fields: [userId], references: [id])
-  tags        Tag[]     @relation("TaskTags")
+  tagIds      String[]
 
   // @@unique([todoListId, position])
   @@unique([userId, position])
 }
 
 model Tag {
-  id     String  @id @default(cuid())
-  name   String
-  color  String
-  tasks  Task[]  @relation("TaskTags")
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
+  id      String   @id @default(cuid())
+  name    String
+  color   String
+  taskIds String[]
+  userId  String?
+  user    User?    @relation(fields: [userId], references: [id])
 }
