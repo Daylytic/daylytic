@@ -41,7 +41,7 @@ export const TaskSchema = z.object({
   deadline: z.date().nullable(),
   // todoListId: IdSchema.nullable(),
   userId: IdSchema.nullable(),
-  tags: z.array(TagSchema), // References to tag IDs
+  tagIds: z.array(IdSchema), // References to tag IDs
 });
 
 // Create Task Schemas

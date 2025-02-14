@@ -11,7 +11,7 @@ export const TagSchema = z.object({
   name: TagNameSchema,
   color: z.string(),
   userId: IdSchema,
-  tasks: z.array(z.string()).optional(),
+  taskIds: z.array(IdSchema),
 });
 
 // Create Tag Schema
