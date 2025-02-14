@@ -52,7 +52,7 @@ const CreateTaskWithIdSchema = CreateTaskInputSchema.extend({
 });
 
 // Fetch Tasks Schema
-const FetchTaskInputSchema = z.object({
+const FetchTasksInputSchema = z.object({
   userId: IdSchema.nullable(),
   // todoListId: IdSchema.optional(),
 });
@@ -98,8 +98,8 @@ export type UpdateTaskWithIdInputSchema = z.infer<
 export type ResetTaskInputSchema = z.infer<
   typeof ResetTaskInputSchema
 >;
-export type FetchTaskInputSchema = z.infer<
-  typeof FetchTaskInputSchema
+export type FetchTasksInputSchema = z.infer<
+  typeof FetchTasksInputSchema
 >;
 
 export const { schemas: taskSchemas, $ref } = buildJsonSchemas(

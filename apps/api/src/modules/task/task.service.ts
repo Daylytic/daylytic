@@ -30,7 +30,7 @@ const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   }
 };
 
-const getTasks = async (data: FetchTaskInputSchema): Promise<Task[]> => {
+const getTasks = async (data: FetchTasksInputSchema): Promise<Task[]> => {
   return await prisma.task.findMany({
     where: data,
     include: {
