@@ -19,8 +19,7 @@ declare module "fastify" {
 const server = Fastify({ logger: true });
 
 const main = async () => {
-
-  for (const schema of [...userSchemas, ...taskSchemas]) {
+  for (const schema of [...userSchemas, ...taskSchemas, ...tagSchemas]) {
     server.addSchema(schema);
   }
 
@@ -96,6 +95,7 @@ const main = async () => {
 
   server.register(authHandler, { prefix: "/oauth2" });
   server.register(routineHandler, { prefix: "/routine" });
+  server.register(tagHandler, { prefix: "/tag" });
   try {
     await server.listen({ port: 8084 });
     console.log(`Server listening at https://localhost:8084`);
