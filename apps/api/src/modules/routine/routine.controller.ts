@@ -45,10 +45,9 @@ const updateDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
 };
 
 const deleteDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
-  const { id } = req.body as DeleteTaskInputSchema;
-  const userId = req.user!.id;
-
   try {
+    const { id } = req.body as DeleteTaskInputSchema;
+    const userId = req.user!.id;
     return await taskService.deleteTask({ userId, id });
   } catch (err: any) {
     handleControllerError(err, rep);
