@@ -8,23 +8,34 @@ import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
 export const TaskType = z.enum(["ROUTINE", "TODOLIST"]);
-export const Priority = z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"]).nullable();
+export const Priority = z
+  .enum(["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"])
+  .nullable();
 
 export const TitleSchema = z
   .string()
-  .max(TASK_TITLE_MAX_LENGTH).min(TASK_TITLE_MIN_LENGTH)
-  .refine((value) => value === null || (value.length >= TASK_TITLE_MIN_LENGTH && value.length <= TASK_TITLE_MAX_LENGTH), {
-    message: `Title must have a length between ${TASK_TITLE_MIN_LENGTH} and ${TASK_TITLE_MAX_LENGTH}.`,
-  });
+  .max(TASK_TITLE_MAX_LENGTH)
+  .min(TASK_TITLE_MIN_LENGTH)
+  .refine(
+    (value) =>
+      value === null ||
+      (value.length >= TASK_TITLE_MIN_LENGTH &&
+        value.length <= TASK_TITLE_MAX_LENGTH),
+    {
+      message: `Title must have a length between ${TASK_TITLE_MIN_LENGTH} and ${TASK_TITLE_MAX_LENGTH}.`,
+    }
+  );
 
-export const ContentSchema: z.ZodType<any> = z.lazy(() => z.union([
-  z.number(),
-  z.string(),
-  z.null(),
-  z.boolean(),
-  z.array(ContentSchema),
-  z.record(ContentSchema),
-]));
+export const ContentSchema: z.ZodType<any> = z.lazy(() =>
+  z.union([
+    z.number(),
+    z.string(),
+    z.null(),
+    z.boolean(),
+    z.array(ContentSchema),
+    z.record(ContentSchema),
+  ])
+);
 
 // Base
 
@@ -84,15 +95,9 @@ const UpdateTasksWithIdInputSchema = z.array(TaskSchema);
 const UpdateTasksResponseSchema = z.array(TaskSchema);
 
 export type Task = z.infer<typeof TaskSchema>;
-export type CreateTaskInputSchema = z.infer<
-  typeof CreateTaskInputSchema
->;
-export type CreateTaskWithIdSchema = z.infer<
-  typeof CreateTaskWithIdSchema
->;
-export type DeleteTaskInputSchema = z.infer<
-  typeof DeleteTaskInputSchema
->;
+export type CreateTaskInputSchema = z.infer<typeof CreateTaskInputSchema>;
+export type CreateTaskWithIdSchema = z.infer<typeof CreateTaskWithIdSchema>;
+export type DeleteTaskInputSchema = z.infer<typeof DeleteTaskInputSchema>;
 export type DeleteTaskWithIdInputSchema = z.infer<
   typeof DeleteTaskWithIdInputSchema
 >;
@@ -103,9 +108,8 @@ export type UpdateTasksWithIdInputSchema = z.infer<
 export type UpdateTasksResponseSchema = z.infer<
   typeof UpdateTasksResponseSchema
 >;
-export type FetchTasksInputSchema = z.infer<
-  typeof FetchTasksInputSchema
->;
+export type ResetTaskInputSchema = z.infer<typeof ResetTaskInputSchema>;
+export type FetchTasksInputSchema = z.infer<typeof FetchTasksInputSchema>;
 
 export const { schemas: taskSchemas, $ref } = buildJsonSchemas(
   {
