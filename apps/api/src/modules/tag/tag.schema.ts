@@ -14,6 +14,11 @@ export const TagSchema = z.object({
   taskIds: z.array(IdSchema),
 });
 
+// Fetch Tags Schema
+const FetchTagsResponseSchema = z.array(TagSchema);
+const FetchTagsInputSchema = TagSchema.pick({userId: true});
+const FetchTagsWithIdsSchema = z.array(IdSchema);
+
 // Create Tag Schema
 const CreateTagSchema = TagSchema.pick({color: true, name: true, userId: true});
 const CreateTagInputSchema = CreateTagSchema.omit({userId: true});
@@ -25,6 +30,10 @@ const DeleteTagInputSchema = DeleteTagSchema.omit({userId: true});
 // Update Tag Schema
 const UpdateTagSchema = TagSchema.pick({color: true, name: true, id: true});
 
+export type TagSchema = z.infer<typeof TagSchema>;
+export type FetchTagsResponseSchema = z.infer<typeof FetchTagsResponseSchema>;
+export type FetchTagsInputSchema = z.infer<typeof FetchTagsInputSchema>;
+export type FetchTagsWithIdsSchema = z.infer<typeof FetchTagsWithIdsSchema>;
 export type CreateTagSchema = z.infer<
   typeof CreateTagSchema
 >;
@@ -38,7 +47,7 @@ export const { schemas: tagSchemas, $ref } = buildJsonSchemas(
     TagSchema,
     CreateTagInputSchema,
     DeleteTagInputSchema,
-
+    FetchTagsResponseSchema,
   },
   { $id: "TagSchemas" }
 );
