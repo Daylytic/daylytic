@@ -1,7 +1,20 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateTagSchema, DeleteTagSchema } from "./tag.schema.js";
+import {
+  CreateTagSchema,
+  DeleteTagSchema,
+  FetchTagsInputSchema,
+} from "./tag.schema.js";
 import { tagService } from "./tag.service.js";
 import { handleControllerError } from "utils/error.js";
+
+const fetchTags = async (req: FastifyRequest, rep: FastifyReply) => {
+  try {
+    const userId = req.user!.id;
+    return await tagService.fetchTags({ userId: userId });
+  } catch (err) {
+    handleControllerError(err, rep);
+  }
+};
 
 const createTag = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
@@ -28,6 +41,7 @@ const deleteTag = async (req: FastifyRequest, rep: FastifyReply) => {
 }
 
 export const tagController = {
+  fetchTags,
   createTag,
   deleteTag,
 };
