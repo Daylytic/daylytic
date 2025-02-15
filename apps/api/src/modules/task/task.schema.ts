@@ -72,9 +72,16 @@ const ResetTaskInputSchema = z.object({
   id: IdSchema,
 });
 
-// Update Task Schema
-const UpdateTaskInputSchema = TaskSchema.omit({ userId: true, /*todoListId: true,*/ updatedAt: true, createdAt: true, });
-const UpdateTaskWithIdInputSchema = TaskSchema;
+// Update Tasks Schema
+const UpdateTasksInputSchema = z.array(
+  TaskSchema.omit({
+    userId: true,
+    /*todoListId: true,*/ updatedAt: true,
+    createdAt: true,
+  })
+);
+const UpdateTasksWithIdInputSchema = z.array(TaskSchema);
+const UpdateTasksResponseSchema = z.array(TaskSchema);
 
 export type Task = z.infer<typeof TaskSchema>;
 export type CreateTaskInputSchema = z.infer<
@@ -89,14 +96,12 @@ export type DeleteTaskInputSchema = z.infer<
 export type DeleteTaskWithIdInputSchema = z.infer<
   typeof DeleteTaskWithIdInputSchema
 >;
-export type UpdateTaskInputSchema = z.infer<
-  typeof UpdateTaskInputSchema
+export type UpdateTasksInputSchema = z.infer<typeof UpdateTasksInputSchema>;
+export type UpdateTasksWithIdInputSchema = z.infer<
+  typeof UpdateTasksWithIdInputSchema
 >;
-export type UpdateTaskWithIdInputSchema = z.infer<
-  typeof UpdateTaskWithIdInputSchema
->;
-export type ResetTaskInputSchema = z.infer<
-  typeof ResetTaskInputSchema
+export type UpdateTasksResponseSchema = z.infer<
+  typeof UpdateTasksResponseSchema
 >;
 export type FetchTasksInputSchema = z.infer<
   typeof FetchTasksInputSchema
@@ -108,7 +113,8 @@ export const { schemas: taskSchemas, $ref } = buildJsonSchemas(
     CreateTaskInputSchema,
     FetchTasksResponseSchema,
     DeleteTaskInputSchema,
-    UpdateTaskInputSchema,
+    UpdateTasksInputSchema,
+    UpdateTasksResponseSchema,
   },
   { $id: "TaskSchemas" }
 );

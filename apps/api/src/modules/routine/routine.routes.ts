@@ -69,14 +69,14 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       authController.authenticate,
       routineController.initializeDailyTasks,
     ],
-    handler: routineController.updateDailyTask,
+    handler: routineController.updateDailyTasks,
     schema: {
-      description: "Updates the data of the daily task",
+      description: "Updates the data of the daily tasks",
       tags: ["routine"],
       headers: $refAuth("HeaderBearerSchema"),
-      body: $ref("UpdateTaskInputSchema"),
+      body: $ref("UpdateTasksInputSchema"),
       response: {
-        201: $ref("TaskSchema"),
+        201: $ref("UpdateTasksResponseSchema"),
       },
     },
   });

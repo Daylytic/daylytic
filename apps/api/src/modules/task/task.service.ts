@@ -5,10 +5,11 @@ import {
   Task,
   DeleteTaskWithIdInputSchema,
   FetchTasksInputSchema,
-  UpdateTaskWithIdInputSchema,
-  UpdateTaskInputSchema,
+  UpdateTasksWithIdInputSchema,
+  UpdateTasksInputSchema,
 } from "./task.schema.js";
 import { convertToTimeZoneISO8601 } from "utils/date.js";
+import { tagService } from "modules/tag/index.js";
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   try {
@@ -43,17 +44,29 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
   }
 };
 
-const updateTask = async (data: UpdateTaskInputSchema) => {
+const updateTasks = async (data: UpdateTasksInputSchema) => {
   try {
-    return await prisma.task.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        ...data,
-        updatedAt: convertToTimeZoneISO8601(),
-      },
-    });
+    const updatedTasks: Task[] = [];
+
+    for(const dataRow of data) {
+      const tagIds = dataRow.tagIds;
+
+      const tags = await tagService.fetchTagsWithIds(tagIds);
+      console.log([tagIds, tags]);
+      updatedTasks.push(
+        await prisma.task.update({
+          where: {
+            id: dataRow.id,
+          },
+          data: {
+            ...dataRow,
+            tagIds: tags.map((tag) => tag.id),
+            updatedAt: convertToTimeZoneISO8601(),
+          },
+        })
+      );
+    }
+    return updatedTasks;
   } catch (err) {
     throw new RequestError(`Problem occurred while updating task`, 500, err);
   }
@@ -63,5 +76,5 @@ export const taskService = {
   createTask,
   getTasks,
   deleteTask,
-  updateTask,
+  updateTasks,
 };

@@ -7,7 +7,7 @@ import { taskService } from "modules/task/task.service.js";
 import {
   CreateTaskInputSchema,
   DeleteTaskInputSchema,
-  UpdateTaskInputSchema,
+  UpdateTasksInputSchema,
 } from "modules/task/task.schema.js";
 
 const createDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
@@ -34,11 +34,10 @@ const getDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
   }
 };
 
-const updateDailyTask = async (req: FastifyRequest, rep: FastifyReply) => {
-  const dailyTask = req.body as UpdateTaskInputSchema;
-
+const updateDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
-    return await taskService.updateTask(dailyTask);
+    const tasks = req.body as UpdateTasksInputSchema;
+    return await taskService.updateTasks(tasks);
   } catch (err: any) {
     handleControllerError(err, rep);
   }
@@ -83,5 +82,5 @@ export const routineController = {
   getDailyTasks,
   deleteDailyTask,
   initializeDailyTasks,
-  updateDailyTask,
+  updateDailyTasks,
 };
