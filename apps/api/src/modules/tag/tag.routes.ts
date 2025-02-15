@@ -7,6 +7,21 @@ import { $ref as $refAuth } from "modules/auth/auth.schema.js";
 export const tagHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
+    method: "GET",
+    preHandler: [authController.authenticate],
+    handler: tagController.fetchTags,
+    schema: {
+      description: "Fetch all tags from the user",
+      tags: ["routine"],
+      headers: $refAuth("HeaderBearerSchema"),
+      response: {
+        201: $ref("FetchTagsResponseSchema"),
+      },
+    },
+  });
+
+  server.route({
+    url: "/",
     method: "POST",
     preHandler: [authController.authenticate],
     handler: tagController.createTag,
