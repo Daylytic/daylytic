@@ -20,7 +20,7 @@ const createTag = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const userId = req.user!.id;
     const { color, name } = req.body as CreateTagSchema;
-    tagService.createTag({
+    return await tagService.createTag({
       color: color,
       name: name,
       userId: userId,
@@ -31,14 +31,14 @@ const createTag = async (req: FastifyRequest, rep: FastifyReply) => {
 };
 
 const deleteTag = async (req: FastifyRequest, rep: FastifyReply) => {
-    try {
-        const userId = req.user!.id;
-        const {id} = req.body as DeleteTagSchema;
-        tagService.deleteTag({id: id, userId: userId});
-    } catch (err) {
-        handleControllerError(err, rep);
-    }
-}
+  try {
+    const userId = req.user!.id;
+    const { id } = req.body as DeleteTagSchema;
+    return await tagService.deleteTag({ id: id, userId: userId });
+  } catch (err) {
+    handleControllerError(err, rep);
+  }
+};
 
 export const tagController = {
   fetchTags,
