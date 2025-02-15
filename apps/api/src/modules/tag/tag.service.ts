@@ -82,7 +82,7 @@ const fetchTagsWithIds = async (data: FetchTagsWithIdsSchema): Promise<TagSchema
 export const tagService = {
   fetchTags,
   fetchTagsWithIds,
-    createTag,
-    deleteTag,
-    updateTag,
-}
+  createTag,
+  deleteTag,
+  updateTag,
+};
