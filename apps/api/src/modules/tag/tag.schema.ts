@@ -10,7 +10,7 @@ export const TagSchema = z.object({
   id: IdSchema,
   name: TagNameSchema,
   color: z.string(),
-  userId: IdSchema,
+  userId: IdSchema.nullable(),
   taskIds: z.array(IdSchema),
 });
 
