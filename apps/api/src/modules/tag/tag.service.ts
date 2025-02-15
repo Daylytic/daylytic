@@ -25,8 +25,9 @@ const fetchTags = async (
   }
 };
 
+const createTag = async (data: CreateTagSchema): Promise<TagSchema> => {
   try {
-    await prisma.tag.create({ data: data });
+    return await prisma.tag.create({ data: data });
   } catch (err) {
     throw new RequestError("Problem occured while creating tag", 500, err);
   }
@@ -40,9 +41,9 @@ const deleteTag = async (data: DeleteTagSchema) => {
   }
 };
 
-const updateTag = async (data: UpdateTagSchema) => {
+const updateTag = async (data: UpdateTagInputSchema): Promise<TagSchema> => {
   try {
-    await prisma.tag.update({
+    return await prisma.tag.update({
       where: { id: data.id },
       data: { color: data.color, name: data.name },
     });
