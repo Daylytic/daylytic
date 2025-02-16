@@ -3,17 +3,20 @@ import { Action } from "components/panel/action/action";
 import { Content } from "components/panel/content/content";
 import { Menu } from "components/panel/menu";
 import { DailyTasksProvider } from "providers/daily-tasks";
+import { TagProvider } from "providers/tag";
 import { useCookies } from "react-cookie";
 
 export const Panel = () => {
   const [cookies] = useCookies(["token"]);
   return (
-    <LayoutPanel>
-      <Menu />
-      <DailyTasksProvider token={cookies.token}>
-        <Content />
-        <Action />
-      </DailyTasksProvider>
-    </LayoutPanel>
+    <DailyTasksProvider token={cookies.token}>
+      <TagProvider token={cookies.token}>
+        <LayoutPanel>
+          <Menu />
+          <Content />
+          <Action />
+        </LayoutPanel>
+      </TagProvider>
+    </DailyTasksProvider>
   );
 };
