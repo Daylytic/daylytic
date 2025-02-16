@@ -36,32 +36,9 @@ export const DailyTasksProvider = ({ token, children }) => {
 
   const recalculatePositions = (tasks: Task[]): Task[] => {
     return tasks
-      .sort((a, b) => a.position - b.position) // Sort by position
-      .map((task, index) => ({ ...task, position: index })); // Reassign positions
+      .sort((a, b) => a.position - b.position)
+      .map((task, index) => ({ ...task, position: index }));
   };
-
-  // const moveTaskAndRecalculate = (
-  //   taskId: string,
-  //   newPosition: number
-  // ): Task[] => {
-  //   const taskIndex = tasks.findIndex((task) => task.id === taskId);
-  //   if (taskIndex === -1) {
-  //     throw new Error(`Task with ID ${taskId} not found`);
-  //   }
-  
-  //   const taskToMove = tasks[taskIndex];
-  //   const filteredTasks = tasks.filter((task) => task.id !== taskId); // Remove the task to move
-  
-  //   const reorderedTasks = [
-  //     ...filteredTasks.slice(0, newPosition),
-  //     { ...taskToMove, position: newPosition }, // Insert the task at the new position
-  //     ...filteredTasks.slice(newPosition),
-  //   ];
-  
-  //   // Recalculate positions to ensure they are sequential
-  //   return recalculatePositions(reorderedTasks);
-  // };
-  
 
   const fetchTasks = async () => {
     try {
@@ -190,7 +167,6 @@ export const DailyTasksProvider = ({ token, children }) => {
   );
 };
 
-// Custom Hook to Use Context
 export const useDailyTasks = () => {
   const context = useContext(DailyTasksContext);
   if (!context) {
