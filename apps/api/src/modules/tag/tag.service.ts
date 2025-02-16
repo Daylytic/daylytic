@@ -8,6 +8,7 @@ import {
   TagSchema,
   UpdateTagInputSchema,
   UpdateTagSchema,
+  UpdateTasksForTagSchema,
 } from "./index.js";
 import { RequestError } from "utils/error.js";
 
@@ -52,6 +53,28 @@ const updateTag = async (data: UpdateTagInputSchema): Promise<TagSchema> => {
   }
 };
 
+const updateTasks = async (data: UpdateTasksForTagSchema): Promise<void> => {
+  try {
+    for (const tagId of data.tagIds) {
+      // Retrieve current taskIds for this tag
+      const tag = await prisma.tag.findUnique({
+        where: { id: tagId },
+        select: { taskIds: true },
+      });
+
+      // Only push the task id if it doesn't already exist
+      if (!tag?.taskIds.includes(data.taskId)) {
+        await prisma.tag.update({
+          where: { id: tagId },
+          data: { taskIds: { push: data.taskId } },
+        });
+      }
+    }
+  } catch (err) {
+    throw new RequestError("Problem occurred while updating tag", 500, err);
+  }
+}
+
 const fetchTagsWithIds = async (data: FetchTagsWithIdsSchema): Promise<TagSchema[]> => {
   try {
     const foundTags: TagSchema[] = [];
@@ -85,4 +108,5 @@ export const tagService = {
   createTag,
   deleteTag,
   updateTag,
+  updateTasks,
 };

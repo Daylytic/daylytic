@@ -52,7 +52,8 @@ const updateTasks = async (data: UpdateTasksInputSchema) => {
       const tagIds = dataRow.tagIds;
 
       const tags = await tagService.fetchTagsWithIds(tagIds);
-      console.log([tagIds, tags]);
+      await tagService.updateTasks({tagIds: tags.map((tag) => tag.id), taskId: dataRow.id})
+      
       updatedTasks.push(
         await prisma.task.update({
           where: {
