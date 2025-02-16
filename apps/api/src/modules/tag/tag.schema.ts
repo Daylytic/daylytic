@@ -30,6 +30,10 @@ const DeleteTagInputSchema = TagSchema.pick({id: true});
 // Update Tag Schema
 const UpdateTagSchema = TagSchema.pick({color: true, name: true});
 const UpdateTagInputSchema = TagSchema.pick({color: true, name: true, id: true});
+const UpdateTasksForTagSchema = z.object({
+  taskId: IdSchema,
+  tagIds: z.array(IdSchema)
+})
 
 export type TagSchema = z.infer<typeof TagSchema>;
 export type FetchTagsResponseSchema = z.infer<typeof FetchTagsResponseSchema>;
@@ -41,6 +45,7 @@ export type CreateTagSchema = z.infer<
 export type DeleteTagSchema = z.infer<typeof DeleteTagSchema>;
 export type UpdateTagSchema = z.infer<typeof UpdateTagSchema>;
 export type UpdateTagInputSchema = z.infer<typeof UpdateTagInputSchema>;
+export type UpdateTasksForTagSchema = z.infer<typeof UpdateTasksForTagSchema>;
 
 
 export const { schemas: tagSchemas, $ref } = buildJsonSchemas(
