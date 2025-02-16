@@ -1,9 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { client } from "services/api-client";
 import { Task } from "types/task";
 
@@ -17,22 +12,15 @@ interface DailyTasksContextType {
   updateTask: (task: Task) => Promise<void>;
 }
 
-const DailyTasksContext = React.createContext<
-  DailyTasksContextType | undefined
->(undefined);
+const DailyTasksContext = React.createContext<DailyTasksContextType | undefined>(undefined);
 
-// Provider Component
 export const DailyTasksProvider = ({ token, children }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task | undefined>();
-  const [debouncedUpdates, setDebouncedUpdates] = useState<
-    Record<string, NodeJS.Timeout>
-  >({});
-  const latestTasksRef = useRef(tasks);
 
-  useEffect(() => {
-    latestTasksRef.current = tasks;
-  }, [tasks]);
+  const globalUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const pendingChangesRef = useRef<Map<string, Task>>(new Map());
 
   const recalculatePositions = (tasks: Task[]): Task[] => {
     return tasks
@@ -43,9 +31,7 @@ export const DailyTasksProvider = ({ token, children }) => {
   const fetchTasks = async () => {
     try {
       const { data } = await client.GET("/routine/", {
-        params: {
-          header: { authorization: `Bearer ${token}` },
-        },
+        params: { header: { authorization: `Bearer ${token}` } },
       });
       setTasks(data ?? []);
     } catch (error) {
@@ -56,15 +42,10 @@ export const DailyTasksProvider = ({ token, children }) => {
   const createTask = async (title: string) => {
     try {
       const { data } = await client.POST("/routine/", {
-        params: {
-          header: { authorization: `Bearer ${token}` },
-        },
+        params: { header: { authorization: `Bearer ${token}` } },
         body: { title, taskType: "ROUTINE" },
       });
-
-      setTasks((prevTasks) => [...prevTasks, data as Task]);
-      setTasks(recalculatePositions(tasks));
-
+      setTasks((prevTasks) => recalculatePositions([...prevTasks, data as Task]));
       return data as Task;
     } catch (error) {
       console.error("Failed to create task:", error);
@@ -77,12 +58,10 @@ export const DailyTasksProvider = ({ token, children }) => {
 
     try {
       const { data } = await client.DELETE("/routine/", {
-        params: {
-          header: { authorization: `Bearer ${token}` },
-        },
+        params: { header: { authorization: `Bearer ${token}` } },
         body: { id },
       });
-      setTasks(recalculatePositions(tasks));
+      setTasks((prevTasks) => recalculatePositions(prevTasks));
       return data;
     } catch (error) {
       console.error("Failed to delete task:", error);
@@ -91,57 +70,37 @@ export const DailyTasksProvider = ({ token, children }) => {
   };
 
   const updateTask = async (task: Task) => {
-    try {
-      const taskIndex = tasks.findIndex(
-        (existingTask) => task.id === existingTask.id
-      );
+    setTasks((prevTasks) => {
+      const index = prevTasks.findIndex((t) => t.id === task.id);
+      if (index === -1) return prevTasks;
+      const updatedTask = { ...prevTasks[index], ...task };
+      const updatedTasks = [...prevTasks];
+      updatedTasks[index] = updatedTask;
+      pendingChangesRef.current.set(task.id, updatedTask);
+      return updatedTasks;
+    });
 
-      setTasks((prevTasks) => {
-        if (taskIndex === -1) {
-          return prevTasks;
-        }
-
-        const updatedTasks = [...prevTasks];
-        updatedTasks[taskIndex] = { ...updatedTasks[taskIndex], ...task };
-        return updatedTasks;
-      });
-
-
-      if (debouncedUpdates[task.id]) {
-        clearTimeout(debouncedUpdates[task.id]); 
-      }
-
-      const timeoutId = setTimeout(async () => {
-        const latestTasks = latestTasksRef.current;
-        const taskToUpdate = latestTasks.find(
-          (existingTask) => existingTask.id === task.id
-        );
-
-        if (taskToUpdate) {
-          try {
-            await client.PUT("/routine/", {
-              params: {
-                header: { authorization: `Bearer ${token}` },
-              },
-              body: {
-                ...taskToUpdate,
-                taskType: "ROUTINE",
-              },
-            });
-            console.log(
-              `Task ${task.id} updated successfully in the database.`
-            );
-          } catch (error) {
-            console.error(`Failed to update task ${task.id}:`, error);
-          }
-        }
-      }, 3000); // Wait for 3 seconds before saving to database
-
-      setDebouncedUpdates((prev) => ({ ...prev, [task.id]: timeoutId })); // Track timeout for this task
-    } catch (error) {
-      console.error("Failed to update task:", error);
-      throw error;
+    // Reset the global debounce timer.
+    if (globalUpdateTimeout.current) {
+      clearTimeout(globalUpdateTimeout.current);
     }
+    globalUpdateTimeout.current = setTimeout(async () => {
+      // When timer fires, extract all pending changes.
+      const tasksToUpdate = Array.from(pendingChangesRef.current.values());
+      if (tasksToUpdate.length > 0) {
+        try {
+          await client.PUT("/routine/", {
+            params: { header: { authorization: `Bearer ${token}` } },
+            body: tasksToUpdate,
+          });
+          console.log("Tasks updated successfully in the database.");
+          // Clear the pending changes after the successful update.
+          pendingChangesRef.current.clear();
+        } catch (error) {
+          console.error("Failed to update tasks:", error);
+        }
+      }
+    }, 3000); // Global debounce delay: 3 seconds
   };
 
   useEffect(() => {
