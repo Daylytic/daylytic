@@ -1,4 +1,4 @@
-import { List, Checkbox, Button, Flex, Tag, Typography } from "antd";
+import { List, Checkbox, Button, Flex, Typography } from "antd";
 import styles from "./routine.module.css";
 import { useNavigate } from "react-router";
 import { useDailyTasks } from "providers/daily-tasks";
@@ -71,11 +71,12 @@ export const RoutineCard = ({ item }: { item: Task }) => {
               ) : (
                 <></>
               )} */}
-              <Flex gap="4px 0" wrap className={styles["button-tags"]}>
+              
+              {/* <Flex gap="4px 0" wrap className={styles["button-tags"]}>
                 {item.tags.map((tag) => (
                   <Tag color={tag.color}>{tag.name}</Tag>
                 ))}
-              </Flex>
+              </Flex> */}
             </Flex>
           </Button>
         }
