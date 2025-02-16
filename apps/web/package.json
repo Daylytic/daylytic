@@ -14,6 +14,7 @@
     "prettier:fix": "prettier --write src"
   },
   "dependencies": {
+    "@daylytic/shared": "*",
     "@ant-design/colors": "^7.2.0",
     "@ant-design/icons": "^5.5.2",
     "@dnd-kit/core": "^6.3.1",
