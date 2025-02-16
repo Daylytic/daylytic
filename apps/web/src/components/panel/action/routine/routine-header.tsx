@@ -28,18 +28,23 @@ const items: DescriptionsProps["items"] = [
 ];
 
 export const RoutineHeader = () => {
-  const { selectedTask } = useDailyTasks();
+  const { selectedTask, updateTask } = useDailyTasks();
   return (
     <Flex className={clsx("ant-typography")} justify="space-between" align="center">
       <Typography.Title
         level={2}
         // editable
         editable={{
+          onChange: (text) => {
+            selectedTask!.title = text;
+            updateTask(selectedTask!);
+          },
           icon: <EditOutlined className={styles["header-edit-icon"]} />,
           triggerType: ["icon"], // Hide the edit icon; click text to edit
           autoSize: { maxRows: 1}, // Match text height
         }}
         style={{ marginBottom: "0" }}
+        onChange={(e) => {console.log(e.target)}}
       >
         {selectedTask!.title}
       </Typography.Title>
