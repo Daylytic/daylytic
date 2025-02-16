@@ -1,24 +1,24 @@
-import { List } from "antd";
-import { useGoals } from "../../../../hooks/use-goals";
-import { useCookies } from "react-cookie";
-import { GoalsCard } from "./goals-card";
-import Title from "antd/es/typography/Title";
+// import { List } from "antd";
+// import { useGoals } from "../../../../hooks/use-goals";
+// import { useCookies } from "react-cookie";
+// import { GoalsCard } from "./goals-card";
+// import Title from "antd/es/typography/Title";
 
-import styles from "./goals.module.css";
-import clsx from "clsx";
-import { usePanel } from "../../../../hooks/use-panel";
-import { useNavigate } from "react-router";
+// import styles from "./goals.module.css";
+// import clsx from "clsx";
+// import { usePanel } from "../../../../hooks/use-panel";
+// import { useNavigate } from "react-router";
 
 export const Goals = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const [cookies, _] = useCookies(["token"]);
-  const { goals } = useGoals(cookies.token);
-  const { getContent } = usePanel();
+  // const [cookies, _] = useCookies(["token"]);
+  // const { goals } = useGoals(cookies.token);
+  // const { getContent } = usePanel();
 
   return (
     <>
-      <Title level={4}>Goals</Title>
+      {/* <Title level={4}>Goals</Title>
       <List
         itemLayout="vertical"
         dataSource={goals}
@@ -35,7 +35,7 @@ export const Goals = () => {
             }}
           />
         )}
-      />
+      /> */}
     </>
   );
 };
