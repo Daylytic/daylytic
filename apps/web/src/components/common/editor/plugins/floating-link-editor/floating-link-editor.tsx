@@ -92,7 +92,7 @@ const FloatingLinkEditor = ({
     ) {
       const domRect: DOMRect | undefined =
         nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
-      console.log(nativeSelection.focusNode?.parentElement);
+
       if (domRect) {
         domRect.y += 40;
         // Pass a horizontal margin value (10 pixels) to your function.
