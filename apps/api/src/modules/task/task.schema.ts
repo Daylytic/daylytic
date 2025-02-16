@@ -28,14 +28,23 @@ export const TitleSchema = z
     }
   );
 
-export const ContentSchema: z.ZodType<any> = z.lazy(() =>
+// Define a type alias for valid JSON values.
+export type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JSONValue[]
+  | { [key: string]: JSONValue };
+
+// Create a local recursive schema.
+const ContentSchema: z.ZodType<any> = z.lazy(() =>
   z.union([
     z.number(),
     z.string(),
-    z.null(),
     z.boolean(),
-    z.array(ContentSchema),
-    z.record(ContentSchema),
+    z.array(z.any()),
+    z.record(z.any()),
   ])
 );
 
