@@ -1,15 +1,17 @@
 import {
+  Priorities,
   TASK_TITLE_MAX_LENGTH,
   TASK_TITLE_MIN_LENGTH,
+  TaskTypes,
 } from "@daylytic/shared/constants";
 import { buildJsonSchemas } from "fastify-zod";
-import { TagSchema } from "modules/tag/index.js";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
-export const TaskType = z.enum(["ROUTINE", "TODOLIST"]);
+
+export const TaskType = z.enum(TaskTypes as any);
 export const Priority = z
-  .enum(["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"])
+  .enum(Priorities as any)
   .nullable();
 
 export const TitleSchema = z
