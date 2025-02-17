@@ -11,7 +11,7 @@ const resetDailyTasks = async (data: ResetDailyTaskInputSchema) => {
       },
     });
   } catch (err) {
-    throw new RequestError("Problem occured while resetting daily tasks", 500);
+    throw new RequestError("Problem occured while resetting daily tasks", 500, err);
   }
 };
 

@@ -7,21 +7,22 @@ import styles from "./lexical.module.css";
 
 const onError = (error) => {
   console.error(error);
-}
+};
 
-export const Lexical = () => {
+export const Lexical = ({ defaultValue, onChange }) => {
   const initialConfig = {
     namespace: "daylytic",
     theme: theme,
     onError,
     nodes: [...TaskNodes],
+    editorState: defaultValue,
   };
 
   return (
     <div className={styles.wrapper}>
       <LexicalComposer initialConfig={initialConfig}>
         <ToolbarContext>
-          <Editor />
+          <Editor onChange={onChange} />
         </ToolbarContext>
       </LexicalComposer>
     </div>

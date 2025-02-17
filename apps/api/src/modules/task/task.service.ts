@@ -4,11 +4,12 @@ import {
   CreateTaskWithIdSchema,
   Task,
   DeleteTaskWithIdInputSchema,
-  FetchTaskInputSchema,
-  UpdateTaskWithIdInputSchema,
-  UpdateTaskInputSchema,
+  FetchTasksInputSchema,
+  UpdateTasksWithIdInputSchema,
+  UpdateTasksInputSchema,
 } from "./task.schema.js";
 import { convertToTimeZoneISO8601 } from "utils/date.js";
+import { tagService } from "modules/tag/index.js";
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   try {
@@ -16,26 +17,20 @@ const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
       where: { userId: data.userId },
       _max: { position: true },
     });
-  
+
     const newPosition = (maxPosition._max.position ?? -1) + 1;
-    
+
     return await prisma.task.create({
-      data: {...data, position: newPosition},
-      include: {
-        tags: true,
-      }
+      data: { ...data, position: newPosition, content: {} },
     });
   } catch (err) {
-    throw new RequestError("Problem occured while creating task", 500);
+    throw new RequestError("Problem occured while creating task", 500, err);
   }
 };
 
-const getTasks = async (data: FetchTaskInputSchema): Promise<Task[]> => {
+const getTasks = async (data: FetchTasksInputSchema): Promise<Task[]> => {
   return await prisma.task.findMany({
     where: data,
-    include: {
-      tags: true,
-    },
   });
 };
 
@@ -45,81 +40,36 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
       where: data,
     });
   } catch (err) {
-    throw new RequestError("Problem occured while deleting task", 500);
+    throw new RequestError("Problem occured while deleting task", 500, err);
   }
 };
 
-const updateTask = async (data: UpdateTaskInputSchema) => {
+const updateTasks = async (data: UpdateTasksInputSchema) => {
   try {
-    // Extract the tags from the incoming data
-    const incomingTags = data.tags!;
+    const updatedTasks: Task[] = [];
 
-    // Fetch current task's tags
-    const currentTask = await prisma.task.findUnique({
-      where: { id: data.id },
-      include: { tags: true },
-    });
+    for(const dataRow of data) {
+      const tagIds = dataRow.tagIds;
 
-    if (!currentTask) {
-      throw new RequestError(`Task with id ${data.id} not found`, 404);
+      const tags = await tagService.fetchTagsWithIds(tagIds);
+      await tagService.updateTasks({tagIds: tags.map((tag) => tag.id), taskId: dataRow.id})
+      
+      updatedTasks.push(
+        await prisma.task.update({
+          where: {
+            id: dataRow.id,
+          },
+          data: {
+            ...dataRow,
+            tagIds: tags.map((tag) => tag.id),
+            updatedAt: convertToTimeZoneISO8601(),
+          },
+        })
+      );
     }
-
-    // Get current tag IDs
-    const currentTags = currentTask.tags;
-
-    // Prepare to find existing tags
-    const tagsToCreate = [];
-    const tagsToConnect = [];
-
-    for (const incomingTag of incomingTags) {
-      const existingTag = await prisma.tag.findFirst({
-        where: {
-          name: incomingTag.name,
-          color: incomingTag.color,
-        },
-      });
-
-      if (existingTag) {
-        tagsToConnect.push({ id: existingTag.id });
-      } else {
-        tagsToCreate.push(incomingTag);
-      }
-    }
-
-    // Determine tags to disconnect
-    const incomingTagIdentifiers = incomingTags.map(
-      (tag) => `${tag.name}-${tag.color}`
-    );
-
-    const tagsToDisconnect = currentTags.filter(
-      (currentTag) =>
-        !incomingTagIdentifiers.includes(`${currentTag.name}-${currentTag.color}`)
-    );
-
-    // Update the task
-    await prisma.task.update({
-      where: {
-        id: data.id,
-      },
-      data: {
-        ...data,
-        updatedAt: convertToTimeZoneISO8601(),
-        tags: {
-          // Create new tags
-          create: tagsToCreate,
-
-          // Connect existing tags
-          connect: tagsToConnect,
-
-          // Disconnect tags that are no longer present
-          disconnect: tagsToDisconnect.map((tag) => ({ id: tag.id })),
-        },
-      },
-    });
-
-    return { message: "Task updated successfully" };
+    return updatedTasks;
   } catch (err) {
-    throw new RequestError(`Problem occurred while updating task: ${err}`, 500);
+    throw new RequestError(`Problem occurred while updating task`, 500, err);
   }
 };
 
@@ -127,5 +77,5 @@ export const taskService = {
   createTask,
   getTasks,
   deleteTask,
-  updateTask,
+  updateTasks,
 };

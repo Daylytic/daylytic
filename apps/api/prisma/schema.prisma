@@ -22,7 +22,8 @@ model User {
   lastSeenAt DateTime   @default(now())
   timeZone   String
   sessions   Session[]
-  dailyTasks Task[]
+  routine    Task[]
+  tags       Tag[]
   analytics  Analytics?
 }
 
@@ -66,7 +67,7 @@ model Task {
   taskType    TaskType
   priority    Priority?
   title       String
-  description String?
+  content     Json
   isCompleted Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -75,15 +76,14 @@ model Task {
   // todoList    ToDoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade) // Cascade delete here
   userId      String? // Relation field to ToDoList
   user        User?     @relation(fields: [userId], references: [id])
-  tags        Tag[]     @relation("TaskTags")
-
-  // @@unique([todoListId, position])
-  @@unique([userId, position])
+  tagIds      String[]
 }
 
 model Tag {
-  id    String @id @default(cuid())
-  name  String
-  color String
-  tasks Task[] @relation("TaskTags")
+  id      String   @id @default(cuid())
+  name    String
+  color   String
+  taskIds String[]
+  userId  String?
+  user    User?    @relation(fields: [userId], references: [id])
 }

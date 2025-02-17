@@ -22,7 +22,7 @@ const getAuthenticationProfile = async (
     const session = await prisma.session.findFirstOrThrow({ where: data });
     return { user: await getUser({ id: session.userId }), session: session };
   } catch (err) {
-    throw new RequestError("Could not find session with given token", 404);
+    throw new RequestError("Could not find session with given token", 404, err);
   }
 };
 
@@ -83,7 +83,7 @@ const createUser = async (input: GoogleAccount): Promise<User> => {
   try {
     return await prisma.user.create({ data: input });
   } catch (err) {
-    throw new RequestError("Problem occured while creating user", 500);
+    throw new RequestError("Problem occured while creating user", 500, err);
   }
 };
 
@@ -92,7 +92,7 @@ const createSession = async (input: Session): Promise<Session> => {
   try {
     return await prisma.session.create({ data: input });
   } catch (err) {
-    throw new RequestError("Problem occured while creating session", 500);
+    throw new RequestError("Problem occured while creating session", 500, err);
   }
 };
 
@@ -102,7 +102,7 @@ const getUser = async (data: FetchUser): Promise<User> => {
     const user = await prisma.user.findFirstOrThrow({ where: data });
     return user;
   } catch (err) {
-    throw new RequestError("Could not find user with given userId", 404);
+    throw new RequestError("Could not find user with given userId", 404, err);
   }
 };
 
@@ -116,7 +116,7 @@ const updateLastSeen = async (data: UpdateLastSeen): Promise<User> => {
           },
         });
     } catch(err) {
-        throw new RequestError("Problem occured while updating last seen for user", 500);
+        throw new RequestError("Problem occured while updating last seen for user", 500, err);
     };
 };
 

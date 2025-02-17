@@ -4,17 +4,21 @@ export interface Tag {
   id: string;
   name: string;
   color: string;
+  userId: string | null;
+  taskIds: string[];
 }
 
 export interface Task {
   id: string;
-  priority: Priority;
   position: number;
+  taskType: "ROUTINE" | "TODOLIST";
+  priority: Priority;
   title: string;
-  description: string;
-  tags: Tag[];
+  content: string | number | boolean | unknown[] | { [key: string]: unknown; } | null;
   isCompleted: boolean;
   createdAt: string;
   updatedAt: string;
   deadline: string | null;
+  userId: string | null;
+  tagIds: string[];
 }

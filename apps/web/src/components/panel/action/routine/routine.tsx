@@ -7,7 +7,7 @@ import { useDailyTasks } from "providers/daily-tasks";
 import { Lexical } from "components/common/editor";
 
 export const Routine = ({ id }) => {
-  const { tasks, selectedTask, setSelectedTask } = useDailyTasks();
+  const { tasks, selectedTask, setSelectedTask, updateTask } = useDailyTasks();
 
   useEffect(() => {
     const task = tasks.find((task) => task.id === id);
@@ -22,7 +22,13 @@ export const Routine = ({ id }) => {
     <Flex vertical id={styles["wrapper"]}>
       <RoutineHeader />
       <RoutineSettings />
-      <Lexical />
+      <Lexical
+        defaultValue={JSON.stringify(selectedTask.content)}
+        onChange={(editor) => {
+          selectedTask.content = editor.toJSON();
+          updateTask(selectedTask);
+        }}
+      />
     </Flex>
   );
 };

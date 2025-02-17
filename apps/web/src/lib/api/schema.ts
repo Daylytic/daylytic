@@ -66,141 +66,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/goals/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Default Response */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["def-1"]["goals"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["def-1"]["goalCreateInput"];
-                };
-            };
-            responses: {
-                /** @description Default Response */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["def-1"]["goalCore"];
-                    };
-                };
-            };
-        };
-        delete: {
-            parameters: {
-                query: {
-                    id: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Goal successfully deleted. No content returned. */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": unknown;
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/projects/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query: {
-                    goalId: string;
-                    projectId: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Default Response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put?: never;
-        post: {
-            parameters: {
-                query: {
-                    goalId: string;
-                    projectId: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Default Response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/routine/": {
         parameters: {
             query?: never;
@@ -226,12 +91,12 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-3"]["FetchTasksResponseSchema"];
+                        "application/json": components["schemas"]["def-1"]["FetchTasksResponseSchema"];
                     };
                 };
             };
         };
-        /** @description Updates the data of the daily task */
+        /** @description Updates the data of the daily tasks */
         put: {
             parameters: {
                 query?: never;
@@ -243,7 +108,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["UpdateTaskInputSchema"];
+                    "application/json": components["schemas"]["def-1"]["UpdateTasksInputSchema"];
                 };
             };
             responses: {
@@ -253,7 +118,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-3"]["TaskSchema"];
+                        "application/json": components["schemas"]["def-1"]["UpdateTasksResponseSchema"];
                     };
                 };
             };
@@ -270,7 +135,7 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["CreateTaskInputSchema"];
+                    "application/json": components["schemas"]["def-1"]["CreateTaskInputSchema"];
                 };
             };
             responses: {
@@ -280,7 +145,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-3"]["TaskSchema"];
+                        "application/json": components["schemas"]["def-1"]["TaskSchema"];
                     };
                 };
             };
@@ -297,7 +162,95 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-3"]["DeleteTaskInputSchema"];
+                    "application/json": components["schemas"]["def-1"]["DeleteTaskInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tag/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch all tags from the user */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-2"]["FetchTagsResponseSchema"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** @description Create new tag */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-2"]["CreateTagInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-2"]["TagSchema"];
+                    };
+                };
+            };
+        };
+        /** @description Delete tag */
+        delete: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-2"]["DeleteTagInputSchema"];
                 };
             };
             responses: {
@@ -352,48 +305,18 @@ export interface components {
                 timeZone?: string;
             };
         };
-        /** GoalsSchema */
-        "def-1": {
-            goalCreateInput: {
-                title: string;
-                description: string;
-                deadline: string | null;
-                userId: string;
-            };
-            goalDeleteInput: {
-                id: string;
-            };
-            goalCore: {
-                title: components["schemas"]["def-1"]["goalCreateInput"]["title"];
-                description: components["schemas"]["def-1"]["goalCreateInput"]["description"];
-                deadline: components["schemas"]["def-1"]["goalCreateInput"]["deadline"];
-                userId: components["schemas"]["def-1"]["goalCreateInput"]["userId"];
-                id: string;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                progress: number;
-            };
-            goals: components["schemas"]["def-1"]["goalCore"][];
-        };
-        /** ProjectsSchema */
-        "def-2": {
-            projectsBaseQuery: {
-                goalId: string;
-                projectId: string;
-            };
-        };
         /** TaskSchemas */
-        "def-3": {
+        "def-1": {
             TaskSchema: {
                 id: string;
+                position: number;
                 /** @enum {string} */
                 taskType: "ROUTINE" | "TODOLIST";
                 priority: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL") | null;
-                position: number;
                 title: string;
-                description: string;
+                content: number | string | boolean | null | unknown[] | {
+                    [key: string]: unknown;
+                };
                 /** @default false */
                 isCompleted: boolean;
                 /**
@@ -404,34 +327,47 @@ export interface components {
                 /** Format: date-time */
                 updatedAt: string;
                 deadline: string | null;
-                todoListId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
-                userId: components["schemas"]["def-3"]["TaskSchema"]["id"] | null;
-                tags: {
-                    id: components["schemas"]["def-3"]["TaskSchema"]["id"];
-                    name: string;
-                    color: string;
-                    tasks?: string[];
-                }[];
+                userId: components["schemas"]["def-1"]["TaskSchema"]["id"] | null;
+                tagIds: components["schemas"]["def-1"]["TaskSchema"]["id"][];
             };
             CreateTaskInputSchema: {
-                title: components["schemas"]["def-3"]["TaskSchema"]["title"];
-                taskType: components["schemas"]["def-3"]["TaskSchema"]["taskType"];
+                title: components["schemas"]["def-1"]["TaskSchema"]["title"];
+                taskType: components["schemas"]["def-1"]["TaskSchema"]["taskType"];
             };
-            FetchTasksResponseSchema: components["schemas"]["def-3"]["TaskSchema"][];
+            FetchTasksResponseSchema: components["schemas"]["def-1"]["TaskSchema"][];
             DeleteTaskInputSchema: {
-                id: components["schemas"]["def-3"]["TaskSchema"]["id"];
+                id: components["schemas"]["def-1"]["TaskSchema"]["id"];
             };
-            UpdateTaskInputSchema: {
-                id: components["schemas"]["def-3"]["TaskSchema"]["id"];
-                taskType: components["schemas"]["def-3"]["TaskSchema"]["taskType"];
-                priority: components["schemas"]["def-3"]["TaskSchema"]["priority"];
-                position: components["schemas"]["def-3"]["TaskSchema"]["position"];
-                title: components["schemas"]["def-3"]["TaskSchema"]["title"];
-                description: components["schemas"]["def-3"]["TaskSchema"]["description"];
-                isCompleted?: components["schemas"]["def-3"]["TaskSchema"]["isCompleted"];
-                deadline: components["schemas"]["def-3"]["TaskSchema"]["deadline"];
-                tags: components["schemas"]["def-3"]["TaskSchema"]["tags"];
+            UpdateTasksInputSchema: {
+                id: components["schemas"]["def-1"]["TaskSchema"]["id"];
+                position: components["schemas"]["def-1"]["TaskSchema"]["position"];
+                taskType: components["schemas"]["def-1"]["TaskSchema"]["taskType"];
+                priority: components["schemas"]["def-1"]["TaskSchema"]["priority"];
+                title: components["schemas"]["def-1"]["TaskSchema"]["title"];
+                content: components["schemas"]["def-1"]["TaskSchema"]["content"];
+                isCompleted?: components["schemas"]["def-1"]["TaskSchema"]["isCompleted"];
+                deadline: components["schemas"]["def-1"]["TaskSchema"]["deadline"];
+                tagIds: components["schemas"]["def-1"]["TaskSchema"]["tagIds"];
+            }[];
+            UpdateTasksResponseSchema: components["schemas"]["def-1"]["TaskSchema"][];
+        };
+        /** TagSchemas */
+        "def-2": {
+            TagSchema: {
+                id: string;
+                name: string;
+                color: string;
+                userId: components["schemas"]["def-2"]["TagSchema"]["id"] | null;
+                taskIds: components["schemas"]["def-2"]["TagSchema"]["id"][];
             };
+            CreateTagInputSchema: {
+                name: components["schemas"]["def-2"]["TagSchema"]["name"];
+                color: components["schemas"]["def-2"]["TagSchema"]["color"];
+            };
+            DeleteTagInputSchema: {
+                id: components["schemas"]["def-2"]["TagSchema"]["id"];
+            };
+            FetchTagsResponseSchema: components["schemas"]["def-2"]["TagSchema"][];
         };
     };
     responses: never;
