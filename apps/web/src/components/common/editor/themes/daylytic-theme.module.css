@@ -67,7 +67,6 @@
     text-align: right;
   }
 
-
   .indent {
     --lexical-indent-base-value: 40px;
   }
@@ -95,7 +94,7 @@
   }
   
   .tabNode.textUnderline::after {
-    content: '';
+  content: "";
     position: absolute;
     left: 0;
     right: 0;
@@ -104,7 +103,7 @@
   }
   
   .tabNode.textStrikethrough::before {
-    content: '';
+  content: "";
     position: absolute;
     left: 0;
     right: 0;
@@ -114,7 +113,7 @@
   
   .tabNode.textUnderlineStrikethrough::before,
   .tabNode.textUnderlineStrikethrough::after {
-    content: '';
+  content: "";
     position: absolute;
     left: 0;
     right: 0;
@@ -171,7 +170,7 @@
     position: absolute;
   }
   .blockCursor:after {
-    content: '';
+  content: "";
     display: block;
     position: absolute;
     top: -2px;
@@ -261,7 +260,7 @@
     top: 0;
     background-color: highlight;
     mix-blend-mode: multiply;
-    content: '';
+  content: "";
     pointer-events: none;
   }
   .tableAddColumns {
@@ -278,7 +277,7 @@
     background-position: center;
     background-repeat: no-repeat;
     display: block;
-    content: ' ';
+  content: " ";
     position: absolute;
     top: 0;
     left: 0;
@@ -304,7 +303,7 @@
     background-position: center;
     background-repeat: no-repeat;
     display: block;
-    content: ' ';
+  content: " ";
     position: absolute;
     top: 0;
     left: 0;
