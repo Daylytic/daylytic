@@ -90,6 +90,18 @@ const BlockFormatDropDown = ({
       case "h2":
         formatHeading(editor, blockType, "h2");
         break;
+      case "h3":
+        formatHeading(editor, blockType, "h3");
+        break;
+      case "h4":
+        formatHeading(editor, blockType, "h4");
+        break;
+      case "h5":
+        formatHeading(editor, blockType, "h5");
+        break;
+      case "h6":
+        formatHeading(editor, blockType, "h6");
+        break;
       case "bullet":
         formatBulletList(editor, blockType);
         break;
@@ -139,6 +151,46 @@ const BlockFormatDropDown = ({
           <HddOutlined />
           <span>Heading 2</span>
           <span className="shortcut">{SHORTCUTS.HEADING2}</span>
+        </Space>
+      ),
+    },
+    {
+      value: "h3",
+      label: (
+        <Space>
+          <HddOutlined />
+          <span>Heading 3</span>
+          <span className="shortcut">{SHORTCUTS.HEADING3}</span>
+        </Space>
+      ),
+    },
+    {
+      value: "h4",
+      label: (
+        <Space>
+          <HddOutlined />
+          <span>Heading 4</span>
+          <span className="shortcut">{SHORTCUTS.HEADING4}</span>
+        </Space>
+      ),
+    },
+    {
+      value: "h5",
+      label: (
+        <Space>
+          <HddOutlined />
+          <span>Heading 5</span>
+          <span className="shortcut">{SHORTCUTS.HEADING5}</span>
+        </Space>
+      ),
+    },
+    {
+      value: "h6",
+      label: (
+        <Space>
+          <HddOutlined />
+          <span>Heading 6</span>
+          <span className="shortcut">{SHORTCUTS.HEADING6}</span>
         </Space>
       ),
     },
@@ -435,4 +487,4 @@ export const ToolbarPlugin = ({
       </Tooltip>
     </Flex>
   );
-}
+};
