@@ -393,14 +393,15 @@
 .listItemChecked,
 .listItemUnchecked {
   position: relative;
-  margin-left: 8px;
-  margin-right: 8px;
+  margin-left: 8px !important;
+  margin-right: 8px !important;
   padding-left: 24px;
   padding-right: 24px;
   list-style-type: none;
   outline: none;
   display: flex;
-  align-items: center;
+  align-items: start;
+  cursor: text;
 }
 .listItemChecked {
   text-decoration: line-through;
@@ -421,11 +422,6 @@
   left: auto;
   right: 0;
 }
-/* .listItemUnchecked:focus:before,
-.listItemChecked:focus:before {
-  box-shadow: 0 0 0 2px #a6cdfe;
-  border-radius: 2px;
-}  */
 
 .listItemUnchecked:hover:before {
   border-color: var(--ant-color-primary);
@@ -434,7 +430,6 @@
 .listItemChecked:hover:before {
   background-color: var(--ant-color-primary-hover);
   border-color: transparent;
-  border: none;
 }
 
 .listItemUnchecked:before {
@@ -470,22 +465,21 @@
 }
 
 .listItemChecked:before {
-  background-color: var(--ant-color-primary-hover);
-  border-color: transparent;
+  background-color: var(--ant-color-primary);
 
   box-sizing: border-box;
   display: block;
   width: var(--ant-control-interactive-size);
   height: var(--ant-control-interactive-size);
   direction: ltr;
-  border: var(--ant-line-width) var(--ant-line-type) var(--ant-color-border);
+  border: var(--ant-line-width) var(--ant-line-type) var(--ant-color-primary);
   border-radius: var(--ant-border-radius-sm);
   border-collapse: separate;
   transition: all var(--ant-motion-duration-slow);
 }
 
 .listItemUnchecked:after {
-  top: 50%;
+  top: 8px;
   left: 4px;
 }
 
@@ -505,6 +499,7 @@
   border-top: 0;
   border-inline-start: 0;
   content: "";
+  top: 8px;
   left: 4px;
   cursor: pointer;
   display: block;
