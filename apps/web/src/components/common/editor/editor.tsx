@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { CodeHighlightPlugin } from "components/common/editor/plugins/code-highlight";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import {TabIndentationPlugin} from '@lexical/react/LexicalTabIndentationPlugin';
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { LexicalContentEditable } from "components/common/editor/ui/content-editable";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
@@ -59,6 +60,7 @@ export const Editor = ({ onChange }) => {
       <ShortcutsPlugin editor={activeEditor} setIsLinkEditMode={setIsLinkEditMode} />
       <LinkPlugin />
       <ListPlugin />
+      <TabIndentationPlugin />
       <CheckListPlugin />
 
       {floatingAnchorElem && (
