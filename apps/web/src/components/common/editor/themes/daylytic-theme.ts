@@ -63,7 +63,7 @@ export const theme: EditorThemeClasses = {
   list: {
     checklist: styles.checklist,
     listitem: clsx(styles.listItem, "ant-checkbox-wrapper css-var-Rdalfmcjcma ant-checkbox-css-var"),
-    listitemChecked: clsx(styles.listItemChecked), //styles.listItemChecked,
+    listitemChecked: clsx(styles.listItemChecked, "ant-checkbox-inner"), //styles.listItemChecked,
     listitemUnchecked: clsx(styles.listItemUnchecked, "ant-checkbox-inner"), // styles.listItemUnchecked
     nested: {
       listitem: styles.nestedListItem,
