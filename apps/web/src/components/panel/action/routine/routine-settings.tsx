@@ -1,7 +1,13 @@
-import { CalendarOutlined, EllipsisOutlined, FlagOutlined, TagsOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Flex, MenuProps, Popover, Select, Tag, TimePicker } from "antd";
+import {
+  CalendarOutlined,
+  EllipsisOutlined,
+  FlagOutlined,
+  PlusOutlined,
+  TagsOutlined,
+} from "@ant-design/icons";
+import { Button, Dropdown, Flex, Input, MenuProps, Popover, Select, Tag, TimePicker } from "antd";
 import styles from "./routine.module.css";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { timeFormat } from "utils/utils";
 import { useDailyTasks } from "providers/daily-tasks";
 import dayjs from "dayjs";
@@ -13,6 +19,7 @@ export const OTHER_SETTINGS = ["delete", "duplicate"] as const;
 export const RoutineSettings = () => {
   const { selectedTask, updateTask } = useDailyTasks();
   const { tags } = useTags();
+  const [inputVisible, setInputVisible] = useState<Boolean>(false);
 
   console.log(tags);
 
@@ -25,16 +32,29 @@ export const RoutineSettings = () => {
   }
 
   for (const tag of tags) {
+    const containsTask = tag.taskIds.includes(selectedTask!.id);
     tagOptions.push(
-      <Tag bordered={true} style={{ color: "black" }} closable color={"pink"}>
+      // <Tag.CheckableTag style={{ color: "black" }} color={tag.color}>
+      //   {tag.name}
+      // </Tag.CheckableTag>,
+      <Tag
+        onClose={(event) => {
+          if (!containsTask) {
+            event.preventDefault();
+            //TODO: Add tag to the task
+          }
+        }}
+        closeIcon={containsTask ? null : <PlusOutlined />}
+        bordered={true}
+        style={{ color: "black" }}
+        closable
+        color={tag.color}
+      >
         {tag.name}
       </Tag>,
     );
 
     console.log("CONTAINSD, " + selectedTask!.id);
-    if (tag.taskIds.includes(selectedTask!.id)) {
-      selectedTagsOptions.push({ label: tag.name, value: tag.id });
-    }
   }
 
   // const sharedProps: SelectProps = {
@@ -84,21 +104,22 @@ export const RoutineSettings = () => {
         content={
           <>
             {tagOptions}
-            {/* <Input
-              ref={inputRef}
-              type="text"
-              size="small"
-              style={tagInputStyle}
-              value={inputValue}
-              onChange={handleInputChange}
-              onBlur={handleInputConfirm}
-              onPressEnter={handleInputConfirm}
-            />
+            {inputVisible ? (
+              <Input
+                // ref={inputRef}
+                type="text"
+                size="small"
+                // style={tagInputStyle}
+                // value={inputValue}
+                // onChange={handleInputChange}
+                // onBlur={handleInputConfirm}
+                // onPressEnter={handleInputConfirm}
+              />
             ) : (
-            <Tag style={tagPlusStyle} icon={<PlusOutlined />} onClick={showInput}>
-              New Tag
-            </Tag>
-            ) */}
+              <Tag icon={<PlusOutlined />} color={"default"}>
+                New Tag
+              </Tag>
+            )}
           </>
         }
         title="Select Tags"
