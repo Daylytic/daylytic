@@ -24,7 +24,7 @@ import { getSelectedNode } from "utils/get-selected-note";
 import { sanitizeUrl } from "utils/url";
 import { setFloatingElemPositionForLinkEditor } from "utils/set-floating-elem-position-for-link-editor";
 import { CloseOutlined, CheckOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Space, Input, Button, Typography } from "antd";
+import { Space, Input, Button, Typography, Flex } from "antd";
 import clsx from "clsx";
 
 const preventDefault = (
@@ -251,6 +251,7 @@ const FloatingLinkEditor = ({
           >
             {linkUrl}
           </Typography.Link>
+
           <Space>
             <Button
               icon={<EditOutlined />}
