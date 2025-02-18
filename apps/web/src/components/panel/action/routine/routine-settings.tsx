@@ -7,12 +7,13 @@ import {
 } from "@ant-design/icons";
 import { Button, Dropdown, Flex, Input, MenuProps, Popover, Select, Tag, TimePicker } from "antd";
 import styles from "./routine.module.css";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { timeFormat } from "utils/utils";
 import { useDailyTasks } from "providers/daily-tasks";
 import dayjs from "dayjs";
 import { Priorities } from "@daylytic/shared/constants";
 import { useTags } from "providers/tag";
+import { capitalize } from "utils/string";
 
 export const OTHER_SETTINGS = ["delete", "duplicate"] as const;
 
@@ -28,7 +29,7 @@ export const RoutineSettings = () => {
   const selectedTagsOptions: { label: string; value: string }[] = [];
   for (const priority of Priorities) {
     console.log("Prioprity: ", priority);
-    priorityOptions.push({ label: priority, value: priority });
+    priorityOptions.push({ label: capitalize(priority.toLowerCase()), value: priority });
   }
 
   for (const tag of tags) {
@@ -38,17 +39,35 @@ export const RoutineSettings = () => {
       //   {tag.name}
       // </Tag.CheckableTag>,
       <Tag
-        onClose={(event) => {
+        onClose={async (event) => {
+          event.preventDefault();
+          if(containsTask) {
+            console.log(selectedTask);
+            const tagIndex = selectedTask!.tagIds.indexOf(tag.id, 0);
+            console.log("Tag index, ", tagIndex)
+            if(tagIndex != -1) {
+            // delete selectedTask!.tagIds[tagIndex];
+            selectedTask!.tagIds.splice(tagIndex,1);
+            console.log("LOG OF THE SELECTED TASK BEFORE UPDATEING, ", selectedTask);
+            await updateTask(selectedTask!);
+            //delete tag.taskIds[tag.taskIds.indexOf(selectedTask!.id)];
+            }
+          } else {
+            selectedTask!.tagIds.push(tag.id);
+            updateTask(selectedTask!);
+            // tag.taskIds.push(selectedTask!.id);
+          }
+
           if (!containsTask) {
             event.preventDefault();
             //TODO: Add tag to the task
           }
         }}
-        closeIcon={containsTask ? null : <PlusOutlined />}
+        closeIcon={containsTask ? null : <PlusOutlined style={{ color: "black" }} />}
         bordered={true}
         style={{ color: "black" }}
         closable
-        color={tag.color}
+        color={"pink"}
       >
         {tag.name}
       </Tag>,
