@@ -14,7 +14,6 @@ export const App = () => (
         colorPrimary: "#6247aa",
         borderRadius: 5,
         fontFamily: "Poppins",
-        colorBgContainer: "white",
         colorBgLayout: "#f5f5f5",
         colorWhite: "#fafafa",
       },
@@ -36,7 +35,7 @@ export const App = () => (
         List: {
           metaMarginBottom: 0,
           itemPadding: "4px 0",
-        }
+        },
       },
     }}
   >
