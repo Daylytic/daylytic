@@ -22,3 +22,14 @@
 .time-picker * {
     color: var(--ant-button-text-text-color) !important;
 }
+
+.tag-input {
+  width: 64px;
+  height: 22px;
+  margin-inline-end: 8px;
+  vertical-align: top;
+}
+
+.tag-popover {
+    width: 200px;
+}

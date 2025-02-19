@@ -5,6 +5,8 @@ import { Tag } from "types/task";
 interface TagContextType {
   tags: Tag[];
   fetchTags: () => Promise<void>;
+  updateCachedTag: (tag: Tag) => Promise<void>;
+  createTag: (name: string, color: string) => Promise<void>;
 }
 
 const TagContext = React.createContext<TagContextType | undefined>(undefined);
@@ -23,6 +25,31 @@ export const TagProvider = ({ token, children }) => {
     }
   };
 
+  const createTag = async (name: string, color: string) => {
+    try {
+      const { data } = await client.POST("/tag/", {
+        params: { header: { authorization: `Bearer ${token}` } },
+        body: {
+          name: name,
+          color: color,
+        }
+      });
+      setTags((prevTags) => [...prevTags, data!]);
+    } catch (error) {
+      console.error("Failed to fetch tags:", error);
+    }
+  };
+
+  const updateCachedTag = async (tag: Tag) => {
+    try {
+      setTags((prevTags) =>
+        prevTags.map((oldTag) => (oldTag.id === tag.id ? { ...oldTag, ...tag } : oldTag)),
+      );
+    } catch (error) {
+      console.error("Failed to update tag in cache :", error);
+    }
+  };
+
   useEffect(() => {
     if (token && tags.length === 0) {
       fetchTags();
@@ -33,6 +60,8 @@ export const TagProvider = ({ token, children }) => {
     <TagContext.Provider
       value={{
         fetchTags,
+        createTag,
+        updateCachedTag,
         tags,
       }}
     >
