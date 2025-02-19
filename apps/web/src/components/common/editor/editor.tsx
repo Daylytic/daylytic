@@ -21,10 +21,6 @@ import clsx from "clsx";
 
 export const Editor = ({ onChange }) => {
   const [editor] = useLexicalComposerContext();
-  const editorState = editor.getEditorState();
-  const json = editorState.toJSON();
-
-  console.log(json);
 
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);

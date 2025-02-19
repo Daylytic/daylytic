@@ -44,7 +44,6 @@ export const RoutineHeader = () => {
           autoSize: { maxRows: 1}, // Match text height
         }}
         style={{ marginBottom: "0" }}
-        onChange={(e) => {console.log(e.target)}}
       >
         {selectedTask!.title}
       </Typography.Title>

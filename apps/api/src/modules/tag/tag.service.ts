@@ -86,8 +86,6 @@ const fetchTagsWithIds = async (data: FetchTagsWithIdsSchema): Promise<TagSchema
         },
       });
 
-      console.log(`Found tag: ${tag}`)
-
       if (!tag) continue;
 
       foundTags.push(tag);
