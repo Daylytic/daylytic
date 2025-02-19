@@ -1,86 +1,160 @@
 import {
   CalendarOutlined,
+  CloseCircleOutlined,
+  CloseOutlined,
   EllipsisOutlined,
   FlagOutlined,
+  PlusCircleOutlined,
   PlusOutlined,
   TagsOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Flex, Input, MenuProps, Popover, Select, Tag, TimePicker } from "antd";
+import {
+  Button,
+  Col,
+  ColorPicker,
+  ColorPickerProps,
+  Divider,
+  Dropdown,
+  Flex,
+  Input,
+  InputRef,
+  MenuProps,
+  Popover,
+  Row,
+  Select,
+  Space,
+  Tag,
+  theme,
+  TimePicker,
+  Tooltip,
+} from "antd";
 import styles from "./routine.module.css";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { timeFormat } from "utils/utils";
 import { useDailyTasks } from "providers/daily-tasks";
 import dayjs from "dayjs";
 import { Priorities } from "@daylytic/shared/constants";
 import { useTags } from "providers/tag";
 import { capitalize } from "utils/string";
+import { presetPalettes, generate } from "@ant-design/colors";
+import { adjustColor, pallets } from "utils/color";
 
 export const OTHER_SETTINGS = ["delete", "duplicate"] as const;
+type Presets = Required<ColorPickerProps>["presets"][number];
+function genPresets(presets = presetPalettes) {
+  return Object.entries(presets).map<Presets>(([label, colors]) => ({
+    label,
+    colors,
+    key: label,
+  }));
+}
 
 export const RoutineSettings = () => {
+  const { token } = theme.useToken();
+  const [loading, setLoading] = useState(false);
   const { selectedTask, updateTask } = useDailyTasks();
-  const { tags } = useTags();
-  const [inputVisible, setInputVisible] = useState<Boolean>(false);
+  const { tags, updateCachedTag, createTag } = useTags();
+  const [inputValue, setInputValue] = useState("");
+  const [color, setColor] = useState(token.colorPrimary);
+  const inputRef = useRef<InputRef>(null);
 
-  console.log(tags);
+
+  const presets = genPresets(pallets);
+  const customPanelRender: ColorPickerProps["panelRender"] = (
+    _,
+    { components: { Picker, Presets } },
+  ) => (
+    <Row justify="space-between" wrap={false}>
+      <Col span={12}>
+        <Presets />
+      </Col>
+      <Divider type="vertical" style={{ height: "auto" }} />
+      <Col flex="auto">
+        <Picker />
+      </Col>
+    </Row>
+  );
 
   const priorityOptions: { label: string; value: string }[] = [];
   const tagOptions: React.JSX.Element[] = [];
-  const selectedTagsOptions: { label: string; value: string }[] = [];
+  const selectedTagOptions: React.JSX.Element[] = [];
   for (const priority of Priorities) {
-    console.log("Prioprity: ", priority);
     priorityOptions.push({ label: capitalize(priority.toLowerCase()), value: priority });
   }
 
+  const handleInputConfirm = async () => {
+    if (inputValue.trim() === "" || loading) {
+      return;
+    }
+
+    setLoading(true);
+
+    await createTag(inputValue.trim(), color);
+
+    setLoading(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
   for (const tag of tags) {
     const containsTask = tag.taskIds.includes(selectedTask!.id);
-    tagOptions.push(
-      // <Tag.CheckableTag style={{ color: "black" }} color={tag.color}>
-      //   {tag.name}
-      // </Tag.CheckableTag>,
+
+
+    const palette = generate(tag.color);
+    const backgroundColor = palette[1];
+    const outlineColor = adjustColor(palette[3]);
+    const textColor = adjustColor(palette[7]);
+
+    const newTag = (
       <Tag
         onClose={async (event) => {
           event.preventDefault();
-          if(containsTask) {
-            console.log(selectedTask);
+          if (containsTask) {
             const tagIndex = selectedTask!.tagIds.indexOf(tag.id, 0);
-            console.log("Tag index, ", tagIndex)
-            if(tagIndex != -1) {
-            // delete selectedTask!.tagIds[tagIndex];
-            selectedTask!.tagIds.splice(tagIndex,1);
-            console.log("LOG OF THE SELECTED TASK BEFORE UPDATEING, ", selectedTask);
-            await updateTask(selectedTask!);
-            //delete tag.taskIds[tag.taskIds.indexOf(selectedTask!.id)];
+            if (tagIndex != -1) {
+              selectedTask!.tagIds.splice(tagIndex, 1);
+
+              const taskIndex = tag!.taskIds.indexOf(selectedTask!.id, 0);
+              tag!.taskIds.splice(taskIndex, 1);
+              updateCachedTag(tag);
+              await updateTask(selectedTask!);
             }
           } else {
+            tag.taskIds.push(selectedTask!.id);
             selectedTask!.tagIds.push(tag.id);
             updateTask(selectedTask!);
-            // tag.taskIds.push(selectedTask!.id);
+            updateCachedTag(tag);
           }
 
           if (!containsTask) {
             event.preventDefault();
-            //TODO: Add tag to the task
           }
         }}
-        closeIcon={containsTask ? null : <PlusOutlined style={{ color: "black" }} />}
+        closeIcon={
+          containsTask ? (
+            <Tooltip title="Detach Tag" ><CloseCircleOutlined style={{ color: textColor }} /></Tooltip>
+          ) : (
+            <Tooltip title="Attach Tag"><CloseCircleOutlined style={{ color: textColor }} /></Tooltip>
+          )
+        }
         bordered={true}
-        style={{ color: "black" }}
+        className={styles.tag}
+        style={{ color: textColor, borderColor: outlineColor }}
         closable
-        color={"pink"}
+        color={backgroundColor}
       >
         {tag.name}
-      </Tag>,
+      </Tag>
     );
 
-    console.log("CONTAINSD, " + selectedTask!.id);
+    if (containsTask) {
+      selectedTagOptions.push(newTag);
+    } else {
+      tagOptions.push(newTag);
+    }
   }
-
-  // const sharedProps: SelectProps = {
-  //   mode: "multiple",
-  //   style: { width: "100%" },
-  //   maxTagCount: "responsive",
-  // };
 
   const menuItems: MenuProps["items"] = useMemo(() => {
     return OTHER_SETTINGS.map((type) => ({
@@ -107,41 +181,45 @@ export const RoutineSettings = () => {
           updateTask(selectedTask!);
         }}
       ></TimePicker>
-      {/* <Select
-        allowClear
-        prefix={<TagsOutlined />}
-        suffixIcon={<></>}
-        variant="filled"
-        className={styles["button"]}
-        defaultValue={selectedTagsOptions}
-        options={tagOptions}
-        placeholder="Tags"
-        {...sharedProps}
-      /> */}
       <Popover
         placement="bottom"
         content={
-          <>
-            {tagOptions}
-            {inputVisible ? (
-              <Input
-                // ref={inputRef}
-                type="text"
-                size="small"
-                // style={tagInputStyle}
-                // value={inputValue}
-                // onChange={handleInputChange}
-                // onBlur={handleInputConfirm}
-                // onPressEnter={handleInputConfirm}
-              />
-            ) : (
-              <Tag icon={<PlusOutlined />} color={"default"}>
-                New Tag
-              </Tag>
-            )}
-          </>
+          <Flex vertical className={styles["tag-popover"]} gap={"small"}>
+            <Flex wrap gap={"small"}>{selectedTagOptions}</Flex>
+            {selectedTagOptions.length > 0 && tagOptions.length > 0 ? <Divider style={{margin: "0"}}/> : <></>}
+            <Flex wrap gap={"small"}>{tagOptions}</Flex>
+            <Flex gap={"small"}>
+              <Space.Compact style={{ width: "100%" }}>
+                <ColorPicker
+                  disabled={loading}
+                  defaultValue={color}
+                  styles={{ popupOverlayInner: { width: 480 } }}
+                  presets={presets}
+                  panelRender={customPanelRender}
+                  onChange={(color) => setColor(color.toHexString())}
+                />
+                <Input
+                  ref={inputRef}
+                  type="text"
+                  disabled={loading}
+                  // size="small"
+                  // className={styles["tag-input"]}
+                  // style={tagInputStyle}
+                  placeholder="Tag name"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  onPressEnter={handleInputConfirm}
+                />
+                <Button
+                  loading={loading}
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={handleInputConfirm}
+                />
+              </Space.Compact>
+            </Flex>
+          </Flex>
         }
-        title="Select Tags"
         trigger="click"
       >
         <Button
