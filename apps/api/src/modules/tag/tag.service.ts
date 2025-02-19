@@ -55,6 +55,23 @@ const updateTag = async (data: UpdateTagInputSchema): Promise<TagSchema> => {
 
 const updateTasks = async (data: UpdateTasksForTagSchema): Promise<void> => {
   try {
+    const tagsToUpdate = await prisma.tag.findMany({
+      where: { taskIds: { has: data.taskId } }
+    });
+
+    // For each tag, remove the unwanted taskId and update.
+    await Promise.all(tagsToUpdate.map(tag => {
+      if(data.tagIds.includes(tag.id)) {
+        return;
+      }
+      
+      const newTaskIds = tag.taskIds.filter(id => id !== data.taskId);
+      return prisma.tag.update({
+        where: { id: tag.id },
+        data: { taskIds: { set: newTaskIds } }
+      });
+    }));
+
     for (const tagId of data.tagIds) {
       // Retrieve current taskIds for this tag
       const tag = await prisma.tag.findUnique({
