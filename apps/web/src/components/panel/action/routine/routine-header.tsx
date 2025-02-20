@@ -1,5 +1,5 @@
 import { EditOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { Flex, Typography, Popover, Descriptions, Button, DescriptionsProps } from "antd";
+import { Flex, Typography, Popover, Descriptions, Button, DescriptionsProps, Skeleton, Space } from "antd";
 import clsx from "clsx";
 import { useDailyTasks } from "providers/daily-tasks";
 import styles from "./routine.module.css";
@@ -41,6 +41,15 @@ export const RoutineHeader = () => {
 
     return [wordCount, charCount];
   };
+
+  if (selectedTask!.current === undefined) {
+    return (
+      <Flex gap={"small"}>
+        <Skeleton.Input size="large" active block={true} />
+        <Skeleton.Avatar active shape={"circle"} />
+      </Flex>
+    );
+  }
 
   const handleOpenDetails = () => {
     const rootNode = selectedTask!.current!.content!["root"];

@@ -1,4 +1,4 @@
-import { Flex, Spin } from "antd";
+import { Flex, Skeleton, Spin } from "antd";
 import { useEffect } from "react";
 import { RoutineSettings } from "./routine-settings";
 import styles from "./routine.module.css";
@@ -24,26 +24,34 @@ export const Routine = ({ id }) => {
     }
   });
 
-  if (selectedTask.current === undefined) {
-    return (
-      <Flex justify="center" align="center" style={{ height: "100%", width: "100%" }}>
-        <Spin indicator={<LoadingOutlined spin />} size="large" />
-      </Flex>
-    );
-  }
+  // if (selectedTask.current === undefined) {
+  //   return (
+  //     <Flex justify="center" align="center" style={{ height: "100%", width: "100%" }}>
+  //       <Spin indicator={<LoadingOutlined spin />} size="large" />
+  //     </Flex>
+  //   );
+  // }
 
   return (
-    <Flex vertical id={styles["wrapper"]}>
+    <Flex vertical id={styles["wrapper"]} gap={selectedTask.current === undefined ? "small" : 0}>
       <RoutineHeader />
       <RoutineSettings />
-      <Lexical
-        key={selectedTask.current.id}
-        selectedTask={selectedTask.current}
-        onChange={(editor) => {
-          selectedTask!.current!.content = editor.toJSON();
-          updateTask(selectedTask!.current!);
-        }}
-      />
+
+      {selectedTask.current ? (
+        <Lexical
+          key={selectedTask.current.id}
+          selectedTask={selectedTask.current}
+          onChange={(editor) => {
+            selectedTask!.current!.content = editor.toJSON();
+            updateTask(selectedTask!.current!);
+          }}
+        />
+      ) : (
+        <Flex vertical gap={"small"}>
+          <Skeleton.Button active block={true} />
+          <Skeleton active />
+        </Flex>
+      )}
     </Flex>
   );
 };
