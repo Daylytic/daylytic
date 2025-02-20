@@ -157,13 +157,25 @@ export const RoutineSettings = () => {
     }
   }
 
-  const menuItems: MenuProps["items"] = useMemo(() => {
-    return OTHER_SETTINGS.map((type) => ({
-      key: type,
-      label: type,
+  const menuItems: MenuProps["items"] = [
+    {
+      key: "DELETE",
+      label: (
+        <Popconfirm
+          title="Are you sure you want to delete this task?"
+          onConfirm={async () => {
+            await deleteTask(selectedTask!.current!.id);
+          }}
+          okText="Yes"
+          cancelText="No"
+        >
+          Delete
+        </Popconfirm>
+      ),
+      danger: true,
       onClick: () => {},
-    }));
-  }, []);
+    },
+  ];
 
   return (
     <Flex gap="small" id={styles.settings}>
