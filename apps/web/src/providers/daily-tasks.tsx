@@ -4,8 +4,8 @@ import { Task } from "types/task";
 
 interface DailyTasksContextType {
   tasks: Task[];
-  selectedTask: Task | undefined;
-  setSelectedTask: (task: Task | undefined) => void;
+  selectedTask: React.MutableRefObject<Task | undefined>;
+  fetched: boolean;
   createTask: (title: string) => Promise<Task>;
   deleteTask: (id: string) => Promise<void>;
   fetchTasks: () => Promise<void>;
@@ -16,7 +16,8 @@ const DailyTasksContext = React.createContext<DailyTasksContextType | undefined>
 
 export const DailyTasksProvider = ({ token, children }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedTask, setSelectedTask] = useState<Task | undefined>();
+  const [fetched, setFetched] = useState<boolean>(false);
+  const selectedTask = useRef<Task | undefined>(undefined);
 
   const globalUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -34,6 +35,7 @@ export const DailyTasksProvider = ({ token, children }) => {
         params: { header: { authorization: `Bearer ${token}` } },
       });
       setTasks(data ?? []);
+      setFetched(true);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
     }
@@ -113,12 +115,12 @@ export const DailyTasksProvider = ({ token, children }) => {
     <DailyTasksContext.Provider
       value={{
         tasks,
+        fetched,
         fetchTasks,
         createTask,
         deleteTask,
         updateTask,
         selectedTask,
-        setSelectedTask,
       }}
     >
       {children}

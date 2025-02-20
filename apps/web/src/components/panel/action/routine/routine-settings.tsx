@@ -1,7 +1,6 @@
 import {
   CalendarOutlined,
   CloseCircleOutlined,
-  CloseOutlined,
   EllipsisOutlined,
   FlagOutlined,
   PlusCircleOutlined,
@@ -19,6 +18,7 @@ import {
   Input,
   InputRef,
   MenuProps,
+  Popconfirm,
   Popover,
   Row,
   Select,
@@ -29,7 +29,7 @@ import {
   Tooltip,
 } from "antd";
 import styles from "./routine.module.css";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { timeFormat } from "utils/utils";
 import { useDailyTasks } from "providers/daily-tasks";
 import dayjs from "dayjs";
@@ -39,7 +39,6 @@ import { capitalize } from "utils/string";
 import { presetPalettes, generate } from "@ant-design/colors";
 import { adjustColor, pallets } from "utils/color";
 
-export const OTHER_SETTINGS = ["delete", "duplicate"] as const;
 type Presets = Required<ColorPickerProps>["presets"][number];
 function genPresets(presets = presetPalettes) {
   return Object.entries(presets).map<Presets>(([label, colors]) => ({
@@ -52,12 +51,11 @@ function genPresets(presets = presetPalettes) {
 export const RoutineSettings = () => {
   const { token } = theme.useToken();
   const [loading, setLoading] = useState(false);
-  const { selectedTask, updateTask } = useDailyTasks();
+  const { selectedTask, updateTask, deleteTask } = useDailyTasks();
   const { tags, updateCachedTag, createTag } = useTags();
   const [inputValue, setInputValue] = useState("");
   const [color, setColor] = useState(token.colorPrimary);
   const inputRef = useRef<InputRef>(null);
-
 
   const presets = genPresets(pallets);
   const customPanelRender: ColorPickerProps["panelRender"] = (
@@ -99,8 +97,7 @@ export const RoutineSettings = () => {
   };
 
   for (const tag of tags) {
-    const containsTask = tag.taskIds.includes(selectedTask!.id);
-
+    const containsTask = tag.taskIds.includes(selectedTask!.current!.id);
 
     const palette = generate(tag.color);
     const backgroundColor = palette[1];
@@ -112,19 +109,19 @@ export const RoutineSettings = () => {
         onClose={async (event) => {
           event.preventDefault();
           if (containsTask) {
-            const tagIndex = selectedTask!.tagIds.indexOf(tag.id, 0);
+            const tagIndex = selectedTask!.current!.tagIds.indexOf(tag.id, 0);
             if (tagIndex != -1) {
-              selectedTask!.tagIds.splice(tagIndex, 1);
+              selectedTask!.current!.tagIds.splice(tagIndex, 1);
 
-              const taskIndex = tag!.taskIds.indexOf(selectedTask!.id, 0);
+              const taskIndex = tag!.taskIds.indexOf(selectedTask!.current!.id, 0);
               tag!.taskIds.splice(taskIndex, 1);
               updateCachedTag(tag);
-              await updateTask(selectedTask!);
+              await updateTask(selectedTask!.current!);
             }
           } else {
-            tag.taskIds.push(selectedTask!.id);
-            selectedTask!.tagIds.push(tag.id);
-            updateTask(selectedTask!);
+            tag.taskIds.push(selectedTask!.current!.id);
+            selectedTask!.current!.tagIds.push(tag.id);
+            updateTask(selectedTask!.current!);
             updateCachedTag(tag);
           }
 
@@ -134,9 +131,13 @@ export const RoutineSettings = () => {
         }}
         closeIcon={
           containsTask ? (
-            <Tooltip title="Detach Tag" ><CloseCircleOutlined style={{ color: textColor }} /></Tooltip>
+            <Tooltip title="Detach Tag">
+              <CloseCircleOutlined style={{ color: textColor }} />
+            </Tooltip>
           ) : (
-            <Tooltip title="Attach Tag"><CloseCircleOutlined style={{ color: textColor }} /></Tooltip>
+            <Tooltip title="Attach Tag">
+              <PlusCircleOutlined style={{ color: textColor }} />
+            </Tooltip>
           )
         }
         bordered={true}
@@ -156,13 +157,25 @@ export const RoutineSettings = () => {
     }
   }
 
-  const menuItems: MenuProps["items"] = useMemo(() => {
-    return OTHER_SETTINGS.map((type) => ({
-      key: type,
-      label: type,
+  const menuItems: MenuProps["items"] = [
+    {
+      key: "DELETE",
+      label: (
+        <Popconfirm
+          title="Are you sure you want to delete this task?"
+          onConfirm={async () => {
+            await deleteTask(selectedTask!.current!.id);
+          }}
+          okText="Yes"
+          cancelText="No"
+        >
+          Delete
+        </Popconfirm>
+      ),
+      danger: true,
       onClick: () => {},
-    }));
-  }, []);
+    },
+  ];
 
   return (
     <Flex gap="small" id={styles.settings}>
@@ -174,20 +187,28 @@ export const RoutineSettings = () => {
         className={styles["button"]}
         placeholder="Time"
         defaultValue={
-          dayjs(selectedTask!.deadline).isValid() ? dayjs(selectedTask!.deadline) : null
+          dayjs(selectedTask!.current!.deadline).isValid() ? dayjs(selectedTask!.current!.deadline) : null
         }
         onChange={(e) => {
-          selectedTask!.deadline = e.toISOString();
-          updateTask(selectedTask!);
+          selectedTask!.current!.deadline = e.toISOString();
+          updateTask(selectedTask!.current!);
         }}
       ></TimePicker>
       <Popover
         placement="bottom"
         content={
           <Flex vertical className={styles["tag-popover"]} gap={"small"}>
-            <Flex wrap gap={"small"}>{selectedTagOptions}</Flex>
-            {selectedTagOptions.length > 0 && tagOptions.length > 0 ? <Divider style={{margin: "0"}}/> : <></>}
-            <Flex wrap gap={"small"}>{tagOptions}</Flex>
+            <Flex wrap gap={"small"}>
+              {selectedTagOptions}
+            </Flex>
+            {selectedTagOptions.length > 0 && tagOptions.length > 0 ? (
+              <Divider style={{ margin: "0" }} />
+            ) : (
+              <></>
+            )}
+            <Flex wrap gap={"small"}>
+              {tagOptions}
+            </Flex>
             <Flex gap={"small"}>
               <Space.Compact style={{ width: "100%" }}>
                 <ColorPicker
@@ -240,10 +261,10 @@ export const RoutineSettings = () => {
         className={styles["button"]}
         options={priorityOptions}
         placeholder="Priority"
-        defaultValue={selectedTask!.priority}
+        defaultValue={selectedTask!.current!.priority}
         onChange={(e) => {
-          selectedTask!.priority = e;
-          updateTask(selectedTask!);
+          selectedTask!.current!.priority = e;
+          updateTask(selectedTask!.current!);
         }}
       />
 

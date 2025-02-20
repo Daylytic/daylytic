@@ -37,8 +37,6 @@ export function setFloatingElemPositionForLinkEditor(
     const anchorElementRect = anchorElem.getBoundingClientRect();
     const editorScrollerRect = scrollerElem.getBoundingClientRect();
 
-    console.log([scrollerElem])
-
     // Calculate initial positions
     let top = targetRect.top - verticalGap;
     let left = targetRect.left - horizontalOffset;

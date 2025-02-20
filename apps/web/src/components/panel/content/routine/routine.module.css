@@ -17,7 +17,7 @@
 }
 
 .input {
-    margin: var(--ant-list-item-padding);
+    margin-bottom: var(--ant-margin-xs);
 }
 
 .card {

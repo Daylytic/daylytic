@@ -4,17 +4,14 @@ import { $isCodeNode, CODE_LANGUAGE_MAP } from "@lexical/code";
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $isListNode, ListNode } from "@lexical/list";
 import { $isHeadingNode } from "@lexical/rich-text";
-import { $getSelectionStyleValueForProperty, $isParentElementRTL } from "@lexical/selection";
-import { $isTableNode, $isTableSelection } from "@lexical/table";
+import { $isTableSelection } from "@lexical/table";
 import {
   $findMatchingParent,
   $getNearestNodeOfType,
-  $isEditorIsNestedEditor,
   mergeRegister,
 } from "@lexical/utils";
 import {
   $getSelection,
-  $isElementNode,
   $isRangeSelection,
   $isRootOrShadowRoot,
   CAN_REDO_COMMAND,
@@ -302,8 +299,6 @@ export const ToolbarPlugin = ({
       const isLink = $isLinkNode(parent) || $isLinkNode(node);
       updateToolbarState("isLink", isLink);
 
-      const tableNode = $findMatchingParent(node, $isTableNode);
-
       if (elementDOM !== null) {
         setSelectedElementKey(elementKey);
         if ($isListNode(element)) {
@@ -325,14 +320,6 @@ export const ToolbarPlugin = ({
             return;
           }
         }
-      }
-      let matchingParent;
-      if ($isLinkNode(parent)) {
-        // If node is a link, we need to fetch the parent paragraph node to set format
-        matchingParent = $findMatchingParent(
-          node,
-          (parentNode) => $isElementNode(parentNode) && !parentNode.isInline(),
-        );
       }
     }
     if ($isRangeSelection(selection) || $isTableSelection(selection)) {

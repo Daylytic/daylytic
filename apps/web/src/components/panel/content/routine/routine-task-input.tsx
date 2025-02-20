@@ -1,6 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Input, Spin } from "antd";
-import clsx from "clsx";
 import styles from "./routine.module.css";
 import { useTaskInput } from "./use-task-input";
 
@@ -10,7 +9,7 @@ export const RoutineTaskInput = () => {
   return (
     <Input
       size="large"
-      className={clsx(styles.input, "ant-list")}
+      className={styles.input}
       prefix={<PlusOutlined />}
       placeholder="Add a new task"
       value={newTask}
