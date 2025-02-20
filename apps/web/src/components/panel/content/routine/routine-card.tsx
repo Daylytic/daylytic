@@ -41,7 +41,7 @@ export const RoutineCard = ({ item }: { item: Task }) => {
     <List.Item ref={setNodeRef} style={style} className={styles.card} {...attributes}>
       <List.Item.Meta
         avatar={
-          <Flex gap="small" justify="center" align="center">
+          <Flex gap="small" justify="center" align="center" className={styles.avatar}>
             <HolderOutlined ref={setActivatorNodeRef} className={styles.grabber} {...listeners} />
             <Checkbox
               className={styles.checkbox}
@@ -68,7 +68,7 @@ export const RoutineCard = ({ item }: { item: Task }) => {
               <Title level={4} className={styles["button-title"]}>
                 {item.title}
               </Title>
-              <Flex>
+              <Flex wrap gap={"small"}>
                 {item.tagIds.map((tagId) => {
                   const tag = tags.find((tag) => tag.id === tagId);
                   if (!tag) {
@@ -84,7 +84,7 @@ export const RoutineCard = ({ item }: { item: Task }) => {
                     <Tag
                       bordered={true}
                       className={styles.tag}
-                      style={{ color: textColor, borderColor: outlineColor }}
+                      style={{ color: textColor, borderColor: outlineColor,margin: "0" }}
                       color={backgroundColor}
                     >
                       {tag.name}
