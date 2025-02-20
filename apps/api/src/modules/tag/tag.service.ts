@@ -7,7 +7,6 @@ import {
   FetchTagsWithIdsSchema,
   TagSchema,
   UpdateTagInputSchema,
-  UpdateTagSchema,
   UpdateTasksForTagSchema,
 } from "./index.js";
 import { RequestError } from "utils/error.js";
