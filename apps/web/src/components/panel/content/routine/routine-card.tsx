@@ -57,7 +57,11 @@ export const RoutineCard = ({ item }: { item: Task }) => {
         description={
           <Button
             type="text"
-            onClick={() => navigate(`/panel/routine/${item.id}`)}
+            onClick={() => {
+              const task = tasks.find((task) => task.id === item.id);
+              selectedTask.current = task;
+              navigate(`/panel/routine/${item.id}`);
+            }}
             className={styles.button}
           >
             <Flex flex={1} gap={12} wrap className={styles["button-details"]}>
