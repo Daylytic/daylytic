@@ -22,6 +22,7 @@ import {
   Popover,
   Row,
   Select,
+  Skeleton,
   Space,
   Tag,
   theme,
@@ -95,6 +96,17 @@ export const RoutineSettings = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
+
+  if(selectedTask!.current === undefined) {
+    return (
+      <Flex gap={"small"}>
+        <Skeleton.Button active block={true} />
+        <Skeleton.Button active block={true} />
+        <Skeleton.Button active block={true} />
+        <Skeleton.Button active shape={"circle"} />
+      </Flex>
+    );
+  }
 
   for (const tag of tags) {
     const containsTask = tag.taskIds.includes(selectedTask!.current!.id);
