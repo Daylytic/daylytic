@@ -45,7 +45,26 @@ export const adjustColor = (hex: string): string => {
     return `#${hex}`;
 };
 
-// Pink Pastel (https://coolors.co/palette/d8e2dc-ffe5d9-ffcad4-f4acb7-9d8189)
+export const generatePresets = (presets = presetPalettes) => {
+  return Object.entries(presets).map<Presets>(([label, colors]) => ({
+    label,
+    colors,
+    key: label,
+  }));
+};
+
 export const pallets = {
-    "General": ["#eb2f96", "#f5222d", "#fa541c", "#fa8c16", "#faad14", "#a0d911", "#52c41a", "#13c2c2", "#1677ff", "#2f54eb", "#722ed1"],
+  General: [
+    "#eb2f96",
+    "#f5222d",
+    "#fa541c",
+    "#fa8c16",
+    "#faad14",
+    "#a0d911",
+    "#52c41a",
+    "#13c2c2",
+    "#1677ff",
+    "#2f54eb",
+    "#722ed1",
+  ],
 };
