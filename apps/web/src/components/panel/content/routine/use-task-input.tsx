@@ -3,22 +3,25 @@ import { useDailyTasks } from "providers/daily-tasks";
 import { useState } from "react";
 
 export const useTaskInput = () => {
-    const [newTask, setNewTask] = useState("");
+  const [newTask, setNewTask] = useState("");
   const [loading, setLoading] = useState(false);
   const { createTask } = useDailyTasks();
 
   const handleCreateTask = async () => {
-    if (newTask.trim()) {
-      setLoading(true);
-      try {
-        await createTask(newTask.trim());
-        setNewTask("");
-        message.success("Task added successfully");
-      } catch {
-        message.error("Failed to add task. Please try again.");
-      } finally {
-        setLoading(false);
-      }
+    const trimmedTask = newTask.trim();
+    if (!trimmedTask) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await createTask(trimmedTask);
+      setNewTask("");
+      message.success("Task added successfully");
+    } catch {
+      message.error("Failed to add task. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,5 +34,5 @@ export const useTaskInput = () => {
     handleCreateTask,
     loading,
     newTask,
-  }
-}
+  };
+};
