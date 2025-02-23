@@ -9,7 +9,7 @@
     flex: 1;
 }
 
-#tasks-list {
+.tasks-list {
     overflow-y: auto;
     max-height: 100%;
     height: 100%;
@@ -22,6 +22,9 @@
 
 .card {
     position: relative;
+    display: flex;
+    align-items: start;
+    width: auto !important;
     flex: 1;
 }
 

@@ -1,38 +1,37 @@
 import { List } from "antd";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { restrictToVerticalAxis, restrictToParentElement  } from "@dnd-kit/modifiers";
+import { restrictToVerticalAxis, restrictToParentElement } from "@dnd-kit/modifiers";
 import { arrayMove } from "@dnd-kit/sortable";
-import styles from "./routine.module.css";
 import { useDailyTasks } from "providers/daily-tasks";
-import { RoutineCard } from "components/panel/content/routine/routine-card";
+import { RoutineCard, styles } from ".";
 
 export const RoutineList = () => {
   const { tasks, updateTask } = useDailyTasks();
-  const sortedTasks = tasks.sort((a, b) => a.position - b.position);
+  const sortedTasks = [...tasks].sort((a, b) => a.position - b.position);
 
   const handleDragEnd = ({ active, over }) => {
-    if (active.id !== over?.id) {
-      const oldIndex = sortedTasks.findIndex((task) => task.id === active.id);
-      const newIndex = sortedTasks.findIndex((task) => task.id === over?.id);
+    if (!over || active.id === over.id) return;
 
-      const updatedTasks = arrayMove(sortedTasks, oldIndex, newIndex);
+    const oldIndex = sortedTasks.findIndex((task) => task.id === active.id);
+    const newIndex = sortedTasks.findIndex((task) => task.id === over?.id);
 
-      const reorderedTasks = updatedTasks.map((task, index) => ({
-        ...task,
-        position: index,
-      }));
+    const updatedTasks = arrayMove(sortedTasks, oldIndex, newIndex);
 
-      reorderedTasks.forEach((task) => {
-        updateTask(task);
-      })
-    }
+    const reorderedTasks = updatedTasks.map((task, index) => ({
+      ...task,
+      position: index,
+    }));
+
+    reorderedTasks.forEach((task) => {
+      updateTask(task);
+    });
   };
 
   return (
     <DndContext
       collisionDetection={closestCenter}
-      modifiers={[restrictToVerticalAxis, restrictToParentElement ]}
+      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
       onDragEnd={handleDragEnd}
     >
       <SortableContext
@@ -42,10 +41,8 @@ export const RoutineList = () => {
         <List
           itemLayout="vertical"
           dataSource={sortedTasks}
-          id={styles["tasks-list"]}
-          renderItem={(item) => (
-            <RoutineCard key={item.id} item={item} />
-          )}
+          className={styles["tasks-list"]}
+          renderItem={(item) => <RoutineCard key={item.id} item={item} />}
         />
       </SortableContext>
     </DndContext>

@@ -1,5 +1,4 @@
-import { List, Checkbox, Button, Flex, Typography, Tag } from "antd";
-import styles from "./routine.module.css";
+import { List, Checkbox, Button, Flex, Typography } from "antd";
 import { useNavigate } from "react-router";
 import { useDailyTasks } from "providers/daily-tasks";
 import { Task } from "types/task";
@@ -7,12 +6,16 @@ import { HolderOutlined } from "@ant-design/icons";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useTags } from "providers/tag";
-import { generate } from "@ant-design/colors";
-import { adjustColor } from "utils/color";
+import { styles } from ".";
+import { Tag } from "components/common/tag";
 
 const { Title } = Typography;
 
-export const RoutineCard = ({ item }: { item: Task }) => {
+interface RoutineCardProps {
+  item: Task;
+}
+
+export const RoutineCard = ({ item }: RoutineCardProps) => {
   const {
     attributes,
     listeners,
@@ -23,14 +26,10 @@ export const RoutineCard = ({ item }: { item: Task }) => {
     isDragging,
   } = useSortable({ id: item.id });
 
-  const style = {
+  const cardStyles = {
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    display: "flex",
-    alignItems: "start",
-    width: "auto !important",
-    flex: "1",
   };
 
   const navigate = useNavigate();
@@ -38,18 +37,15 @@ export const RoutineCard = ({ item }: { item: Task }) => {
   const { tags } = useTags();
 
   return (
-    <List.Item ref={setNodeRef} style={style} className={styles.card} {...attributes}>
+    <List.Item ref={setNodeRef} style={cardStyles} className={styles.card} {...attributes}>
       <List.Item.Meta
         avatar={
           <Flex gap="small" justify="center" align="center" className={styles.avatar}>
             <HolderOutlined ref={setActivatorNodeRef} className={styles.grabber} {...listeners} />
             <Checkbox
               className={styles.checkbox}
-              defaultChecked={item.isCompleted}
-              onChange={async () => {
-                const updatedItem = { ...item, isCompleted: !item.isCompleted };
-                await updateTask(updatedItem);
-              }}
+              checked={item.isCompleted}
+              onChange={async () => await updateTask({ ...item, isCompleted: !item.isCompleted })}
             ></Checkbox>
           </Flex>
         }
@@ -75,21 +71,7 @@ export const RoutineCard = ({ item }: { item: Task }) => {
                     return;
                   }
 
-                  const palette = generate(tag.color);
-                  const backgroundColor = palette[1];
-                  const outlineColor = adjustColor(palette[3]);
-                  const textColor = adjustColor(palette[7]);
-
-                  return (
-                    <Tag
-                      bordered={true}
-                      className={styles.tag}
-                      style={{ color: textColor, borderColor: outlineColor,margin: "0" }}
-                      color={backgroundColor}
-                    >
-                      {tag.name}
-                    </Tag>
-                  );
+                  return <Tag key={tagId} tag={tag} />;
                 })}
               </Flex>
             </Flex>

@@ -12,3 +12,4 @@
 - Tutorial how to use shortcuts, editor, etc
 - Email notifications
 - Work timer
+- Add tags instantly to the tasks you try to attach them
