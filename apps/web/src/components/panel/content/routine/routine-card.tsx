@@ -71,21 +71,7 @@ export const RoutineCard = ({ item }: { item: Task }) => {
                     return;
                   }
 
-                  const palette = generate(tag.color);
-                  const backgroundColor = palette[1];
-                  const outlineColor = adjustColor(palette[3]);
-                  const textColor = adjustColor(palette[7]);
-
-                  return (
-                    <Tag
-                      bordered={true}
-                      className={styles.tag}
-                      style={{ color: textColor, borderColor: outlineColor,margin: "0" }}
-                      color={backgroundColor}
-                    >
-                      {tag.name}
-                    </Tag>
-                  );
+                  return <Tag key={tagId} tag={tag} />;
                 })}
               </Flex>
             </Flex>
