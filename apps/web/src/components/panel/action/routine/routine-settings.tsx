@@ -235,9 +235,6 @@ export const RoutineSettings = () => {
                   ref={inputRef}
                   type="text"
                   disabled={loading}
-                  // size="small"
-                  // className={styles["tag-input"]}
-                  // style={tagInputStyle}
                   placeholder="Tag name"
                   value={inputValue}
                   onChange={handleInputChange}

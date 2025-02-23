@@ -25,14 +25,6 @@ export const Routine = ({ id }) => {
     }
   });
 
-  // if (selectedTask.current === undefined) {
-  //   return (
-  //     <Flex justify="center" align="center" style={{ height: "100%", width: "100%" }}>
-  //       <Spin indicator={<LoadingOutlined spin />} size="large" />
-  //     </Flex>
-  //   );
-  // }
-
   return (
     <Flex vertical id={styles["wrapper"]} gap={selectedTask.current === undefined ? "small" : 0}>
       <RoutineHeader />
