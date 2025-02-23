@@ -1,16 +1,16 @@
-import { Flex, Skeleton, Spin } from "antd";
+import { Flex } from "antd";
 import { useEffect } from "react";
-import { RoutineSettings } from "./routine-settings";
-import styles from "./routine.module.css";
-import { RoutineHeader } from "./routine-header";
 import { useDailyTasks } from "providers/daily-tasks";
 import { useNavigate } from "react-router";
 import { RoutineHeader, RoutineSettings, styles } from ".";
 import { RoutineEditor } from "./routine-editor";
 
+interface RoutineProps {
+  id: string;
+}
 
-export const Routine = ({ id }) => {
-  const { tasks, selectedTask, updateTask, fetched } = useDailyTasks();
+export const Routine = ({ id }: RoutineProps) => {
+  const { tasks, selectedTask, fetched } = useDailyTasks();
   const navigate = useNavigate();
 
   useEffect(() => {
