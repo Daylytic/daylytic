@@ -9,7 +9,7 @@ import { RoutineCard } from "components/panel/content/routine/routine-card";
 
 export const RoutineList = () => {
   const { tasks, updateTask } = useDailyTasks();
-  const sortedTasks = tasks.sort((a, b) => a.position - b.position);
+  const sortedTasks = [...tasks].sort((a, b) => a.position - b.position);
 
   const handleDragEnd = ({ active, over }) => {
     if (active.id !== over?.id) {
