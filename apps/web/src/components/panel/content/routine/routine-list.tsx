@@ -42,10 +42,8 @@ export const RoutineList = () => {
         <List
           itemLayout="vertical"
           dataSource={sortedTasks}
-          id={styles["tasks-list"]}
-          renderItem={(item) => (
-            <RoutineCard key={item.id} item={item} />
-          )}
+          className={styles["tasks-list"]}
+          renderItem={(item) => <RoutineCard key={item.id} item={item} />}
         />
       </SortableContext>
     </DndContext>
