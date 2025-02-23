@@ -1,10 +1,9 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Input, Spin } from "antd";
-import styles from "./routine.module.css";
-import { useTaskInput } from "./use-task-input";
+import { styles, useTaskInput } from ".";
 
 export const RoutineTaskInput = () => {
-  const {loading, handleCreateTask, handleInputChange, newTask} = useTaskInput();
+  const { loading, handleCreateTask, handleInputChange, newTask } = useTaskInput();
 
   return (
     <Input
