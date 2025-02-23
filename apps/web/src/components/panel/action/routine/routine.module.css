@@ -33,3 +33,28 @@
 .tag-popover {
     width: 200px;
 }
+
+.header-title {
+    margin-bottom: 0;
+}
+
+.menu-popover-description {
+    width: auto;
+}
+
+.color-picker-divider {
+    height: auto;
+}
+
+.tags-divider {
+    margin: 0;
+}
+
+.tag-creator {
+    width: 100%;
+}
+
+.tags-button {
+    display: flex;
+    justify-content: flex-start;
+}

@@ -73,7 +73,7 @@ export const RoutineSettings = () => {
               {selectedTagOptions}
             </Flex>
             {selectedTagOptions.length > 0 && tagOptions.length > 0 ? (
-              <Divider style={{ margin: "0" }} />
+              <Divider className={styles["tags-divider"]}/> //TODO: Check if orientional margin is just normal margin
             ) : (
               <></>
             )}
@@ -81,13 +81,13 @@ export const RoutineSettings = () => {
               {tagOptions}
             </Flex>
             <Flex gap={"small"}>
-              <Space.Compact style={{ width: "100%" }}>
+              <Space.Compact className={styles["tag-creator"]}>
                 <ColorPicker
                   disabled={loading}
                   defaultValue={color}
                   styles={{ popupOverlayInner: { width: 480 } }}
                   presets={presets}
-                  panelRender={customPanelRender}
+                  panelRender={colorPickerPanel}
                   onChange={(color) => setColor(color.toHexString())}
                 />
                 <Input
@@ -112,11 +112,10 @@ export const RoutineSettings = () => {
         trigger="click"
       >
         <Button
-          style={{ display: "flex", justifyContent: "flex-start" }}
           icon={<TagsOutlined />}
           color="default"
           variant="filled"
-          className={styles["button"]}
+          className={clsx(styles["button"], styles["tag-button"])}
         >
           Tags
         </Button>

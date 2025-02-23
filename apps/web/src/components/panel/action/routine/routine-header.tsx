@@ -93,14 +93,19 @@ export const RoutineHeader = () => {
           triggerType: ["icon"],
           autoSize: { maxRows: 1 },
         }}
-        style={{ marginBottom: "0" }}
+        className={styles["header-title"]}
       >
         {selectedTask!.current!.title}
       </Typography.Title>
       <Popover
         placement="bottomLeft"
         content={
-          <Descriptions column={1} layout="vertical" items={items} style={{ width: "auto" }} />
+          <Descriptions
+            column={1}
+            layout="vertical"
+            items={menuItems}
+            className={styles["menu-popover-description"]}
+          />
         }
         trigger={"click"}
       >
