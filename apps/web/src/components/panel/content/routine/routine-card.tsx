@@ -45,11 +45,7 @@ export const RoutineCard = ({ item }: { item: Task }) => {
             <HolderOutlined ref={setActivatorNodeRef} className={styles.grabber} {...listeners} />
             <Checkbox
               className={styles.checkbox}
-              defaultChecked={item.isCompleted}
-              onChange={async () => {
-                const updatedItem = { ...item, isCompleted: !item.isCompleted };
-                await updateTask(updatedItem);
-              }}
+              onChange={async () => await updateTask({ ...item, isCompleted: !item.isCompleted })}
             ></Checkbox>
           </Flex>
         }
