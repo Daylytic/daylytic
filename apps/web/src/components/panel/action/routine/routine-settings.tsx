@@ -58,7 +58,9 @@ export const RoutineSettings = () => {
         className={styles["button"]}
         placeholder="Time"
         defaultValue={
-          dayjs(selectedTask!.current!.deadline).isValid() ? dayjs(selectedTask!.current!.deadline) : null
+          dayjs(selectedTask!.current!.deadline).isValid()
+            ? dayjs(selectedTask!.current!.deadline)
+            : null
         }
         onChange={(e) => {
           selectedTask!.current!.deadline = e.toISOString();
