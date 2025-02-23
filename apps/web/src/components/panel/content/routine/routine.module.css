@@ -22,6 +22,9 @@
 
 .card {
     position: relative;
+    display: flex;
+    align-items: start;
+    width: auto !important;
     flex: 1;
 }
 
