@@ -48,9 +48,23 @@ model RoutineData {
   lastRoutineReset DateTime  @default(now())
 }
 
+model Goal {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  projects    Project[]
+}
+
+model Project {
+  id     String @id @default(cuid())
+  goalId String
+  goal   Goal   @relation(fields: [goalId], references: [id])
+  tasks  Task[]
+}
+
 enum TaskType {
   ROUTINE
-  TODOLIST
+  PROJECT
 }
 
 enum Priority {
@@ -72,11 +86,11 @@ model Task {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deadline    DateTime?
-  // todoListId  String? // Relation field to ToDoList
-  // todoList    ToDoList? @relation(fields: [todoListId], references: [id], onDelete: Cascade) // Cascade delete here
   userId      String? // Relation field to ToDoList
   user        User?     @relation(fields: [userId], references: [id])
   tagIds      String[]
+  project     Project?  @relation(fields: [projectId], references: [id])
+  projectId   String?
 }
 
 model Tag {
