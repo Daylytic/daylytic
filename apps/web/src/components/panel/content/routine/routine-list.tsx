@@ -1,56 +1,39 @@
-import { List } from "antd";
-import { DndContext, closestCenter } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { restrictToVerticalAxis, restrictToParentElement } from "@dnd-kit/modifiers";
-import { arrayMove } from "@dnd-kit/sortable";
+import { TaskList, TaskCard } from "components/common/task";
 import { useDailyTasks } from "providers/daily-tasks";
-import { RoutineCard, styles } from ".";
-import { RoutineListSkeleton } from "components/panel/content/routine/skeleton";
+import { useTags } from "providers/tag";
+import { ReactNode } from "react";
+import { useNavigate } from "react-router";
+import { Task } from "types/task";
 
 export const RoutineList = () => {
-  const { tasks, updateTask, fetched } = useDailyTasks();
-
-  if (!fetched) {
-    return <RoutineListSkeleton />;
-  }
-
-  const sortedTasks = [...tasks].sort((a, b) => a.position - b.position);
-
-  const handleDragEnd = ({ active, over }) => {
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = sortedTasks.findIndex((task) => task.id === active.id);
-    const newIndex = sortedTasks.findIndex((task) => task.id === over?.id);
-
-    const updatedTasks = arrayMove(sortedTasks, oldIndex, newIndex);
-
-    const reorderedTasks = updatedTasks.map((task, index) => ({
-      ...task,
-      position: index,
-    }));
-
-    reorderedTasks.forEach((task) => {
-      updateTask(task);
-    });
-  };
+  const { tasks, updateTask, fetched, selectedTask } = useDailyTasks();
+  const navigate = useNavigate();
+  const { tags } = useTags();
 
   return (
-    <DndContext
-      collisionDetection={closestCenter}
-      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={sortedTasks.map((task) => task.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        <List
-          itemLayout="vertical"
-          dataSource={sortedTasks}
-          className={styles["tasks-list"]}
-          renderItem={(item) => <RoutineCard key={item.id} item={item} />}
-        />
-      </SortableContext>
-    </DndContext>
+    <TaskList
+      fetched={fetched}
+      tasks={tasks}
+      updateTask={(task: Task) => {
+        updateTask(task);
+      }}
+      renderItem={(item: Task, index: number): ReactNode => {
+        return (
+          <TaskCard
+            key={item.id}
+            item={item}
+            onClick={() => {
+              const task = tasks.find((task) => task.id === item.id);
+              selectedTask.current = task;
+              navigate(`/panel/routine/${item.id}`);
+            }}
+            onCheckboxChange={async (): Promise<void> => {
+              await updateTask({ ...item, isCompleted: !item.isCompleted });
+            }}
+            tags={tags}
+          />
+        );
+      }}
+    />
   );
 };
