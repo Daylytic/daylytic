@@ -1,2 +1,2 @@
-export * from "./routine-list-skeleton";
+export * from "./task-list-skeleton";
 export {default as styles} from "./skeleton.module.css";
