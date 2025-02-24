@@ -1,15 +1,13 @@
 import { generate } from "@ant-design/colors";
 import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Priorities } from "@daylytic/shared/constants";
-import { theme, ColorPickerProps, Row, Col, Divider, Tooltip, MenuProps, Popconfirm } from "antd";
+import { Tooltip, MenuProps, Popconfirm } from "antd";
 import { useTags } from "providers/tag";
-import { useState } from "react";
-import { adjustColor, generatePresets, pallets } from "utils/color";
+import { adjustColor } from "utils/color";
 import { capitalize } from "utils/string";
 import { Tag } from "components/common/tag";
 import { Task } from "types/task";
-
-import {styles} from ".";
+import { useNavigate } from "react-router";
 
 interface UseSettingsProps {
   selectedTask: React.MutableRefObject<Task | undefined>;
@@ -18,47 +16,12 @@ interface UseSettingsProps {
 }
 
 export const useSettings = ({ selectedTask, updateTask, deleteTask }: UseSettingsProps) => {
-  const { token } = theme.useToken();
-  const { tags, updateCachedTag, createTag } = useTags();
-  const [inputValue, setInputValue] = useState("");
-  const [color, setColor] = useState(token.colorPrimary);
-  const [loading, setLoading] = useState(false);
-
-  const presets = generatePresets(pallets);
-  const colorPickerPanel: ColorPickerProps["panelRender"] = (
-    _,
-    { components: { Picker, Presets } },
-  ) => (
-    <Row justify="space-between" wrap={false}>
-      <Col span={12}>
-        <Presets />
-      </Col>
-      <Divider type="vertical" className={styles["color-picker-divder"]} />
-      <Col flex="auto">
-        <Picker />
-      </Col>
-    </Row>
-  );
+  const navigate = useNavigate();
+  const { tags, updateCachedTag } = useTags();
 
   const priorityOptions: { label: string; value: string }[] = [];
   const tagOptions: React.JSX.Element[] = [];
   const selectedTagOptions: React.JSX.Element[] = [];
-
-  const handleInputConfirm = async () => {
-    if (inputValue.trim() === "" || loading) {
-      return;
-    }
-
-    setLoading(true);
-
-    await createTag(inputValue.trim(), color);
-
-    setLoading(false);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
 
   const menuItems: MenuProps["items"] = [
     {
@@ -67,6 +30,7 @@ export const useSettings = ({ selectedTask, updateTask, deleteTask }: UseSetting
         <Popconfirm
           title="Are you sure you want to delete this task?"
           onConfirm={async () => {
+            navigate("/panel/routine");
             await deleteTask(selectedTask!.current!.id);
           }}
           okText="Yes"
@@ -139,14 +103,6 @@ export const useSettings = ({ selectedTask, updateTask, deleteTask }: UseSetting
   }
 
   return {
-    presets,
-    colorPickerPanel,
-    handleInputConfirm,
-    handleInputChange,
-    loading,
-    inputValue,
-    setColor,
-    color,
     tagOptions,
     menuItems,
     priorityOptions,
