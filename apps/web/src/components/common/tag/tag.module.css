@@ -1,3 +1,8 @@
 .tag {
-    margin: 0;
+    margin-inline-end: 0 !important;
+}
+
+.tag-creator {
+    width: 100%;
+}
 }

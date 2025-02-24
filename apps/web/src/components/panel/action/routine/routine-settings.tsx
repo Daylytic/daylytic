@@ -83,31 +83,7 @@ export const RoutineSettings = () => {
               {tagOptions}
             </Flex>
             <Flex gap={"small"}>
-              <Space.Compact className={styles["tag-creator"]}>
-                <ColorPicker
-                  disabled={loading}
-                  defaultValue={color}
-                  styles={{ popupOverlayInner: { width: 480 } }}
-                  presets={presets}
-                  panelRender={colorPickerPanel}
-                  onChange={(color) => setColor(color.toHexString())}
-                />
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  disabled={loading}
-                  placeholder="Tag name"
-                  value={inputValue}
-                  onChange={handleInputChange}
-                  onPressEnter={handleInputConfirm}
-                />
-                <Button
-                  loading={loading}
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={handleInputConfirm}
-                />
-              </Space.Compact>
+              <TagCreator />
             </Flex>
           </Flex>
         }
