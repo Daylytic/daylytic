@@ -1,5 +1,5 @@
 import { EditOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { Flex, Typography, Popover, Descriptions, Button, Skeleton } from "antd";
+import { Flex, Typography, Popover, Descriptions, Button } from "antd";
 import clsx from "clsx";
 import { useDailyTasks } from "providers/daily-tasks";
 import { RoutineHeaderSkeleton, styles, useHeader } from ".";

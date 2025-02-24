@@ -18,8 +18,14 @@ import { OnChangePlugin } from "components/common/editor/plugins/on-change";
 
 import styles from "./lexical.module.css";
 import clsx from "clsx";
+import { Task } from "types/task";
 
-export const Editor = ({ onChange }) => {
+interface EditorProps {
+  selectedTask: Task;
+  onChange: (editor, task: Task) => void;
+}
+
+export const Editor = ({ onChange, selectedTask }: EditorProps) => {
   const [editor] = useLexicalComposerContext();
 
   const [activeEditor, setActiveEditor] = useState(editor);
@@ -69,7 +75,7 @@ export const Editor = ({ onChange }) => {
         </>
       )}
 
-      <OnChangePlugin onChange={onChange} />
+      <OnChangePlugin selectedTask={selectedTask} onChange={onChange} />
     </>
   );
 };

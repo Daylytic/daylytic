@@ -1,0 +1,7 @@
+.tags-item {
+    margin: var(--ant-margin-xs);
+}
+
+.create {
+    cursor: pointer;
+}

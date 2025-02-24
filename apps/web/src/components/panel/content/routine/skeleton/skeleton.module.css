@@ -1,0 +1,3 @@
+.skeleton-centered :global(.ant-skeleton-header) {
+    padding-block-start: calc(var(--ant-margin-sm) / 2);
+  }

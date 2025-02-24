@@ -1,30 +1,12 @@
-import {
-  CalendarOutlined,
-  EllipsisOutlined,
-  FlagOutlined,
-  PlusOutlined,
-  TagsOutlined,
-} from "@ant-design/icons";
-import {
-  Button,
-  ColorPicker,
-  Divider,
-  Dropdown,
-  Flex,
-  Input,
-  InputRef,
-  Popover,
-  Select,
-  Space,
-  TimePicker,
-} from "antd";
+import { CalendarOutlined, EllipsisOutlined, FlagOutlined, TagsOutlined } from "@ant-design/icons";
+import { Button, Divider, Dropdown, Flex, Popover, Select, TimePicker } from "antd";
 import styles from "./routine.module.css";
-import { useRef } from "react";
 import { timeFormat } from "utils/utils";
 import { useDailyTasks } from "providers/daily-tasks";
 import dayjs from "dayjs";
 import { RoutineSettingsSkeleton, useSettings } from ".";
 import clsx from "clsx";
+import { TagCreator } from "components/common/tag";
 
 export const RoutineSettings = () => {
   const { selectedTask, updateTask, deleteTask } = useDailyTasks();
@@ -32,21 +14,11 @@ export const RoutineSettings = () => {
     return <RoutineSettingsSkeleton />;
   }
 
-  const {
-    presets,
-    colorPickerPanel,
-    handleInputConfirm,
-    handleInputChange,
-    loading,
-    inputValue,
-    setColor,
-    color,
-    tagOptions,
-    selectedTagOptions,
-    priorityOptions,
-    menuItems,
-  } = useSettings({selectedTask, updateTask, deleteTask});
-  const inputRef = useRef<InputRef>(null);
+  const { tagOptions, selectedTagOptions, priorityOptions, menuItems } = useSettings({
+    selectedTask,
+    updateTask,
+    deleteTask,
+  });
 
   return (
     <Flex gap="small" id={styles.settings}>
@@ -75,7 +47,7 @@ export const RoutineSettings = () => {
               {selectedTagOptions}
             </Flex>
             {selectedTagOptions.length > 0 && tagOptions.length > 0 ? (
-              <Divider className={styles["tags-divider"]}/> //TODO: Check if orientional margin is just normal margin
+              <Divider className={styles["tags-divider"]} /> //TODO: Check if orientional margin is just normal margin
             ) : (
               <></>
             )}
@@ -83,31 +55,7 @@ export const RoutineSettings = () => {
               {tagOptions}
             </Flex>
             <Flex gap={"small"}>
-              <Space.Compact className={styles["tag-creator"]}>
-                <ColorPicker
-                  disabled={loading}
-                  defaultValue={color}
-                  styles={{ popupOverlayInner: { width: 480 } }}
-                  presets={presets}
-                  panelRender={colorPickerPanel}
-                  onChange={(color) => setColor(color.toHexString())}
-                />
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  disabled={loading}
-                  placeholder="Tag name"
-                  value={inputValue}
-                  onChange={handleInputChange}
-                  onPressEnter={handleInputConfirm}
-                />
-                <Button
-                  loading={loading}
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={handleInputConfirm}
-                />
-              </Space.Compact>
+              <TagCreator />
             </Flex>
           </Flex>
         }

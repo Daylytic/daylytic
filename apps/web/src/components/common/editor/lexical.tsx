@@ -13,7 +13,7 @@ const onError = (error) => {
 
 interface LexicalProps {
   selectedTask: Task;
-  onChange: (editor) => void;
+  onChange: (editor, task: Task) => void;
 }
 
 export const Lexical = ({ selectedTask, onChange }: LexicalProps) => {
@@ -28,7 +28,6 @@ export const Lexical = ({ selectedTask, onChange }: LexicalProps) => {
     editorState:
       content === "{}"
         ? () => {
-            // Ensure valid initial state
             const initialParagraph = $createParagraphNode();
             const root = $getRoot();
             root.append(initialParagraph);
@@ -43,7 +42,7 @@ export const Lexical = ({ selectedTask, onChange }: LexicalProps) => {
         initialConfig={initialConfig}
       >
         <ToolbarContext>
-          <Editor onChange={onChange} />
+          <Editor onChange={onChange} selectedTask={selectedTask} />
         </ToolbarContext>
       </LexicalComposer>
     </div>

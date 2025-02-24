@@ -35,7 +35,7 @@
 }
 
 .header-title {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
 }
 
 .menu-popover-description {
@@ -48,10 +48,6 @@
 
 .tags-divider {
     margin: 0;
-}
-
-.tag-creator {
-    width: 100%;
 }
 
 .tags-button {

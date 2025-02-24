@@ -5,9 +5,15 @@ import { restrictToVerticalAxis, restrictToParentElement } from "@dnd-kit/modifi
 import { arrayMove } from "@dnd-kit/sortable";
 import { useDailyTasks } from "providers/daily-tasks";
 import { RoutineCard, styles } from ".";
+import { RoutineListSkeleton } from "components/panel/content/routine/skeleton";
 
 export const RoutineList = () => {
-  const { tasks, updateTask } = useDailyTasks();
+  const { tasks, updateTask, fetched } = useDailyTasks();
+
+  if (!fetched) {
+    return <RoutineListSkeleton />;
+  }
+
   const sortedTasks = [...tasks].sort((a, b) => a.position - b.position);
 
   const handleDragEnd = ({ active, over }) => {

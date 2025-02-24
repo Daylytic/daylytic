@@ -1,24 +1,18 @@
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot } from "lexical";
+import { Task } from "types/task";
 
-export const OnChangePlugin = ({ onChange }) => {
+interface OnChangePluginProps {
+  selectedTask: Task;
+  onChange: (editor, task: Task) => void;
+}
+
+export const OnChangePlugin = ({ onChange, selectedTask }: OnChangePluginProps) => {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
     const unregister = editor.registerUpdateListener(({ editorState }) => {
-      const isEditorEmpty = editorState.read(() => {
-        const root = $getRoot();
-        const isEmpty = !root.getFirstChild();
-
-        return isEmpty;
-      });
-
-      if (isEditorEmpty) {
-        return;
-      }
-
-      onChange(editorState);
+      onChange(editorState, selectedTask);
     });
     return () => {
       unregister();
