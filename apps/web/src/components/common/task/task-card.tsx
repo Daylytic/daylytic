@@ -1,7 +1,7 @@
 import { List, Checkbox, Button, Flex, Typography } from "antd";
 import { useNavigate } from "react-router";
 import { useDailyTasks } from "providers/daily-tasks";
-import { Task } from "types/task";
+import { Tag as TagModel, Task } from "types/task";
 import { HolderOutlined } from "@ant-design/icons";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -11,11 +11,14 @@ import { Tag } from "components/common/tag";
 
 const { Title } = Typography;
 
-interface RoutineCardProps {
+interface TaskCardProps {
   item: Task;
+  onClick: () => void;
+  onCheckboxChange: () => Promise<void>;
+  tags: TagModel[];
 }
 
-export const RoutineCard = ({ item }: RoutineCardProps) => {
+export const TaskCard = ({ item, onClick, onCheckboxChange, tags }: TaskCardProps) => {
   const {
     attributes,
     listeners,
@@ -32,10 +35,6 @@ export const RoutineCard = ({ item }: RoutineCardProps) => {
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const navigate = useNavigate();
-  const { updateTask, selectedTask, tasks } = useDailyTasks();
-  const { tags } = useTags();
-
   return (
     <List.Item ref={setNodeRef} style={cardStyles} className={styles.card} {...attributes}>
       <List.Item.Meta
@@ -45,7 +44,7 @@ export const RoutineCard = ({ item }: RoutineCardProps) => {
             <Checkbox
               className={styles.checkbox}
               checked={item.isCompleted}
-              onChange={async () => await updateTask({ ...item, isCompleted: !item.isCompleted })}
+              onChange={onCheckboxChange}
             ></Checkbox>
           </Flex>
         }
@@ -53,11 +52,7 @@ export const RoutineCard = ({ item }: RoutineCardProps) => {
         description={
           <Button
             type="text"
-            onClick={() => {
-              const task = tasks.find((task) => task.id === item.id);
-              selectedTask.current = task;
-              navigate(`/panel/routine/${item.id}`);
-            }}
+            onClick={onClick}
             className={styles.button}
           >
             <Flex flex={1} gap={12} wrap className={styles["button-details"]}>

@@ -2,7 +2,7 @@ import { Divider, List, Skeleton } from "antd";
 import {styles} from ".";
 import React from "react";
 
-export const RoutineListSkeleton = () => {
+export const TaskListSkeleton = () => {
   const skeletonItems = [1, 2, 3];
 
   return (

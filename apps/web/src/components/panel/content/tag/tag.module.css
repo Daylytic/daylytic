@@ -8,7 +8,3 @@
     flex-direction: column;
     flex: 1;
 }
-
-.input {
-    margin-bottom: var(--ant-margin-xs);
-}

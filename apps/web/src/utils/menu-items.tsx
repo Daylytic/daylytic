@@ -9,6 +9,7 @@ import { Badge } from "antd";
 import { Routine as RoutineAction } from "components/panel/action/routine";
 import { Goals as GoalsContent } from "components/panel/content/goals";
 import { Routine as RoutineContent } from "components/panel/content/routine";
+import { Tag as TagContent } from "components/panel/content/tag";
 import { GeneralItem } from "components/panel/menu/general";
 
 export const MENU_KEYS = {
@@ -16,6 +17,7 @@ export const MENU_KEYS = {
   ROUTINE: "routine",
   UPCOMING: "upcoming",
   CALENDAR: "calendar",
+  TAG: "tag",
   GOALS: "goals",
 };
 
@@ -29,6 +31,7 @@ export const ContentMap = {
   [MENU_KEYS.ROUTINE]: RoutineContent,
   [MENU_KEYS.UPCOMING]: null,
   [MENU_KEYS.CALENDAR]: null,
+  [MENU_KEYS.TAG]: TagContent,
   [MENU_KEYS.GOALS]: GoalsContent,
 };
 

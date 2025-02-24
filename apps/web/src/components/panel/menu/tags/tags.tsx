@@ -5,7 +5,9 @@ import { Tag, TagCreator } from "components/common/tag";
 import { useTags } from "providers/tag";
 import { styles } from ".";
 import clsx from "clsx";
+import { useNavigate } from "react-router";
 export const Tags = () => {
+  const navigate = useNavigate();
   const { tags } = useTags();
 
   return (
@@ -17,6 +19,7 @@ export const Tags = () => {
             className={clsx("prevent-select")}
             clickable
             onClick={() => {
+              navigate(`/panel/tag/${item.id}`);
               console.log("ON CLICK WORKS!");
             }}
             tag={item}
