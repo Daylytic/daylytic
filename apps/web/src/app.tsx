@@ -2,10 +2,10 @@ import { ConfigProvider } from "antd";
 import { Routes, Route, BrowserRouter } from "react-router";
 import { ScrollToHash } from "components/common/scroll-to-hash";
 import { Home } from "pages/home";
-import { Panel } from "pages/panel";
 import { Routine as RoutineAction } from "components/panel/action/routine";
-import { LayoutRoutine } from "components/layout/layout-routine";
-import { LayoutTag } from "components/layout/layout-tag";
+import { Tag as TagAction } from "components/panel/action/tag";
+import { LayoutRoutine, LayoutTag, LayoutPanel } from "components/layout";
+import { config } from "config";
 
 export const App = () => (
   <ConfigProvider
@@ -46,20 +46,12 @@ export const App = () => (
       <ScrollToHash />
       <Routes>
         <Route index element={<Home />} />
-        <Route
-          path="/panel/*"
-          element={
-            // <PrivateRoute>
-            //   <Panel />
-            // </PrivateRoute>
-            <Panel />
-          }
-        >
+        <Route path="/panel/*" element={<LayoutPanel />}>
           <Route path="routine" element={<LayoutRoutine />}>
             <Route path=":taskId" element={<RoutineAction />} />
           </Route>
           <Route path="tag/:tagId" element={<LayoutTag />}>
-            <Route path=":taskId" element={<RoutineAction />} />
+            <Route path=":taskId" element={<TagAction />} />
           </Route>
         </Route>
       </Routes>
