@@ -4,6 +4,7 @@ import { useTags } from "providers/tag";
 import { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Task } from "types/task";
+import { getTagRoute } from "utils/routes";
 
 export const TagList = () => {
   const { tasks, updateTask, fetched, selectedTask } = useDailyTasks();
@@ -35,7 +36,7 @@ export const TagList = () => {
             onClick={() => {
               const task = tasks.find((task) => task.id === item.id);
               selectedTask.current = task;
-              navigate(`/panel/routine/${item.id}`);
+              navigate(getTagRoute(tagId!, item.id));
             }}
             onCheckboxChange={async (): Promise<void> => {
               await updateTask({ ...item, isCompleted: !item.isCompleted });
