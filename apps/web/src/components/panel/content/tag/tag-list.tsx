@@ -1,19 +1,18 @@
 import { TaskList, TaskCard } from "components/common/task";
-import { usePanel } from "hooks/use-panel";
 import { useDailyTasks } from "providers/daily-tasks";
 import { useTags } from "providers/tag";
 import { ReactNode } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Task } from "types/task";
 
 export const TagList = () => {
   const { tasks, updateTask, fetched, selectedTask } = useDailyTasks();
-  const { getContent } = usePanel();
+  const { tagId } = useParams();
   const navigate = useNavigate();
   const { tags } = useTags();
 
-  const selectedTag = tags.find((tag) => tag.id === getContent());
-  if(!selectedTag) {
+  const selectedTag = tags.find((tag) => tag.id === tagId);
+  if (!selectedTag) {
     return <></>;
   }
 
@@ -21,14 +20,16 @@ export const TagList = () => {
 
   return (
     <TaskList
+      orderable={false}
       fetched={fetched}
       tasks={tasksByTag}
       updateTask={(task: Task) => {
         updateTask(task);
       }}
-      renderItem={(item: Task, index: number): ReactNode => {
+      renderItem={(item: Task): ReactNode => {
         return (
           <TaskCard
+            orderable={false}
             key={item.id}
             item={item}
             onClick={() => {

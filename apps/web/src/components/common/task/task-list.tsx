@@ -3,19 +3,20 @@ import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis, restrictToParentElement } from "@dnd-kit/modifiers";
 import { arrayMove } from "@dnd-kit/sortable";
-import { TaskCard, styles } from ".";
+import { styles } from ".";
 import { TaskListSkeleton } from "./skeleton";
 import { Task } from "types/task";
 import { ReactNode } from "react";
 
 interface TaskListProps {
   fetched: boolean;
-  tasks: Task[],
+  orderable: boolean;
+  tasks: Task[];
   updateTask: (task: Task) => void;
   renderItem: (item: Task, index: number) => ReactNode;
 }
 
-export const TaskList = ({fetched, tasks, updateTask, renderItem}: TaskListProps) => {
+export const TaskList = ({ fetched, orderable, tasks, updateTask, renderItem }: TaskListProps) => {
   if (!fetched) {
     return <TaskListSkeleton />;
   }
@@ -40,6 +41,19 @@ export const TaskList = ({fetched, tasks, updateTask, renderItem}: TaskListProps
     });
   };
 
+  const list = (
+    <List
+      itemLayout="vertical"
+      dataSource={sortedTasks}
+      className={styles["tasks-list"]}
+      renderItem={renderItem}
+    />
+  );
+
+  if (!orderable) {
+    return list;
+  }
+
   return (
     <DndContext
       collisionDetection={closestCenter}
@@ -50,12 +64,7 @@ export const TaskList = ({fetched, tasks, updateTask, renderItem}: TaskListProps
         items={sortedTasks.map((task) => task.id)}
         strategy={verticalListSortingStrategy}
       >
-        <List
-          itemLayout="vertical"
-          dataSource={sortedTasks}
-          className={styles["tasks-list"]}
-          renderItem={renderItem}
-        />
+        {list}
       </SortableContext>
     </DndContext>
   );
