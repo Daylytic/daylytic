@@ -1,10 +1,9 @@
 import { LayoutPanel } from "components/layout/layout-panel";
-import { Action } from "components/panel/action/action";
-import { Content } from "components/panel/content/content";
 import { Menu } from "components/panel/menu";
 import { DailyTasksProvider } from "providers/daily-tasks";
 import { TagProvider } from "providers/tag";
 import { useCookies } from "react-cookie";
+import { Outlet } from "react-router";
 
 export const Panel = () => {
   const [cookies] = useCookies(["token"]);
@@ -13,8 +12,7 @@ export const Panel = () => {
       <TagProvider token={cookies.token}>
         <LayoutPanel>
           <Menu />
-          <Content />
-          <Action />
+          <Outlet />
         </LayoutPanel>
       </TagProvider>
     </DailyTasksProvider>
