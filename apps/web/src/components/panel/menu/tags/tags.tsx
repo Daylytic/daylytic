@@ -18,22 +18,18 @@ export const Tags = () => {
       <Flex gap="small" wrap>
         {fetched ? (
           tags.map((item) => (
-          <Tag
+            <Tag
               className="prevent-select"
-            clickable
+              clickable
               onClick={() => navigate(getTagRoute(item.id))}
-            tag={item}
-          />
+              tag={item}
+            />
           ))
         ) : (
           <TagsSkeleton tagCount={3} />
         )}
         <Popover placement="bottom" trigger="click" content={<TagCreator />}>
-          <AntTag
-            className={clsx(styles.create, "prevent-select")}
-            onClick={() => {}}
-            icon={<PlusCircleOutlined />}
-          >
+          <AntTag className={clsx(styles.create, "prevent-select")} icon={<PlusCircleOutlined />}>
             Create Tag
           </AntTag>
         </Popover>
