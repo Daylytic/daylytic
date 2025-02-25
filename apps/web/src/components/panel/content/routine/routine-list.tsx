@@ -12,14 +12,16 @@ export const RoutineList = () => {
 
   return (
     <TaskList
+      orderable={true}
       fetched={fetched}
       tasks={tasks}
       updateTask={(task: Task) => {
         updateTask(task);
       }}
-      renderItem={(item: Task, index: number): ReactNode => {
+      renderItem={(item: Task): ReactNode => {
         return (
           <TaskCard
+            orderable={true}
             key={item.id}
             item={item}
             onClick={() => {

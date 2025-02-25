@@ -3,6 +3,9 @@ import { Routes, Route, BrowserRouter } from "react-router";
 import { ScrollToHash } from "components/common/scroll-to-hash";
 import { Home } from "pages/home";
 import { Panel } from "pages/panel";
+import { Routine as RoutineAction } from "components/panel/action/routine";
+import { LayoutRoutine } from "components/layout/layout-routine";
+import { LayoutTag } from "components/layout/layout-tag";
 
 export const App = () => (
   <ConfigProvider
@@ -51,7 +54,14 @@ export const App = () => (
             // </PrivateRoute>
             <Panel />
           }
-        />
+        >
+          <Route path="routine" element={<LayoutRoutine />}>
+            <Route path=":taskId" element={<RoutineAction />} />
+          </Route>
+          <Route path="tag/:tagId" element={<LayoutTag />}>
+            <Route path=":taskId" element={<RoutineAction />} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   </ConfigProvider>
