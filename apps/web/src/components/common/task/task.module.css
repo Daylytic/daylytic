@@ -75,6 +75,38 @@
     padding-block: var(--ant-padding-xxs);
 }
 
+.header-edit-icon {
+    color: var(--ant-color-primary-text);
+}
+
+.header-title {
+    margin-bottom: 0 !important;
+}
+
+.menu-popover-description {
+    width: auto;
+}
+
+#settings {
+    width: 100%;
+    display: flex;
+    margin-bottom: var(--ant-margin-xs);
+    /* background-color: blue; */
+}
+
+.tags-divider {
+    margin: 0;
+}
+
+.tag-popover {
+    width: 200px;
+}
+
+.button {
+    box-sizing: border-box;
+    flex: 1;
+}
+
 .button-details {
     display: flex;
     flex-direction: column;
@@ -88,12 +120,12 @@
     margin-bottom: 0 !important;
 }
 
-.button-description {
-    text-align: left;
-    color: rgba(0, 0, 0, 0.45);
-    white-space: normal;
+.settings-button {
+    box-sizing: border-box;
+    flex: 1;
 }
 
-.button-tags {
-    width: 100%;
+.tags-button {
+    display:flex;
+    justify-content: flex-start;
 }
