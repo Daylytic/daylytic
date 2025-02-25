@@ -7,16 +7,14 @@ import { adjustColor } from "utils/color";
 import { capitalize } from "utils/string";
 import { Tag } from "components/common/tag";
 import { Task } from "types/task";
-import { useNavigate } from "react-router";
 
 interface UseSettingsProps {
-  selectedTask: React.MutableRefObject<Task | undefined>;
-  updateTask: (task: Task) => Promise<void>;
-  deleteTask: (id: string) => Promise<void>;
+  selectedTask: Task;
+  onChange: (task: Task) => Promise<void>;
+  onConfirmDeletetion: ((e?: React.MouseEvent<HTMLElement>) => void) | undefined;
 }
 
-export const useSettings = ({ selectedTask, updateTask, deleteTask }: UseSettingsProps) => {
-  const navigate = useNavigate();
+export const useSettings = ({ selectedTask, onChange, onConfirmDeletetion }: UseSettingsProps) => {
   const { tags, updateCachedTag } = useTags();
 
   const priorityOptions: { label: string; value: string }[] = [];
@@ -29,10 +27,8 @@ export const useSettings = ({ selectedTask, updateTask, deleteTask }: UseSetting
       label: (
         <Popconfirm
           title="Are you sure you want to delete this task?"
-          onConfirm={async () => {
-            navigate("/panel/routine");
-            await deleteTask(selectedTask!.current!.id);
-          }}
+          onConfirm={onConfirmDeletetion}
+
           okText="Yes"
           cancelText="No"
         >
@@ -49,7 +45,7 @@ export const useSettings = ({ selectedTask, updateTask, deleteTask }: UseSetting
   }
 
   for (const tag of tags) {
-    const containsTask = tag.taskIds.includes(selectedTask!.current!.id);
+    const containsTask = tag.taskIds.includes(selectedTask.id);
 
     const palette = generate(tag.color);
     const textColor = adjustColor(palette[7]);
@@ -60,19 +56,19 @@ export const useSettings = ({ selectedTask, updateTask, deleteTask }: UseSetting
         onClose={async (event) => {
           event.preventDefault();
           if (containsTask) {
-            const tagIndex = selectedTask!.current!.tagIds.indexOf(tag.id, 0);
+            const tagIndex = selectedTask.tagIds.indexOf(tag.id, 0);
             if (tagIndex != -1) {
-              selectedTask!.current!.tagIds.splice(tagIndex, 1);
+              selectedTask.tagIds.splice(tagIndex, 1);
 
-              const taskIndex = tag!.taskIds.indexOf(selectedTask!.current!.id, 0);
+              const taskIndex = tag!.taskIds.indexOf(selectedTask.id, 0);
               tag!.taskIds.splice(taskIndex, 1);
               updateCachedTag(tag);
-              await updateTask(selectedTask!.current!);
+              await onChange(selectedTask);
             }
           } else {
-            tag.taskIds.push(selectedTask!.current!.id);
-            selectedTask!.current!.tagIds.push(tag.id);
-            updateTask(selectedTask!.current!);
+            tag.taskIds.push(selectedTask.id);
+            selectedTask.tagIds.push(tag.id);
+            onChange(selectedTask);
             updateCachedTag(tag);
           }
 

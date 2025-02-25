@@ -1,14 +1,18 @@
 import { EditOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Flex, Typography, Popover, Descriptions, Button } from "antd";
 import clsx from "clsx";
-import { useDailyTasks } from "providers/daily-tasks";
-import { RoutineHeaderSkeleton, styles, useHeader } from ".";
+import { TaskHeaderSkeleton, styles, useHeader } from ".";
+import { Task } from "types/task";
 
-export const RoutineHeader = () => {
-  const { selectedTask, updateTask } = useDailyTasks();
+interface TaskHeaderProps {
+  selectedTask: Task | undefined;
+  onChange: (task: Task) => void;
+}
 
-  if (selectedTask!.current === undefined) {
-    return <RoutineHeaderSkeleton />;
+export const TaskHeader = ({selectedTask, onChange}: TaskHeaderProps) => {
+
+  if (selectedTask === undefined) {
+    return <TaskHeaderSkeleton />;
   }
 
   const { menuItems, handleOpenDetails } = useHeader({ selectedTask });
@@ -19,8 +23,8 @@ export const RoutineHeader = () => {
         level={2}
         editable={{
           onChange: (text) => {
-            selectedTask!.current!.title = text;
-            updateTask(selectedTask!.current!);
+            selectedTask.title = text;
+            onChange(selectedTask);
           },
           icon: <EditOutlined className={styles["header-edit-icon"]} />,
           triggerType: ["icon"],
@@ -28,7 +32,7 @@ export const RoutineHeader = () => {
         }}
         className={styles["header-title"]}
       >
-        {selectedTask!.current!.title}
+        {selectedTask.title}
       </Typography.Title>
       <Popover
         placement="bottomLeft"
