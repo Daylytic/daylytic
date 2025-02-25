@@ -1,23 +1,32 @@
 import { CalendarOutlined, EllipsisOutlined, FlagOutlined, TagsOutlined } from "@ant-design/icons";
 import { Button, Divider, Dropdown, Flex, Popover, Select, TimePicker } from "antd";
-import styles from "./routine.module.css";
-import { timeFormat } from "utils/utils";
-import { useDailyTasks } from "providers/daily-tasks";
+import {styles} from ".";
+import { timeFormat } from "utils/date";
 import dayjs from "dayjs";
-import { RoutineSettingsSkeleton, useSettings } from ".";
+import { TaskSettingsSkeleton, useSettings } from ".";
 import clsx from "clsx";
 import { TagCreator } from "components/common/tag";
+import { Task } from "types/task";
 
-export const RoutineSettings = () => {
-  const { selectedTask, updateTask, deleteTask } = useDailyTasks();
-  if (selectedTask!.current === undefined) {
-    return <RoutineSettingsSkeleton />;
+interface TaskSettingsProps {
+  selectedTask: Task | undefined;
+  onChange: (task: Task) => Promise<void>;
+  onConfirmDeletetion: ((e?: React.MouseEvent<HTMLElement>) => void) | undefined;
+}
+
+export const TaskSettings = ({
+  selectedTask,
+  onChange,
+  onConfirmDeletetion,
+}: TaskSettingsProps) => {
+  if (selectedTask === undefined) {
+    return <TaskSettingsSkeleton />;
   }
 
   const { tagOptions, selectedTagOptions, priorityOptions, menuItems } = useSettings({
     selectedTask,
-    updateTask,
-    deleteTask,
+    onChange,
+    onConfirmDeletetion,
   });
 
   return (
@@ -27,16 +36,12 @@ export const RoutineSettings = () => {
         variant="filled"
         prefix={<CalendarOutlined />}
         suffixIcon={<></>}
-        className={styles["button"]}
+        className={styles["settings-button"]}
         placeholder="Time"
-        defaultValue={
-          dayjs(selectedTask!.current!.deadline).isValid()
-            ? dayjs(selectedTask!.current!.deadline)
-            : null
-        }
+        defaultValue={dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null}
         onChange={(e) => {
-          selectedTask!.current!.deadline = e.toISOString();
-          updateTask(selectedTask!.current!);
+          selectedTask.deadline = e.toISOString();
+          onChange(selectedTask);
         }}
       ></TimePicker>
       <Popover
@@ -65,7 +70,7 @@ export const RoutineSettings = () => {
           icon={<TagsOutlined />}
           color="default"
           variant="filled"
-          className={clsx(styles["button"], styles["tag-button"])}
+          className={clsx(styles["settings-button"], styles["tags-button"])}
         >
           Tags
         </Button>
@@ -75,13 +80,13 @@ export const RoutineSettings = () => {
         prefix={<FlagOutlined />}
         suffixIcon={<></>}
         variant="filled"
-        className={styles["button"]}
+        className={styles["settings-button"]}
         options={priorityOptions}
         placeholder="Priority"
-        defaultValue={selectedTask!.current!.priority}
+        defaultValue={selectedTask.priority}
         onChange={(e) => {
-          selectedTask!.current!.priority = e;
-          updateTask(selectedTask!.current!);
+          selectedTask.priority = e;
+          onChange(selectedTask);
         }}
       />
 

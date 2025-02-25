@@ -1,6 +1,6 @@
 import { Flex, Skeleton } from "antd";
 
-export const RoutineEditorSkeleton = () => (
+export const TaskEditorSkeleton = () => (
   <Flex vertical gap={"small"}>
     <Skeleton.Button active block={true} />
     <Skeleton active />

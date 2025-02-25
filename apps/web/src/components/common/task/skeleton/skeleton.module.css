@@ -1,3 +1,7 @@
 .skeleton-centered :global(.ant-skeleton-header) {
-    padding-block-start: calc(var(--ant-margin-sm) / 2);
-  }
+  padding-block-start: calc(var(--ant-margin-sm) / 2);
+}
+
+.header {
+  margin-bottom: 1em; /* ant-typography default margin */
+}

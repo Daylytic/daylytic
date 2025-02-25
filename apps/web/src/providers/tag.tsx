@@ -4,6 +4,7 @@ import { Tag } from "types/task";
 
 interface TagContextType {
   tags: Tag[];
+  fetched: boolean;
   fetchTags: () => Promise<void>;
   updateCachedTag: (tag: Tag) => Promise<void>;
   createTag: (name: string, color: string) => Promise<void>;
@@ -13,6 +14,7 @@ const TagContext = React.createContext<TagContextType | undefined>(undefined);
 
 export const TagProvider = ({ token, children }) => {
   const [tags, setTags] = useState<Tag[]>([]);
+  const [fetched, setFetched] = useState<boolean>(false);
 
   const fetchTags = async () => {
     try {
@@ -20,6 +22,7 @@ export const TagProvider = ({ token, children }) => {
         params: { header: { authorization: `Bearer ${token}` } },
       });
       setTags(data ?? []);
+      setFetched(true);
     } catch (error) {
       console.error("Failed to fetch tags:", error);
     }
@@ -59,6 +62,7 @@ export const TagProvider = ({ token, children }) => {
   return (
     <TagContext.Provider
       value={{
+        fetched,
         fetchTags,
         createTag,
         updateCachedTag,

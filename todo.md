@@ -13,3 +13,6 @@
 - Email notifications
 - Work timer
 - Add tags instantly to the tasks you try to attach them
+- Make tags have the same margin as title of the task/content/card 
+- Make panel private
+- Rewrite user.tsx provider (replace fetch requests)

@@ -1,15 +1,15 @@
 import { DescriptionsProps } from "antd";
 import { useState } from "react";
 import { Task } from "types/task";
-import { formatDate } from "utils/utils";
+import { formatDate } from "utils/date";
 
 interface UseHeaderProps {
-    selectedTask: React.MutableRefObject<Task | undefined>;
+    selectedTask: Task;
 }
 
 export const useHeader = ({selectedTask}: UseHeaderProps) => {
 
-      // HACK: Prevents counting characters and words every time user types something.
+  // HACK: Prevents counting characters and words every time user types something.
   // Instead, we only perform calculations when user clicks on the buttons with popover.
   const [counts, setCounts] = useState<[number, number]>();
 
@@ -43,7 +43,7 @@ export const useHeader = ({selectedTask}: UseHeaderProps) => {
   };
 
   const handleOpenDetails = () => {
-    const rootNode = selectedTask!.current!.content!["root"];
+    const rootNode = selectedTask.content!["root"];
     const [totalWords, totalChars] = countCharactersAndWords(rootNode);
     setCounts([totalWords, totalChars]);
   };
@@ -62,12 +62,12 @@ export const useHeader = ({selectedTask}: UseHeaderProps) => {
     {
       key: "3",
       label: "Created",
-      children: formatDate(selectedTask!.current!.createdAt),
+      children: formatDate(selectedTask.createdAt),
     },
     {
       key: "4",
       label: "Updated",
-      children: formatDate(selectedTask!.current!.updatedAt),
+      children: formatDate(selectedTask.updatedAt),
     },
   ];
 

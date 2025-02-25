@@ -7,9 +7,10 @@ import Sider from "antd/es/layout/Sider";
 import { TaskHeader, TaskSettings, TaskEditor } from "components/common/task";
 import { Routes } from "utils/routes";
 
-export const Routine = () => {
+export const Tag = () => {
   const { taskId } = useParams();
 
+  //TODO: In the future fetch all of the tags.
   const { tasks, selectedTask, fetched, updateTask, deleteTask } = useDailyTasks();
   const navigate = useNavigate();
 
@@ -20,8 +21,8 @@ export const Routine = () => {
 
       // If tasks fetched, and selectedTask is not selected, navigate back to /panel/routine
       if (fetched && !task) {
-        message.error("This task does not exist");
-        navigate(Routes.PANEL_ROUTINE);
+        message.error("This tag does not exist");
+        navigate(Routes.PANEL_DASHBOARD);
       }
     }
   });
@@ -35,8 +36,8 @@ export const Routine = () => {
           onChange={updateTask}
           onConfirmDeletetion={async () => {
             await deleteTask(selectedTask!.current!.id);
-            navigate(Routes.PANEL_ROUTINE);
-            message.success("Task deleted successfully");
+            navigate(Routes.PANEL_DASHBOARD);
+            message.success("Tag deleted successfully");
           }}
         />
         <TaskEditor selectedTask={selectedTask!.current} onChange={updateTask} />
