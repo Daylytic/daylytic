@@ -14,7 +14,7 @@ export interface Task {
   taskType: "ROUTINE" | "TODOLIST";
   priority: Priority;
   title: string;
-  content: string | number | boolean | unknown[] | { [key: string]: unknown; } | null;
+  content: string | number | boolean | unknown[] | { [key: string]: unknown } | null;
   isCompleted: boolean;
   createdAt: string;
   updatedAt: string;
