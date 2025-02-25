@@ -1,10 +1,7 @@
 import { DateTime } from "luxon";
 
-export function timeout(delay: number) {
-  return new Promise((res) => setTimeout(res, delay));
-}
-
 export const timeFormat = 'HH:mm';
+
 const getOrdinalSuffix = (day: number): string => {
   if (day > 3 && day < 21) return 'th'; 
   switch (day % 10) {
