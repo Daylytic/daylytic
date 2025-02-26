@@ -1,0 +1,30 @@
+#content {
+    background: var(--ant-color-white);
+    border-radius: var(--ant-border-radius-lg);
+    padding: var(--ant-padding-md);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    overflow-x: hidden
+}
+
+.projects-list {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: end;
+    overflow: scroll;
+    transform: rotateX(180deg);
+}
+
+.invert {
+    transform: rotateX(180deg);
+}
+
+.card {
+    width: 300px;
+    /* transform: rotateX(180deg); */
+}

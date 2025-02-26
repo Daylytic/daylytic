@@ -1,11 +1,11 @@
 import { ConfigProvider } from "antd";
 import { Routes, Route, BrowserRouter } from "react-router";
 import { ScrollToHash } from "components/common/scroll-to-hash";
-import { Home } from "pages/home";
 import { Routine as RoutineAction } from "components/panel/action/routine";
 import { Tag as TagAction } from "components/panel/action/tag";
-import { LayoutRoutine, LayoutTag, LayoutPanel } from "components/layout";
+import { LayoutRoutine, LayoutTag, LayoutPanel, LayoutHome } from "components/layout";
 import { config } from "config";
+import { LayoutGoal } from "components/layout/layout-goal";
 
 export const App = () => (
   <ConfigProvider theme={config}>
@@ -14,6 +14,9 @@ export const App = () => (
       <Routes>
         <Route index element={<LayoutHome />} />
         <Route path="/panel/*" element={<LayoutPanel />}>
+          <Route path="dashboard" element={<LayoutGoal />}>
+            <Route path=":goalId" element={<></>} />
+          </Route>
           <Route path="routine" element={<LayoutRoutine />}>
             <Route path=":taskId" element={<RoutineAction />} />
           </Route>
