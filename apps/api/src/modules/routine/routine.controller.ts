@@ -36,8 +36,9 @@ const getDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
 
 const updateDailyTasks = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
+    const userId = req.user!.id;
     const tasks = req.body as UpdateTasksInputSchema;
-    return await taskService.updateTasks(tasks);
+    return await taskService.updateTasks({userId, tasks});
   } catch (err: any) {
     handleControllerError(err, rep);
   }

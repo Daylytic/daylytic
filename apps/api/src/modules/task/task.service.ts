@@ -5,8 +5,7 @@ import {
   Task,
   DeleteTaskWithIdInputSchema,
   FetchTasksInputSchema,
-  UpdateTasksWithIdInputSchema,
-  UpdateTasksInputSchema,
+  UpdateTasksSchema,
 } from "./task.schema.js";
 import { convertToTimeZoneISO8601 } from "utils/date.js";
 import { tagService } from "modules/tag/index.js";
@@ -44,11 +43,11 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
   }
 };
 
-const updateTasks = async (data: UpdateTasksInputSchema) => {
+const updateTasks = async (data: UpdateTasksSchema) => {
   try {
     const updatedTasks: Task[] = [];
 
-    for(const dataRow of data) {
+    for(const dataRow of data.tasks) {
       const tagIds = dataRow.tagIds;
 
       const tags = await tagService.fetchTagsWithIds(tagIds);
@@ -58,6 +57,7 @@ const updateTasks = async (data: UpdateTasksInputSchema) => {
         await prisma.task.update({
           where: {
             id: dataRow.id,
+            userId: data.userId,
           },
           data: {
             ...dataRow,

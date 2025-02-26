@@ -58,6 +58,11 @@ export const routineHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["routine"],
       headers: $refAuth("HeaderBearerSchema"),
       body: $ref("DeleteTaskInputSchema"),
+      response: {
+        204: {
+          description: "Succesfully deleted daily task",
+        },
+      },
     },
   });
 
