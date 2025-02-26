@@ -102,6 +102,7 @@ const UpdateTasksInputSchema = z.array(
     createdAt: true,
   })
 );
+const UpdateTasksSchema = z.object({userId: IdSchema, tasks: UpdateTasksInputSchema});
 const UpdateTasksWithIdInputSchema = z.array(TaskSchema);
 const UpdateTasksResponseSchema = z.array(TaskSchema);
 
@@ -113,6 +114,7 @@ export type DeleteTaskWithIdInputSchema = z.infer<
   typeof DeleteTaskWithIdInputSchema
 >;
 export type UpdateTasksInputSchema = z.infer<typeof UpdateTasksInputSchema>;
+export type UpdateTasksSchema = z.infer<typeof UpdateTasksSchema>;
 export type UpdateTasksWithIdInputSchema = z.infer<
   typeof UpdateTasksWithIdInputSchema
 >;
