@@ -24,6 +24,7 @@ model User {
   sessions   Session[]
   routine    Task[]
   tags       Tag[]
+  goals      Goal[]
   analytics  Analytics?
 }
 
@@ -53,6 +54,8 @@ model Goal {
   title       String
   description String
   projects    Project[]
+  userId      String
+  user        User?     @relation(fields: [userId], references: [id])
 }
 
 model Project {
