@@ -6,8 +6,8 @@ interface TagSkeletonProps {
 
 export const TagsSkeleton = ({ tagCount }: TagSkeletonProps) => (
   <Flex gap="small">
-    {[...Array(tagCount)].map((x, i) => (
-      <Skeleton.Button size="small" active block={true} />
+    {[...Array(tagCount)].map((_, i) => (
+      <Skeleton.Button key={i} size="small" active block={true} />
     ))}
   </Flex>
 );
