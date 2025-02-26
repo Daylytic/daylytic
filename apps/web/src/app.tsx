@@ -12,7 +12,7 @@ export const App = () => (
     <BrowserRouter>
       <ScrollToHash />
       <Routes>
-        <Route index element={<Home />} />
+        <Route index element={<LayoutHome />} />
         <Route path="/panel/*" element={<LayoutPanel />}>
           <Route path="routine" element={<LayoutRoutine />}>
             <Route path=":taskId" element={<RoutineAction />} />
