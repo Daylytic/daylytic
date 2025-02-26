@@ -19,6 +19,7 @@ export const Tags = () => {
         {fetched ? (
           tags.map((item) => (
             <Tag
+              key={item.id}
               className="prevent-select"
               clickable
               onClick={() => navigate(getTagRoute(item.id))}

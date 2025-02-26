@@ -13,11 +13,10 @@ export const TagList = () => {
   const { tags } = useTags();
 
   const selectedTag = tags.find((tag) => tag.id === tagId);
-  if (!selectedTag) {
-    return <></>;
-  }
 
-  const tasksByTag = tasks.filter((task) => task.tagIds.includes(selectedTag.id));
+  const tasksByTag = selectedTag
+    ? tasks.filter((task) => task.tagIds.includes(selectedTag.id))
+    : [];
 
   return (
     <TaskList

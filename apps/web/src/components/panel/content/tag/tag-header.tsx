@@ -11,15 +11,11 @@ export const TagHeader = () => {
   const { tags, fetched } = useTags();
 
   const selectedTag = tags.find((tag) => tag.id === tagId);
-
-  if (!selectedTag) {
-    return <></>;
-  }
-
+  
   return (
-    <Flex align="center" gap="small" className={styles.header}>
-      <Title level={1}>Tag</Title>
-      {fetched ? <Tag tag={selectedTag} /> : <TagsSkeleton tagCount={1} />}
+    <Flex align="center" gap="small" className={"ant-typography"}>
+      <Title level={1} className={styles.title}>Tag</Title>
+      {fetched ? <Tag tag={selectedTag!} /> : <TagsSkeleton tagCount={1} />}
     </Flex>
   );
 };
