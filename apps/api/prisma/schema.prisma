@@ -60,6 +60,7 @@ model Goal {
 
 model Project {
   id     String @id @default(cuid())
+  title  String
   goalId String
   goal   Goal   @relation(fields: [goalId], references: [id])
   tasks  Task[]
