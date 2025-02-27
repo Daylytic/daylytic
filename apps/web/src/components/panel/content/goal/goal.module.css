@@ -8,23 +8,26 @@
     flex-direction: column;
     flex: 1;
 
-    overflow-x: hidden
+    overflow: hidden;
 }
 
 .projects-list {
     display: flex;
     width: 100%;
     height: 100%;
-    align-items: end;
+    align-items: start;
+    /* Change to end if inverted*/
     overflow: scroll;
-    transform: rotateX(180deg);
+    /* transform: rotateX(180deg); */
 }
 
+/* Keep scrollbar at the bottom or not? */
 .invert {
-    transform: rotateX(180deg);
+    /* transform: rotateX(180deg); */
 }
 
 .card {
     width: 300px;
+    height: min-content;
     /* transform: rotateX(180deg); */
 }
