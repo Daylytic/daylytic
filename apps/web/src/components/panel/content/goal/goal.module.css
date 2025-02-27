@@ -28,5 +28,6 @@
 
 .card {
     width: 300px;
+    height: min-content;
     /* transform: rotateX(180deg); */
 }
