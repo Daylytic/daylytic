@@ -1,13 +1,16 @@
 import Fastify from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
-import postgres from "@fastify/postgres"; // Use import instead of requird
-import { authHandler } from "./src/modules/auth/index.js"; // Ensure the extension is included
+import { authHandler } from "./src/modules/auth/index.js";
 import { Session, User, userSchemas } from "./src/modules/auth/auth.schema.js";
 
 import { routineHandler } from "./src/modules/routine/routine.routes.js";
 import { taskSchemas } from "./src/modules/task/index.js";
 import { tagHandler, tagSchemas } from "modules/tag/index.js";
+import { goalHandler } from "modules/goal/goal.routes.js";
+import { projectHandler } from "modules/project/project.routes.js";
+import { goalSchemas } from "modules/goal/goal.schema.js";
+import { projectSchemas } from "modules/project/project.schema.js";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -19,7 +22,7 @@ declare module "fastify" {
 const server = Fastify({ logger: true });
 
 const main = async () => {
-  for (const schema of [...userSchemas, ...taskSchemas, ...tagSchemas]) {
+  for (const schema of [...userSchemas, ...taskSchemas, ...tagSchemas, ...goalSchemas, ...projectSchemas]) {
     server.addSchema(schema);
   }
 
@@ -94,8 +97,11 @@ const main = async () => {
   });
 
   server.register(authHandler, { prefix: "/oauth2" });
-  server.register(routineHandler, { prefix: "/routine" });
-  server.register(tagHandler, { prefix: "/tag" });
+  server.register(routineHandler, { prefix: "/user/routine" });
+  server.register(goalHandler, {prefix: "/user/goal"});
+  server.register(projectHandler, {prefix: "/user/goal/:id/project"});
+  server.register(tagHandler, { prefix: "/user/tag" });
+
   try {
     await server.listen({ port: 8084 });
     console.log(`Server listening at https://localhost:8084`);
