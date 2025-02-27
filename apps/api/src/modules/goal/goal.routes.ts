@@ -51,6 +51,7 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
       description: "Delete a specific goal",
       tags: ["goal"],
       headers: $refAuth("HeaderBearerSchema"),
+      params: $ref("DeleteGoalInputSchema"),
       204: {
         description: "Succesfully deleted goal",
       },
