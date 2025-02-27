@@ -5,7 +5,7 @@ import { $ref as $refAuth } from "modules/auth/auth.schema.js";
 import { authController } from "modules/auth/auth.controller.js";
 
 export const goalHandler: FastifyPluginAsync = async (server, _) => {
-  // Create Goal
+  // Create goal POST /user/goal
   server.route({
     url: "/",
     method: "POST",
@@ -22,7 +22,7 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Fetch
+  // Fetch all goals GET /user/goal
   server.route({
     url: "/",
     method: "GET",
@@ -33,28 +33,32 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["goal"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
-        201: $ref("GoalSchema"),
+        200: {
+          type: "array",
+          items: $ref("GoalSchema"),
+        },
       },
     },
   });
 
-  // Delete
+  // Delete specific goal DELETE /user/goal/:id
   server.route({
     url: "/",
     method: "DELETE",
     preHandler: [authController.authenticate],
     handler: goalController.fetchGoals,
     schema: {
-      description: "Delete goal",
+      description: "Delete a specific goal",
       tags: ["goal"],
       headers: $refAuth("HeaderBearerSchema"),
+      params: $ref("DeleteGoalInputSchema"),
       204: {
         description: "Succesfully deleted goal",
       },
     },
   });
 
-  // UPDATE
+  // Update specific project PUT /user/goal
   server.route({
     url: "/",
     method: "PUT",
