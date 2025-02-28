@@ -58,7 +58,7 @@ export const TaskSchema = z.object({
   createdAt: z.date().default(new Date()),
   updatedAt: z.date(),
   deadline: z.date().nullable(),
-  // todoListId: IdSchema.nullable(),
+  projectId: IdSchema.nullable(),
   userId: IdSchema.nullable(),
   tagIds: z.array(IdSchema), // References to tag IDs
 });
@@ -66,14 +66,14 @@ export const TaskSchema = z.object({
 // Create Task Schemas
 const CreateTaskInputSchema = TaskSchema.pick({ title: true, taskType: true });
 const CreateTaskWithIdSchema = CreateTaskInputSchema.extend({
-  userId: IdSchema.nullable(),
-  // todoListId: IdSchema.optional(),
+  userId: IdSchema.optional(),
+  projectId: IdSchema.optional(),
 });
 
 // Fetch Tasks Schema
 const FetchTasksInputSchema = z.object({
-  userId: IdSchema.nullable(),
-  // todoListId: IdSchema.optional(),
+  userId: IdSchema.optional(),
+  projectId: IdSchema.optional(),
 });
 const FetchTasksResponseSchema = z.array(TaskSchema);
 
@@ -82,9 +82,10 @@ const DeleteTaskInputSchema = z.object({
   id: IdSchema,
 });
 const DeleteTaskWithIdInputSchema = DeleteTaskInputSchema.extend({
-  userId: IdSchema.nullable(),
-  // todoListId: IdSchema.optional(),
+  userId: IdSchema.optional(),
+  projectId: IdSchema.optional(),
 });
+const DeleteTaskParamsInputSchema = TaskSchema.pick({id: true});
 
 // Reset Task Schema
 const ResetTaskInputSchema = z.object({
@@ -99,7 +100,11 @@ const UpdateTasksInputSchema = z.array(
     createdAt: true,
   })
 );
-const UpdateTasksSchema = z.object({userId: IdSchema, tasks: UpdateTasksInputSchema});
+const UpdateTasksSchema = z.object({
+  userId: IdSchema.optional(),
+  projectId: IdSchema.optional(),
+  tasks: UpdateTasksInputSchema,
+});
 const UpdateTasksWithIdInputSchema = z.array(TaskSchema);
 const UpdateTasksResponseSchema = z.array(TaskSchema);
 
@@ -110,6 +115,7 @@ export type DeleteTaskInputSchema = z.infer<typeof DeleteTaskInputSchema>;
 export type DeleteTaskWithIdInputSchema = z.infer<
   typeof DeleteTaskWithIdInputSchema
 >;
+export type DeleteTaskParamsInputSchema = z.infer<typeof DeleteTaskParamsInputSchema>;
 export type UpdateTasksInputSchema = z.infer<typeof UpdateTasksInputSchema>;
 export type UpdateTasksSchema = z.infer<typeof UpdateTasksSchema>;
 export type UpdateTasksWithIdInputSchema = z.infer<
