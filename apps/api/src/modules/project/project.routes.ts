@@ -5,11 +5,14 @@ import { $ref as $refAuth } from "modules/auth/auth.schema.js";
 import { authController } from "modules/auth/auth.controller.js";
 
 export const projectHandler: FastifyPluginAsync = async (server, _) => {
-  // Create project POST /user/goal/:id/project
+  // Create project POST /user/goal/:goalId/project
   server.route({
     url: "/",
     method: "POST",
-    preHandler: [authController.authenticate],
+    preHandler: [
+      authController.authenticate,
+      projectController.authenticateGoal,
+    ],
     handler: projectController.createProject,
     schema: {
       description: "Create project",
@@ -26,7 +29,7 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
     method: "GET",
-    preHandler: [authController.authenticate],
+    preHandler: [authController.authenticate, projectController.authenticateGoal],
     handler: projectController.fetchProjects,
     schema: {
       description: "Fetch projects",
@@ -45,13 +48,13 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
     method: "DELETE",
-    preHandler: [authController.authenticate],
-    handler: projectController.fetchProjects,
+    preHandler: [authController.authenticate, projectController.authenticateGoal],
+    handler: projectController.deleteProject,
     schema: {
       description: "Delete a specific project",
       tags: ["project"],
       headers: $refAuth("HeaderBearerSchema"),
-      params: $ref("DeleteProjectInputSchema"),
+      params: $ref("DeleteProjectParamsInputSchema"),
       204: {
         description: "Succesfully deleted project",
       },
@@ -62,7 +65,7 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
     method: "PUT",
-    preHandler: [authController.authenticate],
+    preHandler: [authController.authenticate, projectController.authenticateGoal],
     handler: projectController.updateProject,
     schema: {
       description: "Update project",
