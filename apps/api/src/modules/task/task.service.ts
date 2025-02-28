@@ -27,7 +27,7 @@ const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   }
 };
 
-const getTasks = async (data: FetchTasksInputSchema): Promise<Task[]> => {
+const fetchTasks = async (data: FetchTasksInputSchema): Promise<Task[]> => {
   return await prisma.task.findMany({
     where: data,
   });
@@ -45,6 +45,10 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
 
 const updateTasks = async (data: UpdateTasksSchema) => {
   try {
+    if(!data.userId && !data.projectId) {
+      throw new RequestError("Neither userId nor projectId were provided", 400, null);
+    }
+
     const updatedTasks: Task[] = [];
 
     for(const dataRow of data.tasks) {
@@ -58,6 +62,7 @@ const updateTasks = async (data: UpdateTasksSchema) => {
           where: {
             id: dataRow.id,
             userId: data.userId,
+            projectId: data.projectId,
           },
           data: {
             ...dataRow,
@@ -75,7 +80,7 @@ const updateTasks = async (data: UpdateTasksSchema) => {
 
 export const taskService = {
   createTask,
-  getTasks,
+  fetchTasks,
   deleteTask,
   updateTasks,
 };

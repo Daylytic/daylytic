@@ -11,6 +11,7 @@ import { goalHandler } from "modules/goal/goal.routes.js";
 import { projectHandler } from "modules/project/project.routes.js";
 import { goalSchemas } from "modules/goal/goal.schema.js";
 import { projectSchemas } from "modules/project/project.schema.js";
+import { taskHandler } from "modules/task/task.routes.js";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -22,7 +23,13 @@ declare module "fastify" {
 const server = Fastify({ logger: true });
 
 const main = async () => {
-  for (const schema of [...userSchemas, ...taskSchemas, ...tagSchemas, ...goalSchemas, ...projectSchemas]) {
+  for (const schema of [
+    ...userSchemas,
+    ...taskSchemas,
+    ...tagSchemas,
+    ...goalSchemas,
+    ...projectSchemas,
+  ]) {
     server.addSchema(schema);
   }
 
@@ -98,8 +105,11 @@ const main = async () => {
 
   server.register(authHandler, { prefix: "/oauth2" });
   server.register(routineHandler, { prefix: "/user/routine" });
-  server.register(goalHandler, {prefix: "/user/goal"});
-  server.register(projectHandler, {prefix: "/user/goal/:id/project"});
+  server.register(goalHandler, { prefix: "/user/goal" });
+  server.register(projectHandler, { prefix: "/user/goal/:goalId/project" });
+  server.register(taskHandler, {
+    prefix: "/user/goal/:goalId/project/:projectId/task",
+  });
   server.register(tagHandler, { prefix: "/user/tag" });
 
   try {

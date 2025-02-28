@@ -1,6 +1,7 @@
 import { prisma } from "utils/prisma.js";
 import {
   CreateProjectSchema,
+  DeleteProjectParamsInputSchema,
   DeleteProjectSchema,
   FetchProjectsSchema,
   ProjectSchema,
@@ -29,7 +30,10 @@ const fetchProjects = async (
 const deleteProject = async (data: DeleteProjectSchema) => {
   try {
     return await prisma.project.delete({
-      where: data,
+      where: {
+        id: data.projectId,
+        goalId: data.goalId,
+      },
     });
   } catch (err) {
     throw new RequestError("The task with given ID does not exist", 404, err);
