@@ -8,11 +8,8 @@ import { buildJsonSchemas } from "fastify-zod";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
-
-export const TaskType = z.enum(TaskTypes as any);
-export const Priority = z
-  .enum(Priorities as any)
-  .nullable();
+export const TaskType = z.enum(TaskTypes);
+export const Priority = z.enum(Priorities as any).nullable();
 
 export const TitleSchema = z
   .string()
