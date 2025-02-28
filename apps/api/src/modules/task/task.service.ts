@@ -45,6 +45,10 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
 
 const updateTasks = async (data: UpdateTasksSchema) => {
   try {
+    if(!data.userId && !data.projectId) {
+      throw new RequestError("Neither userId nor projectId were provided", 400, null);
+    }
+
     const updatedTasks: Task[] = [];
 
     for(const dataRow of data.tasks) {
@@ -58,6 +62,7 @@ const updateTasks = async (data: UpdateTasksSchema) => {
           where: {
             id: dataRow.id,
             userId: data.userId,
+            projectId: data.projectId,
           },
           data: {
             ...dataRow,
