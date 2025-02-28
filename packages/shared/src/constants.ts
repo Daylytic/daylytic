@@ -22,5 +22,5 @@ export const goals = {
     MIN_GOAL_DESCRIPTION_LENGTH,
 }
 
-export const TaskTypes = ["ROUTINE", "TODOLIST"];
+export const TaskTypes = ["ROUTINE", "PROJECT"] as const;
 export const Priorities = ["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"];
