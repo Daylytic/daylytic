@@ -1,5 +1,5 @@
 import { prisma } from "utils/prisma.js";
-import { CreateGoalSchema, DeleteGoalSchema, FetchGoalsSchema, GoalSchema, UpdateGoalSchema } from "./goal.schema.js";
+import { CreateGoalSchema, DeleteGoalSchema, FetchGoalsSchema, FetchGoalWithIdSchema, GoalSchema, UpdateGoalSchema } from "./goal.schema.js";
 import { RequestError } from "utils/error.js";
 
 const createGoal = async (data: CreateGoalSchema) => {
@@ -11,6 +11,12 @@ const createGoal = async (data: CreateGoalSchema) => {
     throw new RequestError("Problem occured while creating goal", 500, err);
   }
 };
+
+const fetchGoalWithId = async(data: FetchGoalWithIdSchema) => {
+  return await prisma.goal.findFirst({
+    where: data,
+  });
+}
 
 const fetchGoals = async (data: FetchGoalsSchema): Promise<GoalSchema[]> => {
   return await prisma.goal.findMany({
@@ -45,6 +51,7 @@ const updateGoal = async (data: UpdateGoalSchema) => {
 export const goalService = {
   createGoal,
   fetchGoals,
+  fetchGoalWithId,
   deleteGoal,
   updateGoal,
 };
