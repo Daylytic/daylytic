@@ -40,7 +40,7 @@ const deleteGoal = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const userId = req.user!.id;
     const { id } = req.params as DeleteGoalInputSchema;
-    return await goalService.deleteGoal({ userId, id });
+    await goalService.deleteGoal({ userId, id });
   } catch (err) {
     handleControllerError(err, rep);
   }
