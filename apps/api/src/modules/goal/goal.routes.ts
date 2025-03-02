@@ -51,18 +51,20 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
 
   // Delete specific goal DELETE /user/goal/:id
   server.route({
-    url: "/",
+    url: "/:goalId",
     method: "DELETE",
     preHandler: [authController.authenticate],
-    handler: goalController.fetchGoals,
+    handler: goalController.deleteGoal,
     schema: {
       description: "Delete a specific goal",
       tags: ["goal"],
       headers: $refAuth("HeaderBearerSchema"),
       params: $ref("DeleteGoalInputSchema"),
-      204: {
-        description: "Succesfully deleted goal",
-      },
+      response: {
+        204: {
+          description: "Succesfully deleted goal",
+        },
+      }
     },
   });
 
