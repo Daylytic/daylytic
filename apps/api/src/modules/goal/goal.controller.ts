@@ -49,13 +49,13 @@ const deleteGoal = async (req: FastifyRequest, rep: FastifyReply) => {
 const updateGoal = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const userId = req.user!.id;
-    const task = req.body as GoalSchema;
+    const goal = req.body as GoalSchema;
 
-    if (task.userId !== userId) {
+    if (goal.userId !== userId) {
       throw new RequestError("You do not have access to this goal.", 403, null);
     }
 
-    return await goalService.updateGoal(task);
+    return await goalService.updateGoal(goal);
   } catch (err) {
     handleControllerError(err, rep);
   }
@@ -64,6 +64,7 @@ const updateGoal = async (req: FastifyRequest, rep: FastifyReply) => {
 export const goalController = {
   createGoal,
   fetchGoals,
+  fetchAll,
   deleteGoal,
   updateGoal,
 };
