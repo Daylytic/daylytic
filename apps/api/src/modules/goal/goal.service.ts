@@ -12,10 +12,14 @@ const createGoal = async (data: CreateGoalSchema) => {
   }
 };
 
-const fetchGoalWithId = async(data: FetchGoalWithIdSchema) => {
-  return await prisma.goal.findFirst({
-    where: data,
-  });
+const fetchGoalWithId = async (data: FetchGoalWithIdSchema) => {
+  try {
+    return await prisma.goal.findUniqueOrThrow({
+      where: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching goals with ID", 500, err);
+  }
 }
 
 const fetchGoals = async (data: FetchGoalsSchema): Promise<GoalSchema[]> => {
