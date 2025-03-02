@@ -26,6 +26,16 @@ const fetchGoals = async (req: FastifyRequest, rep: FastifyReply) => {
   }
 };
 
+const fetchAll = async (req: FastifyRequest, rep: FastifyReply) => {
+  try {
+    const userId = req.user!.id;
+    return await goalService.fetchAll({ userId });
+  } catch (err) {
+    handleControllerError(err, rep);
+  }
+};
+
+
 const deleteGoal = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const userId = req.user!.id;

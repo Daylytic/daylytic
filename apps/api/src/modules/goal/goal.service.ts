@@ -19,9 +19,22 @@ const fetchGoalWithId = async(data: FetchGoalWithIdSchema) => {
 }
 
 const fetchGoals = async (data: FetchGoalsSchema): Promise<GoalSchema[]> => {
-  return await prisma.goal.findMany({
-    where: data,
-  });
+
+const fetchAll = async (data: FetchGoalsSchema): Promise<GoalSchema[]> => {
+  try {
+    return await prisma.goal.findMany({
+      where: data,
+      include: {
+        projects: {
+          include: {
+            tasks: true,
+          }
+        },
+      }
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching goals", 500, err);
+  }
 };
 
 const deleteGoal = async (data: DeleteGoalSchema) => {
@@ -51,6 +64,7 @@ const updateGoal = async (data: UpdateGoalSchema) => {
 export const goalService = {
   createGoal,
   fetchGoals,
+  fetchAll,
   fetchGoalWithId,
   deleteGoal,
   updateGoal,
