@@ -68,17 +68,17 @@ const deleteGoal = async (data: DeleteGoalSchema) => {
 }
 
 const updateGoal = async (data: UpdateGoalSchema) => {
-    try {
-        return await prisma.goal.update({
-            where: {
-                id: data.id,
-                userId: data.userId,
-            },
-            data: data
-        });
-    } catch(err) {
-        throw new RequestError("Could not update task", 500, err);
-    }
+  try {
+    return await prisma.goal.update({
+      where: {
+        id: data.id,
+        userId: data.userId,
+      },
+      data: data
+    });
+  } catch (err) {
+    throw new RequestError("Could not update task", 500, err);
+  }
 }
 
 export const goalService = {
