@@ -23,6 +23,14 @@ const fetchGoalWithId = async (data: FetchGoalWithIdSchema) => {
 }
 
 const fetchGoals = async (data: FetchGoalsSchema): Promise<GoalSchema[]> => {
+  try {
+    return await prisma.goal.findMany({
+      where: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching goals", 500, err);
+  }
+};
 
 const fetchAll = async (data: FetchGoalsSchema): Promise<GoalSchema[]> => {
   try {
