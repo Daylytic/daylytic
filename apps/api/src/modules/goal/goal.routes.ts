@@ -5,7 +5,7 @@ import { $ref as $refAuth } from "modules/auth/auth.schema.js";
 import { authController } from "modules/auth/auth.controller.js";
 
 export const goalHandler: FastifyPluginAsync = async (server, _) => {
-  // Create goal POST /user/goal
+  // Create goal POST /goal
   server.route({
     url: "/",
     method: "POST",
@@ -22,7 +22,7 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Fetch all goals GET /user/goal
+  // Fetch all goals GET /goal
   server.route({
     url: "/",
     method: "GET",
@@ -53,7 +53,7 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Delete specific goal DELETE /user/goal/:id
+  // Delete specific goal DELETE /goal/:id
   server.route({
     url: "/:goalId",
     method: "DELETE",
@@ -72,7 +72,7 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Update specific project PUT /user/goal
+  // Update specific project PUT /goal
   server.route({
     url: "/",
     method: "PUT",
