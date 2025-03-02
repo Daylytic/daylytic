@@ -50,13 +50,21 @@ const fetchAll = async (data: FetchGoalsSchema): Promise<GoalSchema[]> => {
 };
 
 const deleteGoal = async (data: DeleteGoalSchema) => {
-    try {
-        return await prisma.goal.delete({
-            where: data
-        });
-    }catch (err) {
-        throw new RequestError("The task with given ID does not exist", 404, err);
-    }
+  try {
+    await prisma.task.deleteMany({
+      where: { projectId: data.id }
+    });
+
+    await prisma.project.deleteMany({
+      where: { goalId: data.id }
+    });
+
+    return await prisma.goal.delete({
+      where: data
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while deleting goal", 404, err);
+  }
 }
 
 const updateGoal = async (data: UpdateGoalSchema) => {
