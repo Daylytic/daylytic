@@ -4,7 +4,7 @@ import { RequestError } from "utils/error.js";
 
 const createGoal = async (data: CreateGoalSchema) => {
   try {
-    await prisma.goal.create({
+    return await prisma.goal.create({
       data: data,
     });
   } catch (err) {
