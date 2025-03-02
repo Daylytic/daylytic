@@ -33,6 +33,10 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["goal"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
+        201: $ref("FetchGoalsResponseSchema"),
+      },
+    },
+  });
 
   server.route({
     url: "/all",
