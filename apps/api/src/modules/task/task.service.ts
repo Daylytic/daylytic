@@ -13,7 +13,7 @@ import { tagService } from "modules/tag/index.js";
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   try {
     const maxPosition = await prisma.task.aggregate({
-      where: { userId: data.userId },
+      where: { userId: data.userId, projectId: data.projectId, taskType: data.taskType },
       _max: { position: true },
     });
 
