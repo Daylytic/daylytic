@@ -1,9 +1,10 @@
 import { prisma } from "utils/prisma.js";
 import {
   CreateProjectSchema,
-  DeleteProjectParamsInputSchema,
   DeleteProjectSchema,
   FetchProjectsSchema,
+  FetchProjectWithIdAndGoalIdSchema,
+  FetchProjectWithIdSchema,
   ProjectSchema,
   UpdateProjectSchema,
 } from "./project.schema.js";
@@ -68,7 +69,7 @@ const deleteProject = async (data: DeleteProjectSchema) => {
       },
     });
   } catch (err) {
-    throw new RequestError("The task with given ID does not exist", 404, err);
+    throw new RequestError("The project with given ID does not exist", 404, err);
   }
 };
 
@@ -82,13 +83,15 @@ const updateProject = async (data: UpdateProjectSchema) => {
       data: data,
     });
   } catch (err) {
-    throw new RequestError("Could not update task", 500, err);
+    throw new RequestError("Could not update project", 500, err);
   }
 };
 
 export const projectService = {
   createProject,
   fetchProjects,
+  fetchProjectWithIdAndGoalId,
+  fetchProjectWithId,
   deleteProject,
   updateProject,
 };
