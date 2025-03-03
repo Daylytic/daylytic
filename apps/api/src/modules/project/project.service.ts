@@ -35,6 +35,26 @@ const fetchProjects = async (
   }
 };
 
+const fetchProjectWithIdAndGoalId = async (data: FetchProjectWithIdAndGoalIdSchema) => {
+  try {
+    return await prisma.project.findUniqueOrThrow({
+      where: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching goals with ID", 500, err);
+  }
+}
+
+const fetchProjectWithId = async (data: FetchProjectWithIdSchema) => {
+  try {
+    return await prisma.project.findUniqueOrThrow({
+      where: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching goals with ID", 500, err);
+  }
+}
+
 const deleteProject = async (data: DeleteProjectSchema) => {
   try {
     return await prisma.project.delete({
