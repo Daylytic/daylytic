@@ -57,6 +57,10 @@ const fetchProjectWithId = async (data: FetchProjectWithIdSchema) => {
 
 const deleteProject = async (data: DeleteProjectSchema) => {
   try {
+    await prisma.task.deleteMany({
+      where: { projectId: data.projectId }
+    });
+
     return await prisma.project.delete({
       where: {
         id: data.projectId,
