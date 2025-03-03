@@ -46,7 +46,7 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
 
   // Delete specific project DELETE /goal/:id/project/:id
   server.route({
-    url: "/",
+    url: "/:projectId",
     method: "DELETE",
     preHandler: [authController.authenticate, projectController.authenticateGoal],
     handler: projectController.deleteProject,
@@ -55,9 +55,11 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["project"],
       headers: $refAuth("HeaderBearerSchema"),
       params: $ref("DeleteProjectParamsInputSchema"),
-      204: {
-        description: "Succesfully deleted project",
-      },
+      response: {
+        204: {
+          description: "Succesfully deleted project",
+        },
+      }
     },
   });
 
