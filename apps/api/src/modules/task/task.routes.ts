@@ -41,10 +41,41 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["project"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
-        200: {
-          type: "array",
-          items: $ref("TaskSchema"),
+
+  // Delete specific task DELETE /goal/:id/project/:projectId/task/:taskId
+  server.route({
+    url: "/:taskId",
+    method: "DELETE",
+    preHandler: [authController.authenticate, projectController.authenticateGoal,
+    taskController.authenticateProject],
+    handler: taskController.deleteTask,
+    schema: {
+      description: "Delete a specific project",
+      tags: ["project"],
+      headers: $refAuth("HeaderBearerSchema"),
+      params: $ref("DeleteTaskParamsInputSchema"),
+      response: {
+        204: {
+          description: "Succesfully deleted project",
         },
+      }
+    },
+  });
+
+  // Update specific task PUT /goal/:id/project/:projectId/task
+  server.route({
+    url: "/",
+    method: "PUT",
+    preHandler: [authController.authenticate, projectController.authenticateGoal,
+    taskController.authenticateProject],
+    handler: taskController.updateTask,
+    schema: {
+      description: "Update project",
+      tags: ["project"],
+      headers: $refAuth("HeaderBearerSchema"),
+      body: $ref("UpdateTasksInputSchema"),
+      response: {
+        201: $ref("TaskSchema"),
       },
     },
   });
