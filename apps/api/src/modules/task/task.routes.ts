@@ -33,6 +33,7 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
     method: "GET",
     preHandler: [
       authController.authenticate,
+      projectController.authenticateGoal,
       taskController.authenticateProject,
     ],
     handler: taskController.fetchTasks,
