@@ -1,15 +1,13 @@
 import {
-  Priorities,
   TASK_TITLE_MAX_LENGTH,
   TASK_TITLE_MIN_LENGTH,
-  TaskTypes,
 } from "@daylytic/shared/constants";
 import { buildJsonSchemas } from "fastify-zod";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
-export const TaskType = z.enum(TaskTypes);
-export const Priority = z.enum(Priorities as any).nullable();
+export const TaskType = z.enum(["ROUTINE", "PROJECT"]);
+export const Priority = z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"]).nullable();
 
 export const TitleSchema = z
   .string()
@@ -65,6 +63,7 @@ export const TaskSchema = z.object({
 
 // Create Task Schemas
 const CreateTaskInputSchema = TaskSchema.pick({ title: true, taskType: true });
+const CreateProjectTaskInputSchema = TaskSchema.pick({ title: true });
 const CreateTaskWithIdSchema = CreateTaskInputSchema.extend({
   userId: IdSchema.optional(),
   projectId: IdSchema.optional(),
@@ -85,7 +84,7 @@ const DeleteTaskWithIdInputSchema = DeleteTaskInputSchema.extend({
   userId: IdSchema.optional(),
   projectId: IdSchema.optional(),
 });
-const DeleteTaskParamsInputSchema = TaskSchema.pick({id: true});
+const DeleteTaskParamsInputSchema = z.object({ goalId: IdSchema, projectId: IdSchema, taskId: IdSchema });
 
 // Reset Task Schema
 const ResetTaskInputSchema = z.object({
@@ -95,21 +94,25 @@ const ResetTaskInputSchema = z.object({
 // Update Tasks Schema
 const UpdateTasksInputSchema = z.array(
   TaskSchema.omit({
-    userId: true,
-    /*todoListId: true,*/ updatedAt: true,
+    updatedAt: true,
     createdAt: true,
   })
 );
 const UpdateTasksSchema = z.object({
-  userId: IdSchema.optional(),
-  projectId: IdSchema.optional(),
   tasks: UpdateTasksInputSchema,
+  userId: IdSchema,
+});;
+
+const VerifyOwnershipSchema = z.object({
+  tasks: z.array(TaskSchema),
+  userId: IdSchema,
 });
 const UpdateTasksWithIdInputSchema = z.array(TaskSchema);
 const UpdateTasksResponseSchema = z.array(TaskSchema);
 
 export type Task = z.infer<typeof TaskSchema>;
 export type CreateTaskInputSchema = z.infer<typeof CreateTaskInputSchema>;
+export type CreateProjectTaskInputSchema = z.infer<typeof CreateProjectTaskInputSchema>;
 export type CreateTaskWithIdSchema = z.infer<typeof CreateTaskWithIdSchema>;
 export type DeleteTaskInputSchema = z.infer<typeof DeleteTaskInputSchema>;
 export type DeleteTaskWithIdInputSchema = z.infer<
@@ -118,6 +121,7 @@ export type DeleteTaskWithIdInputSchema = z.infer<
 export type DeleteTaskParamsInputSchema = z.infer<typeof DeleteTaskParamsInputSchema>;
 export type UpdateTasksInputSchema = z.infer<typeof UpdateTasksInputSchema>;
 export type UpdateTasksSchema = z.infer<typeof UpdateTasksSchema>;
+export type VerifyOwnershipSchema = z.infer<typeof VerifyOwnershipSchema>;
 export type UpdateTasksWithIdInputSchema = z.infer<
   typeof UpdateTasksWithIdInputSchema
 >;
@@ -131,10 +135,12 @@ export const { schemas: taskSchemas, $ref } = buildJsonSchemas(
   {
     TaskSchema,
     CreateTaskInputSchema,
+    CreateProjectTaskInputSchema,
     FetchTasksResponseSchema,
     DeleteTaskInputSchema,
     UpdateTasksInputSchema,
     UpdateTasksResponseSchema,
+    DeleteTaskParamsInputSchema,
   },
   { $id: "TaskSchemas" }
 );
