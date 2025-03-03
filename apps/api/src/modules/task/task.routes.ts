@@ -27,7 +27,7 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Fetch all projects GET /user/goal/:id/project/:projectId/task
+  // Fetch all tasks GET /goal/:id/project/:projectId/task
   server.route({
     url: "/",
     method: "GET",
@@ -38,7 +38,7 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
     ],
     handler: taskController.fetchTasks,
     schema: {
-      description: "Fetch tasks",
+      description: "Fetch tasks from project",
       tags: ["project"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
@@ -84,37 +84,4 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
       },
     },
   });
-
-  // // Delete specific project DELETE /user/goal/:id/project/:projectId/task/:taskId
-  // server.route({
-  //   url: "/",
-  //   method: "DELETE",
-  //   preHandler: [authController.authenticate, projectController.authenticateGoal],
-  //   handler: projectController.deleteProject,
-  //   schema: {
-  //     description: "Delete a specific project",
-  //     tags: ["project"],
-  //     headers: $refAuth("HeaderBearerSchema"),
-  //     params: $ref("DeleteProjectParamsInputSchema"),
-  //     204: {
-  //       description: "Succesfully deleted project",
-  //     },
-  //   },
-  // });
-
-  // // Update specific project PUT /user/goal/:id/project/:projectId/task
-  // server.route({
-  //   url: "/",
-  //   method: "PUT",
-  //   preHandler: [authController.authenticate, projectController.authenticateGoal],
-  //   handler: projectController.updateProject,
-  //   schema: {
-  //     description: "Update project",
-  //     tags: ["project"],
-  //     headers: $refAuth("HeaderBearerSchema"),
-  //     response: {
-  //       201: $ref("ProjectSchema"),
-  //     },
-  //   },
-  // });
 };
