@@ -22,9 +22,17 @@ const createProject = async (data: CreateProjectSchema) => {
 const fetchProjects = async (
   data: FetchProjectsSchema
 ): Promise<ProjectSchema[]> => {
-  return await prisma.project.findMany({
-    where: data,
-  });
+  try {
+    return await prisma.project.findMany({
+      where: {
+        goalId: {
+          in: data.goalIds,
+        },
+      },
+    });
+  } catch (err) {
+    throw new RequestError("Problem occurred while fetching projects", 500, err);
+  }
 };
 
 const deleteProject = async (data: DeleteProjectSchema) => {

@@ -13,8 +13,7 @@ const ProjectSchema = z.object({
 const AuthenticateProjectParamsInput = z.object({ goalId: IdSchema, projectId: IdSchema });
 const CreateProjectInputSchema = ProjectSchema.pick({ title: true });
 const CreateProjectSchema = ProjectSchema.pick({ title: true, goalId: true });
-const FetchProjectsSchema = ProjectSchema.pick({ goalId: true });
-const DeleteProjectParamsInputSchema = z.object({ projectId: IdSchema });
+const FetchProjectsSchema = z.object({goalIds: z.array(IdSchema)});
 const DeleteProjectSchema = z.object({ goalId: IdSchema, projectId: IdSchema });
 const UpdateProjectSchema = ProjectSchema;
 

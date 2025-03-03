@@ -47,7 +47,7 @@ const createProject = async (req: ProjectRequest, rep: FastifyReply) => {
 const fetchProjects = async (req: ProjectRequest, rep: FastifyReply) => {
   try {
     const goal = req.goal!;
-    return await projectService.fetchProjects({ goalId: goal.id });
+    return await projectService.fetchProjects({ goalIds: [goal.id] });
   } catch (err) {
     handleControllerError(err, rep);
   }
