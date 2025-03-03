@@ -42,6 +42,10 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["project"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
+        200: $ref("FetchTasksResponseSchema"),
+      },
+    },
+  });
 
   // Delete specific task DELETE /goal/:id/project/:projectId/task/:taskId
   server.route({
