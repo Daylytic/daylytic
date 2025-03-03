@@ -11,7 +11,7 @@ import { RequestError } from "utils/error.js";
 
 const createProject = async (data: CreateProjectSchema) => {
   try {
-    await prisma.project.create({
+    return await prisma.project.create({
       data: data,
     });
   } catch (err) {
