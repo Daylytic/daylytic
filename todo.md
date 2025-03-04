@@ -16,3 +16,5 @@
 - Make tags have the same margin as title of the task/content/card 
 - Make panel private
 - Rewrite user.tsx provider (replace fetch requests)
+- When going through oauth, if the session is expired, check for more expired session.
+- FIX Check if when creating new tasks while opened one, description copies 
