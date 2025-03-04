@@ -1,39 +1,69 @@
-import { Card } from "antd";
+import { Card, Input, Spin } from "antd";
 import { styles } from ".";
 import { TaskCard, TaskList } from "components/common/task";
 import { Task } from "types/task";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import Title from "antd/es/typography/Title";
+import { Project } from "types/goal";
+import { useGoal } from "providers/goal";
+import { useNavigate } from "react-router";
+import { getGoalRoute } from "utils/routes";
 
-export const GoalProjectsCard = ({ contentLines }: { contentLines: number }) => {
-  const tasks = [...Array(contentLines)].map((_, i) => ({
-    id: i.toString(),
-    position: 0,
-    taskType: "TODOLIST",
-    priority: null,
-    title: `Task Cardd ${i}`,
-    content: {},
-    isCompleted: true,
-    createdAt: "",
-    updatedAt: "",
-    deadline: null,
-    userId: "",
-    tagIds: [],
-  })) as Task[];
+interface GoalProjectsCard {
+  project: Project;
+}
+
+export const GoalProjectsCard = ({ project }: GoalProjectsCard) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [taskName, setTaskName] = useState<string>("");
+  const { createTask, getSelectedGoal, selectedTask, tasks } = useGoal();
+
+  const handleInputChange = async (e) => {
+    setTaskName(e.target.value);
+  };
+
+  const handleTaskCreate = async () => {
+    setLoading(true);
+    await createTask(project.goalId, project.id, taskName);
+    setTaskName("");
+    setLoading(false);
+  };
 
   return (
-    <Card title="Default Project" extra={<a href="#">More</a>} className={styles.card}>
+    <Card
+      actions={[
+        <Input
+          size="large"
+          className={styles.input}
+          prefix={<PlusOutlined />}
+          placeholder="Add a new task"
+          autoFocus={false}
+          value={taskName}
+          onChange={handleInputChange}
+          onPressEnter={handleTaskCreate}
+          aria-label="New task input"
+          disabled={loading}
+          suffix={loading && <Spin size="small" />}
+        />,
+      ]}
+      className={styles.card}
+    >
+      <Title level={3}>{project.title}</Title>
       <TaskList
         orderable={true}
         fetched={true}
-        tasks={tasks}
+        tasks={tasks.filter((task) => task.projectId === project.id)}
         updateTask={(_) => {}}
         renderItem={(item: Task): ReactNode => {
           return (
             <TaskCard
               orderable={false}
               item={item}
-              onClick={function (): void {
-                throw new Error("Function not implemented.");
+              onClick={() => {
+                selectedTask.current = item;
+                navigate(getGoalRoute(getSelectedGoal()!.id, item.id))
               }}
               onCheckboxChange={function (): Promise<void> {
                 throw new Error("Function not implemented.");
