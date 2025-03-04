@@ -166,12 +166,452 @@ export interface paths {
                 };
             };
             responses: {
+                /** @description Succesfully deleted daily task */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch goals */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-3"]["FetchGoalsResponseSchema"];
+                    };
+                };
+            };
+        };
+        /** @description Update goal */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-3"]["GoalSchema"];
+                    };
+                };
+            };
+        };
+        /** @description Create goal */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-3"]["CreateGoalInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-3"]["GoalSchema"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch goals, with projects, and tasks */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-3"]["FetchAllResponseSchema"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/{goalId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Delete a specific goal */
+        delete: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Succesfully deleted goal */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/{goalId}/project/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch projects */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
                 /** @description Default Response */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["def-4"]["ProjectSchema"][];
+                    };
+                };
+            };
+        };
+        /** @description Update project */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-4"]["ProjectSchema"];
+                    };
+                };
+            };
+        };
+        /** @description Create project */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-4"]["CreateProjectInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-4"]["ProjectSchema"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/{goalId}/project/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Delete a specific project */
+        delete: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
+                    projectId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Succesfully deleted project */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/{goalId}/project/{projectId}/task/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch tasks from project */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: string;
+                    projectId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-1"]["FetchTasksResponseSchema"];
+                    };
+                };
+            };
+        };
+        /** @description Update project */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: string;
+                    projectId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-1"]["UpdateTasksInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-1"]["TaskSchema"];
+                    };
+                };
+            };
+        };
+        /** @description Create task */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: string;
+                    projectId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-1"]["CreateProjectTaskInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-1"]["TaskSchema"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/{goalId}/project/{projectId}/task/{taskId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Delete a specific project */
+        delete: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    goalId: components["schemas"]["def-1"]["TaskSchema"]["id"];
+                    projectId: components["schemas"]["def-1"]["TaskSchema"]["id"];
+                    taskId: components["schemas"]["def-1"]["TaskSchema"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Succesfully deleted project */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
                 };
             };
         };
@@ -311,10 +751,10 @@ export interface components {
                 id: string;
                 position: number;
                 /** @enum {string} */
-                taskType: "ROUTINE" | "TODOLIST";
+                taskType: "ROUTINE" | "PROJECT";
                 priority: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL") | null;
                 title: string;
-                content: number | string | boolean | null | unknown[] | {
+                content: number | string | boolean | unknown[] | {
                     [key: string]: unknown;
                 };
                 /** @default false */
@@ -327,12 +767,16 @@ export interface components {
                 /** Format: date-time */
                 updatedAt: string;
                 deadline: string | null;
+                projectId: components["schemas"]["def-1"]["TaskSchema"]["id"] | null;
                 userId: components["schemas"]["def-1"]["TaskSchema"]["id"] | null;
                 tagIds: components["schemas"]["def-1"]["TaskSchema"]["id"][];
             };
             CreateTaskInputSchema: {
                 title: components["schemas"]["def-1"]["TaskSchema"]["title"];
                 taskType: components["schemas"]["def-1"]["TaskSchema"]["taskType"];
+            };
+            CreateProjectTaskInputSchema: {
+                title: components["schemas"]["def-1"]["TaskSchema"]["title"];
             };
             FetchTasksResponseSchema: components["schemas"]["def-1"]["TaskSchema"][];
             DeleteTaskInputSchema: {
@@ -347,9 +791,15 @@ export interface components {
                 content: components["schemas"]["def-1"]["TaskSchema"]["content"];
                 isCompleted?: components["schemas"]["def-1"]["TaskSchema"]["isCompleted"];
                 deadline: components["schemas"]["def-1"]["TaskSchema"]["deadline"];
+                projectId: components["schemas"]["def-1"]["TaskSchema"]["projectId"];
                 tagIds: components["schemas"]["def-1"]["TaskSchema"]["tagIds"];
             }[];
             UpdateTasksResponseSchema: components["schemas"]["def-1"]["TaskSchema"][];
+            DeleteTaskParamsInputSchema: {
+                goalId: components["schemas"]["def-1"]["TaskSchema"]["id"];
+                projectId: components["schemas"]["def-1"]["TaskSchema"]["id"];
+                taskId: components["schemas"]["def-1"]["TaskSchema"]["id"];
+            };
         };
         /** TagSchemas */
         "def-2": {
@@ -368,6 +818,75 @@ export interface components {
                 id: components["schemas"]["def-2"]["TagSchema"]["id"];
             };
             FetchTagsResponseSchema: components["schemas"]["def-2"]["TagSchema"][];
+        };
+        /** GoalSchemas */
+        "def-3": {
+            GoalSchema: {
+                id: string;
+                title: string;
+                description: string;
+                userId: components["schemas"]["def-3"]["GoalSchema"]["id"];
+            };
+            CreateGoalInputSchema: {
+                title: components["schemas"]["def-3"]["GoalSchema"]["title"];
+                description: components["schemas"]["def-3"]["GoalSchema"]["description"];
+            };
+            DeleteGoalInputSchema: {
+                id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+            };
+            UpdateGoalSchema: components["schemas"]["def-3"]["GoalSchema"];
+            FetchGoalsResponseSchema: components["schemas"]["def-3"]["GoalSchema"][];
+            FetchAllResponseSchema: {
+                id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                title: components["schemas"]["def-3"]["GoalSchema"]["title"];
+                description: components["schemas"]["def-3"]["GoalSchema"]["description"];
+                userId: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                projects: {
+                    id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                    title: string;
+                    goalId: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                    tasks: {
+                        id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                        position: number;
+                        /** @enum {string} */
+                        taskType: "ROUTINE" | "PROJECT";
+                        priority: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL") | null;
+                        title: string;
+                        content: number | string | boolean | unknown[] | {
+                            [key: string]: unknown;
+                        };
+                        /** @default false */
+                        isCompleted: boolean;
+                        /**
+                         * Format: date-time
+                         * @default {}
+                         */
+                        createdAt: string;
+                        /** Format: date-time */
+                        updatedAt: string;
+                        deadline: string | null;
+                        projectId: components["schemas"]["def-3"]["GoalSchema"]["id"] | null;
+                        userId: components["schemas"]["def-3"]["GoalSchema"]["id"] | null;
+                        tagIds: components["schemas"]["def-3"]["GoalSchema"]["id"][];
+                    }[];
+                }[];
+            }[];
+        };
+        /** ProjectSchemas */
+        "def-4": {
+            ProjectSchema: {
+                id: string;
+                title: string;
+                goalId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
+            };
+            CreateProjectInputSchema: {
+                title: components["schemas"]["def-4"]["ProjectSchema"]["title"];
+            };
+            DeleteProjectParamsInputSchema: {
+                goalId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
+                projectId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
+            };
+            UpdateProjectSchema: components["schemas"]["def-4"]["ProjectSchema"];
         };
     };
     responses: never;
