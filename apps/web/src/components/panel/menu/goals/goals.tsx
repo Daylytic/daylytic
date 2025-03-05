@@ -1,41 +1,42 @@
-// import { List } from "antd";
-// import { useGoals } from "../../../../hooks/use-goals";
-// import { useCookies } from "react-cookie";
-// import { GoalsCard } from "./goals-card";
-// import Title from "antd/es/typography/Title";
-
-// import styles from "./goals.module.css";
-// import clsx from "clsx";
-// import { usePanel } from "../../../../hooks/use-panel";
-// import { useNavigate } from "react-router";
+import { Flex, List, Typography } from "antd";
+import clsx from "clsx";
+import { styles } from "components/layout";
+import { GoalCreatorCard } from "components/panel/menu/goals/goal-creator-card";
+import { GoalsCard } from "components/panel/menu/goals/goals-card";
+import { usePanel } from "hooks/use-panel";
+import { useGoal } from "providers/goal";
+import { useNavigate } from "react-router";
 
 export const Goals = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const [cookies, _] = useCookies(["token"]);
-  // const { goals } = useGoals(cookies.token);
-  // const { getContent } = usePanel();
+  const { goals, selectedGoal } = useGoal();
+  const { getContent } = usePanel();
 
   return (
-    <>
-      {/* <Title level={4}>Goals</Title>
+    <Flex vertical>
+      <Typography.Title level={4}>Goals</Typography.Title>
+      <GoalCreatorCard />
       <List
         itemLayout="vertical"
         dataSource={goals}
         id={styles.wrapper}
         className={clsx("css-var-r1", "ant-menu-css-var")}
         renderItem={(item, _) => (
-          <GoalsCard
-            selected={getContent() === item.id}
-            id={item.id}
-            title={item.title}
-            description={item.description}
-            onClick={(key) => {
-              navigate(`/panel/goals/${key}`);
-            }}
-          />
+          <>
+            <GoalsCard
+              selected={getContent() === item.id}
+              id={item.id}
+              title={item.title}
+              description={item.description}
+              onClick={(key) => {
+                selectedGoal.current = item;
+                navigate(`/panel/goal/${key}`);
+              }}
+            />
+          </>
         )}
-      /> */}
-    </>
+      />
+    </Flex>
   );
 };
