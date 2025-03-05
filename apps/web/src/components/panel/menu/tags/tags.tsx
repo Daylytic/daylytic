@@ -13,7 +13,7 @@ export const Tags = () => {
   const { tags, fetched } = useTags();
 
   return (
-    <>
+    <Flex vertical>
       <Title level={4}>Tags</Title>
       <Flex gap="small" wrap>
         {fetched ? (
@@ -35,6 +35,6 @@ export const Tags = () => {
           </AntTag>
         </Popover>
       </Flex>
-    </>
+    </Flex>
   );
 };
