@@ -21,6 +21,3 @@ export const goals = {
     MAX_GOAL_DESCRIPTION_LENGTH,
     MIN_GOAL_DESCRIPTION_LENGTH,
 }
-
-export const TaskTypes = ["ROUTINE", "PROJECT"] as const;
-export const Priorities = ["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"];
