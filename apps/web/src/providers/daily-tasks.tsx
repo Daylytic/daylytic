@@ -47,7 +47,7 @@ export const DailyTasksProvider = ({ token, children }) => {
         params: { header: { authorization: `Bearer ${token}` } },
         body: { title, taskType: "ROUTINE" },
       });
-      setTasks((prevTasks) => recalculatePositions([...prevTasks, data as Task]));
+      setTasks((prevTasks) => recalculatePositions([...prevTasks, data!]));
       return data as Task;
     } catch (error) {
       console.error("Failed to create task:", error);
