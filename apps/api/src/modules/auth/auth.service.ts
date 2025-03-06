@@ -4,6 +4,7 @@ import { prisma } from "../../utils/prisma.js";
 import {
   $ref,
   CreateUserInput,
+  CreateUserSchema,
   DeleteSessionInput,
   FetchAuthenticationProfile,
   FetchGoogleAccountInfo,
@@ -36,17 +37,18 @@ const createAuthenticationProfile = async (
     timeZone: data.timeZone,
   });
 
-  const session = { token: data.token, userId: googleAccount.id };
+
 
   /* Create User if doesnt exist, else get existing user data from google account id */
   const userExists = await prisma.user.findFirst({
-    where: { id: googleAccount.id },
+    where: { id: googleAccount.id! },
   });
   const user =
     userExists ||
-    (await createUser({ ...googleAccount, timeZone: data.timeZone }));
+    (await createUser({ ...googleAccount, timeZone: data.timeZone, id: undefined }));
 
   /* Create Session attached to the userId */
+  const session = { token: data.token, userId: user.id };
   await createSession(session);
 
   return { user: user, session: session };
@@ -79,8 +81,9 @@ const fetchGoogleAccountInfo = async (
 };
 
 // Create a new user in the database
-const createUser = async (input: GoogleAccount): Promise<User> => {
+const createUser = async (input: CreateUserSchema): Promise<User> => {
   try {
+    console.log(`CREATE ACCOUNT: `, input);
     return await prisma.user.create({ data: input });
   } catch (err) {
     throw new RequestError("Problem occured while creating user", 500, err);
