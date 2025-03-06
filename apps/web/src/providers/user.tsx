@@ -15,6 +15,7 @@ interface Profile {
 
 interface UserContextValue {
   profile: Profile | null;
+  fetched: boolean;
   token: string | undefined;
   login: () => void;
   logout: () => void;
@@ -23,6 +24,7 @@ interface UserContextValue {
 const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [fetched, setFetched] = useState<boolean>(false);
   const [cookies, setCookies, removeCookie] = useCookies(["token"]);
   const [profile, setProfile] = useState<Profile | null>(null);
 
@@ -64,6 +66,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } catch (error) {
           console.error("Error fetching profile:", error);
         }
+
+        setFetched(true);
       }
     };
 
@@ -95,7 +99,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <UserContext.Provider value={{ profile, token: cookies.token, login, logout }}>
+    <UserContext.Provider value={{ profile, fetched, token: cookies.token, login, logout }}>
       {children}
     </UserContext.Provider>
   );

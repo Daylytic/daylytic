@@ -15,6 +15,7 @@ datasource db {
 
 model User {
   id         String     @unique @default(cuid())
+  googleId   String     @unique
   email      String     @unique
   name       String
   picture    String

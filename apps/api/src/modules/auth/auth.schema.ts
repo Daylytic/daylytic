@@ -12,6 +12,7 @@ const SessionSchema = z.object({
 
 const UserSchema = z.object({
   id: IdSchema,
+  googleId: z.string(),
   name: z.string(),
   email: z.string(),
   picture: z.string(),
@@ -40,7 +41,7 @@ const CreateUserInputSchema = z.object({
   timeZone: z.string(),
 });
 
-const CreateUserSchema = GoogleAccountSchema.extend({id: z.string().optional()});
+const CreateUserSchema = GoogleAccountSchema.extend({googleId: z.string(), id: IdSchema.optional()});
 
 const LoadUserInputSchema = z.object({
     token: z.string(),
