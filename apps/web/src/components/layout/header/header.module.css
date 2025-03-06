@@ -32,6 +32,14 @@
     padding: var(--ant-padding-xxs);
 }
 
+.spinner {
+    right: 0;
+    position: fixed;
+    padding: var(--ant-padding-xxs);
+    height: var(--ant-layout-header-height);
+    width: var(--ant-layout-header-height);
+}
+
 #avatar-img {
     color: black;
     height: 100%;
