@@ -40,6 +40,8 @@ const CreateUserInputSchema = z.object({
   timeZone: z.string(),
 });
 
+const CreateUserSchema = GoogleAccountSchema.extend({id: z.string().optional()});
+
 const LoadUserInputSchema = z.object({
     token: z.string(),
     timeZone: z.string().optional(),
@@ -70,6 +72,7 @@ export type Session = z.infer<typeof SessionSchema>;
 export type User = z.infer<typeof UserSchema>;
 export type GoogleAccount = z.infer<typeof GoogleAccountSchema>;
 export type CreateUserInput = z.infer<typeof CreateUserInputSchema>;
+export type CreateUserSchema = z.infer<typeof CreateUserSchema>;
 export type LoadUserInput = z.infer<typeof LoadUserInputSchema>;
 export type DeleteSessionInput = z.infer<typeof DeleteSessionInputSchema>;
 export type FetchAuthenticationProfile = z.infer<
