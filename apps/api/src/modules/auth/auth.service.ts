@@ -2,7 +2,6 @@ import { RequestError } from "utils/error.js";
 import { convertToTimeZoneISO8601 } from "../../utils/date.js";
 import { prisma } from "../../utils/prisma.js";
 import {
-  $ref,
   CreateUserInput,
   CreateUserSchema,
   DeleteSessionInput,
@@ -37,15 +36,13 @@ const createAuthenticationProfile = async (
     timeZone: data.timeZone,
   });
 
-
-
   /* Create User if doesnt exist, else get existing user data from google account id */
   const userExists = await prisma.user.findFirst({
-    where: { id: googleAccount.id! },
+    where: { googleId: googleAccount.id! },
   });
   const user =
     userExists ||
-    (await createUser({ ...googleAccount, timeZone: data.timeZone, id: undefined }));
+    (await createUser({ ...googleAccount, timeZone: data.timeZone, id: undefined, googleId: googleAccount.id }));
 
   /* Create Session attached to the userId */
   const session = { token: data.token, userId: user.id };
@@ -83,7 +80,6 @@ const fetchGoogleAccountInfo = async (
 // Create a new user in the database
 const createUser = async (input: CreateUserSchema): Promise<User> => {
   try {
-    console.log(`CREATE ACCOUNT: `, input);
     return await prisma.user.create({ data: input });
   } catch (err) {
     throw new RequestError("Problem occured while creating user", 500, err);
@@ -110,17 +106,17 @@ const getUser = async (data: FetchUser): Promise<User> => {
 };
 
 const updateLastSeen = async (data: UpdateLastSeen): Promise<User> => {
-    try {
-        const now = convertToTimeZoneISO8601();
-        return await prisma.user.update({
-          where: data,
-          data: {
-            lastSeenAt: now,
-          },
-        });
-    } catch(err) {
-        throw new RequestError("Problem occured while updating last seen for user", 500, err);
-    };
+  try {
+    const now = convertToTimeZoneISO8601();
+    return await prisma.user.update({
+      where: data,
+      data: {
+        lastSeenAt: now,
+      },
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while updating last seen for user", 500, err);
+  };
 };
 
 export const authService = {
