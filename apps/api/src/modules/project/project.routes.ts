@@ -5,7 +5,7 @@ import { $ref as $refAuth } from "modules/auth/auth.schema.js";
 import { authController } from "modules/auth/auth.controller.js";
 
 export const projectHandler: FastifyPluginAsync = async (server, _) => {
-  // Create project POST /user/goal/:goalId/project
+  // Create project POST /goal/:goalId/project
   server.route({
     url: "/",
     method: "POST",
@@ -25,7 +25,7 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Fetch all projects GET /user/goal/:id/project
+  // Fetch all projects GET /goal/:id/project
   server.route({
     url: "/",
     method: "GET",
@@ -44,9 +44,9 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Delete specific project DELETE /user/goal/:id/project/:id
+  // Delete specific project DELETE /goal/:id/project/:id
   server.route({
-    url: "/",
+    url: "/:projectId",
     method: "DELETE",
     preHandler: [authController.authenticate, projectController.authenticateGoal],
     handler: projectController.deleteProject,
@@ -55,13 +55,15 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["project"],
       headers: $refAuth("HeaderBearerSchema"),
       params: $ref("DeleteProjectParamsInputSchema"),
-      204: {
-        description: "Succesfully deleted project",
-      },
+      response: {
+        204: {
+          description: "Succesfully deleted project",
+        },
+      }
     },
   });
 
-  // Update specific project PUT /user/goal/:id/project
+  // Update specific project PUT /goal/:id/project
   server.route({
     url: "/",
     method: "PUT",

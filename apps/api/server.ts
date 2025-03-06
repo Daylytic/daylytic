@@ -104,13 +104,13 @@ const main = async () => {
   });
 
   server.register(authHandler, { prefix: "/oauth2" });
-  server.register(routineHandler, { prefix: "/user/routine" });
-  server.register(goalHandler, { prefix: "/user/goal" });
-  server.register(projectHandler, { prefix: "/user/goal/:goalId/project" });
+  server.register(routineHandler, { prefix: "/routine" });
+  server.register(goalHandler, { prefix: "/goal" });
+  server.register(projectHandler, { prefix: "/goal/:goalId/project" });
   server.register(taskHandler, {
-    prefix: "/user/goal/:goalId/project/:projectId/task",
+    prefix: "/goal/:goalId/project/:projectId/task",
   });
-  server.register(tagHandler, { prefix: "/user/tag" });
+  server.register(tagHandler, { prefix: "/tag" });
 
   try {
     await server.listen({ port: 8084 });

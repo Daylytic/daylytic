@@ -2,13 +2,12 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { handleControllerError, RequestError } from "utils/error.js";
 import { projectService } from "./project.service.js";
 import {
-  AuthenticateGoalParamsInput,
   CreateProjectInputSchema,
   DeleteProjectParamsInputSchema,
   ProjectSchema,
 } from "./project.schema.js";
 import { goalService } from "modules/goal/goal.service.js";
-import { GoalSchema } from "modules/goal/goal.schema.js";
+import { AuthenticateGoalParamsInput, GoalSchema } from "modules/goal/goal.schema.js";
 
 interface ProjectRequest extends FastifyRequest {
   goal?: GoalSchema;
@@ -22,7 +21,7 @@ const authenticateGoal = async (req: ProjectRequest, rep: FastifyReply) => {
     const goal = await goalService.fetchGoalWithId({ id: goalId, userId });
     if (!goal) {
       throw new RequestError(
-        "You do not have access or thFastifyRequestis goal does not exist",
+        "You do not have access or the goal does not exist",
         403,
         null
       );
@@ -47,7 +46,7 @@ const createProject = async (req: ProjectRequest, rep: FastifyReply) => {
 const fetchProjects = async (req: ProjectRequest, rep: FastifyReply) => {
   try {
     const goal = req.goal!;
-    return await projectService.fetchProjects({ goalId: goal.id });
+    return await projectService.fetchProjects({ goalIds: [goal.id] });
   } catch (err) {
     handleControllerError(err, rep);
   }
@@ -57,7 +56,8 @@ const deleteProject = async (req: ProjectRequest, rep: FastifyReply) => {
   try {
     const goal = req.goal!;
     const { projectId } = req.params as DeleteProjectParamsInputSchema;
-    return await projectService.deleteProject({ goalId: goal.id, projectId });
+
+    await projectService.deleteProject({ goalId: goal.id, projectId });
   } catch (err) {
     handleControllerError(err, rep);
   }

@@ -1,9 +1,10 @@
 import { prisma } from "utils/prisma.js";
 import {
   CreateProjectSchema,
-  DeleteProjectParamsInputSchema,
   DeleteProjectSchema,
   FetchProjectsSchema,
+  FetchProjectWithIdAndGoalIdSchema,
+  FetchProjectWithIdSchema,
   ProjectSchema,
   UpdateProjectSchema,
 } from "./project.schema.js";
@@ -11,7 +12,7 @@ import { RequestError } from "utils/error.js";
 
 const createProject = async (data: CreateProjectSchema) => {
   try {
-    await prisma.project.create({
+    return await prisma.project.create({
       data: data,
     });
   } catch (err) {
@@ -22,13 +23,45 @@ const createProject = async (data: CreateProjectSchema) => {
 const fetchProjects = async (
   data: FetchProjectsSchema
 ): Promise<ProjectSchema[]> => {
-  return await prisma.project.findMany({
-    where: data,
-  });
+  try {
+    return await prisma.project.findMany({
+      where: {
+        goalId: {
+          in: data.goalIds,
+        },
+      },
+    });
+  } catch (err) {
+    throw new RequestError("Problem occurred while fetching projects", 500, err);
+  }
 };
+
+const fetchProjectWithIdAndGoalId = async (data: FetchProjectWithIdAndGoalIdSchema) => {
+  try {
+    return await prisma.project.findUniqueOrThrow({
+      where: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching goals with ID", 500, err);
+  }
+}
+
+const fetchProjectWithId = async (data: FetchProjectWithIdSchema) => {
+  try {
+    return await prisma.project.findUniqueOrThrow({
+      where: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching goals with ID", 500, err);
+  }
+}
 
 const deleteProject = async (data: DeleteProjectSchema) => {
   try {
+    await prisma.task.deleteMany({
+      where: { projectId: data.projectId }
+    });
+
     return await prisma.project.delete({
       where: {
         id: data.projectId,
@@ -36,7 +69,7 @@ const deleteProject = async (data: DeleteProjectSchema) => {
       },
     });
   } catch (err) {
-    throw new RequestError("The task with given ID does not exist", 404, err);
+    throw new RequestError("The project with given ID does not exist", 404, err);
   }
 };
 
@@ -50,13 +83,15 @@ const updateProject = async (data: UpdateProjectSchema) => {
       data: data,
     });
   } catch (err) {
-    throw new RequestError("Could not update task", 500, err);
+    throw new RequestError("Could not update project", 500, err);
   }
 };
 
 export const projectService = {
   createProject,
   fetchProjects,
+  fetchProjectWithIdAndGoalId,
+  fetchProjectWithId,
   deleteProject,
   updateProject,
 };

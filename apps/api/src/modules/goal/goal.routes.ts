@@ -5,7 +5,7 @@ import { $ref as $refAuth } from "modules/auth/auth.schema.js";
 import { authController } from "modules/auth/auth.controller.js";
 
 export const goalHandler: FastifyPluginAsync = async (server, _) => {
-  // Create goal POST /user/goal
+  // Create goal POST /goal
   server.route({
     url: "/",
     method: "POST",
@@ -22,7 +22,7 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Fetch all goals GET /user/goal
+  // Fetch all goals GET /goal
   server.route({
     url: "/",
     method: "GET",
@@ -33,32 +33,46 @@ export const goalHandler: FastifyPluginAsync = async (server, _) => {
       tags: ["goal"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
-        200: {
-          type: "array",
-          items: $ref("GoalSchema"),
-        },
+        201: $ref("FetchGoalsResponseSchema"),
       },
     },
   });
 
-  // Delete specific goal DELETE /user/goal/:id
   server.route({
-    url: "/",
+    url: "/all",
+    method: "GET",
+    preHandler: [authController.authenticate],
+    handler: goalController.fetchAll,
+    schema: {
+      description: "Fetch goals, with projects, and tasks",
+      tags: ["goal"],
+      headers: $refAuth("HeaderBearerSchema"),
+      response: {
+        201: $ref("FetchAllResponseSchema"),
+      },
+    },
+  });
+
+  // Delete specific goal DELETE /goal/:id
+  server.route({
+    url: "/:goalId",
     method: "DELETE",
     preHandler: [authController.authenticate],
-    handler: goalController.fetchGoals,
+    handler: goalController.deleteGoal,
     schema: {
       description: "Delete a specific goal",
       tags: ["goal"],
       headers: $refAuth("HeaderBearerSchema"),
       params: $ref("DeleteGoalInputSchema"),
-      204: {
-        description: "Succesfully deleted goal",
-      },
+      response: {
+        204: {
+          description: "Succesfully deleted goal",
+        },
+      }
     },
   });
 
-  // Update specific project PUT /user/goal
+  // Update specific project PUT /goal
   server.route({
     url: "/",
     method: "PUT",

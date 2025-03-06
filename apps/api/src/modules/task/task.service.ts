@@ -6,14 +6,17 @@ import {
   DeleteTaskWithIdInputSchema,
   FetchTasksInputSchema,
   UpdateTasksSchema,
+  VerifyOwnershipSchema,
 } from "./task.schema.js";
 import { convertToTimeZoneISO8601 } from "utils/date.js";
 import { tagService } from "modules/tag/index.js";
+import { goalService } from "modules/goal/goal.service.js";
+import { projectService } from "modules/project/project.service.js";
 
 const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   try {
     const maxPosition = await prisma.task.aggregate({
-      where: { userId: data.userId },
+      where: { userId: data.userId, projectId: data.projectId, taskType: data.taskType },
       _max: { position: true },
     });
 
@@ -45,24 +48,19 @@ const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
 
 const updateTasks = async (data: UpdateTasksSchema) => {
   try {
-    if(!data.userId && !data.projectId) {
-      throw new RequestError("Neither userId nor projectId were provided", 400, null);
-    }
-
     const updatedTasks: Task[] = [];
+    await verifyOwnership({tasks: updatedTasks, userId: data.userId});
 
-    for(const dataRow of data.tasks) {
+    for (const dataRow of data.tasks) {
       const tagIds = dataRow.tagIds;
 
       const tags = await tagService.fetchTagsWithIds(tagIds);
-      await tagService.updateTasks({tagIds: tags.map((tag) => tag.id), taskId: dataRow.id})
-      
+      await tagService.updateTasks({ tagIds: tags.map((tag) => tag.id), taskId: dataRow.id })
+
       updatedTasks.push(
         await prisma.task.update({
           where: {
             id: dataRow.id,
-            userId: data.userId,
-            projectId: data.projectId,
           },
           data: {
             ...dataRow,
@@ -77,6 +75,36 @@ const updateTasks = async (data: UpdateTasksSchema) => {
     throw new RequestError(`Problem occurred while updating task`, 500, err);
   }
 };
+
+const verifyOwnership = async (data: VerifyOwnershipSchema) => {
+  try {
+    const userId = data.userId;
+    const goals = await goalService.fetchGoals({ userId });
+    const goalIds = goals.map(goal => goal.id);
+    const projects = await projectService.fetchProjects({goalIds: goalIds});
+
+    for (const task of data.tasks) {
+      if (!task.userId && !task.projectId) {
+        throw Error("Neither userId, nor projectId are set");
+      }
+
+      if (task.userId) {
+        if (userId !== task.userId) {
+          throw Error("UserId does not match task.userId")
+        }
+      }
+
+      if (task.projectId) {
+        const project = projects.find((fetchedProject) => fetchedProject.id === task.projectId);
+        if(!project) {
+          throw Error("ProjectId does not match any projects user owns")
+        }
+      }
+    }
+  } catch (err) {
+    throw new RequestError("Could not verify ownership", 500, err);
+  }
+}
 
 export const taskService = {
   createTask,
