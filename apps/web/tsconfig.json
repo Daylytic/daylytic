@@ -8,9 +8,6 @@
     "strict": true,
     "skipLibCheck": true,
     "lib": ["dom", "dom.iterable", "esnext"],
-    // "paths": {
-    //   "@src/*": ["./src*"],
-    // },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,

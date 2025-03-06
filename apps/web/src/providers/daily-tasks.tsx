@@ -47,7 +47,7 @@ export const DailyTasksProvider = ({ token, children }) => {
         params: { header: { authorization: `Bearer ${token}` } },
         body: { title, taskType: "ROUTINE" },
       });
-      setTasks((prevTasks) => recalculatePositions([...prevTasks, data as Task]));
+      setTasks((prevTasks) => recalculatePositions([...prevTasks, data!]));
       return data as Task;
     } catch (error) {
       console.error("Failed to create task:", error);
@@ -59,12 +59,11 @@ export const DailyTasksProvider = ({ token, children }) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
 
     try {
-      const { data } = await client.DELETE("/routine/", {
+      await client.DELETE("/routine/", {
         params: { header: { authorization: `Bearer ${token}` } },
         body: { id },
       });
       setTasks((prevTasks) => recalculatePositions(prevTasks));
-      return data;
     } catch (error) {
       console.error("Failed to delete task:", error);
       throw error;

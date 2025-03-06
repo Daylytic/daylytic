@@ -1,12 +1,11 @@
 import { generate } from "@ant-design/colors";
 import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Priorities } from "@daylytic/shared/constants";
 import { Tooltip, MenuProps, Popconfirm } from "antd";
 import { useTags } from "providers/tag";
 import { adjustColor } from "utils/color";
 import { capitalize } from "utils/string";
 import { Tag } from "components/common/tag";
-import { Task } from "types/task";
+import { Priorities, Task } from "types/task";
 
 interface UseSettingsProps {
   selectedTask: Task;
