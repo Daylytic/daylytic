@@ -1,16 +1,21 @@
 import { Flex, Space } from "antd";
 import { GoalProjectsCard } from "components/panel/content/goal/goal-projects-card";
 import { styles } from ".";
+import { useGoal } from "providers/goal";
+import { GoalAddProjectCard } from "components/panel/content/goal/goal-add-project-card";
 
 export const GoalProjectsList = () => {
+  const { selectedGoal, projects } = useGoal();
+
   return (
     <Space direction="horizontal" className={styles["projects-list"]}>
       <Flex className={styles.invert} gap="small">
-        <GoalProjectsCard contentLines={5}/>
-        <GoalProjectsCard contentLines={10}/>
-        <GoalProjectsCard contentLines={40}/>
-        <GoalProjectsCard contentLines={1}/>
-        <GoalProjectsCard contentLines={3}/>
+        {projects
+          .filter((p) => p.goalId === selectedGoal.current!.id)
+          .map((project) => (
+            <GoalProjectsCard project={project} />
+          ))}
+        <GoalAddProjectCard />
       </Flex>
     </Space>
   );
