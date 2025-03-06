@@ -1,15 +1,16 @@
 import Sider from "antd/es/layout/Sider";
-import { General } from "./general";
 import { Goals } from "./goals";
 import styles from "./menu.module.css";
 import { Header } from "./header";
 import { Tags } from "./tags";
+import { Flex } from "antd";
 
 export const Menu = () => (
   <Sider width={400} id={styles.sider}>
-    <Header />
-    <General />
-    <Tags />
-    <Goals />
+    <Flex vertical gap={"large"}>
+      <Header />
+      <Tags />
+      <Goals />
+    </Flex>
   </Sider>
 );

@@ -28,7 +28,7 @@ export const GoalsCard = ({
     <Card
       className={clsx(styles["card"], selected && styles.selected)}
       title={title}
-      extra={<a href="#">More</a>}
+      // extra={<a href="#">More</a>}
       key={id}
       onClick={handleClick}
     >
