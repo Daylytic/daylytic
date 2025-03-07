@@ -12,8 +12,15 @@ import { RequestError } from "utils/error.js";
 
 const createProject = async (data: CreateProjectSchema) => {
   try {
+    const maxPosition = await prisma.project.aggregate({
+      where: { goalId: data.goalId },
+      _max: { position: true },
+    });
+
+    const newPosition = (maxPosition._max.position ?? -1) + 1;
+
     return await prisma.project.create({
-      data: data,
+      data: { ...data, position: newPosition },
     });
   } catch (err) {
     throw new RequestError("Problem occured while creating project", 500, err);
