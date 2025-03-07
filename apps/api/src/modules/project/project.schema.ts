@@ -6,6 +6,7 @@ import { z } from "zod";
 
 export const ProjectSchema = z.object({
   id: IdSchema,
+  position: z.number(),
   title: z.string(),
   goalId: IdSchema,
 });
