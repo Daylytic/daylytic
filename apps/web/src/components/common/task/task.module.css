@@ -40,8 +40,9 @@
 }
 
 .avatar {
-    margin-block: var(--ant-padding-xxs);
-    height: calc(var(--ant-font-size-heading-4) * var(--ant-line-height-heading-4));
+    margin-block: calc(var(--ant-padding-xxs) + 1px); /* Adding the border 1px from button text idk what is it doing there ¯\(ツ)/¯ */
+    /* height: 24px; */
+    height: calc(var(--ant-font-size) * var(--ant-line-height));
 }
 
 .grabber {
@@ -126,6 +127,6 @@
 }
 
 .tags-button {
-    display:flex;
+    display: flex;
     justify-content: flex-start;
 }
