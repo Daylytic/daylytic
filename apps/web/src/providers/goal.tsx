@@ -17,6 +17,7 @@ interface GoalContextType {
   fetchAll: () => Promise<void>;
   getSelectedGoal: () => Goal | undefined;
   createProject: (goalId: string, title: string) => Promise<void>;
+  createGoal: (title: string, description: string) => Promise<void>;
   createTask: (goalId: string, projectId: string, title: string) => Promise<void>;
   updateTask: (task: Task) => Promise<void>;
   deleteTask: (task: Task) => Promise<void>;
@@ -67,6 +68,22 @@ export const GoalProvider = ({ token, children }) => {
       setFetched(true);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
+    }
+  };
+
+  const createGoal = async (title: string, description: string) => {
+    try {
+      const { data } = await client.POST("/goal/", {
+        params: {
+          header: { authorization: `Bearer ${token}` },
+        },
+        body: { title, description },
+      });
+
+      setGoals((prevGoals) => [...prevGoals, data!]);
+    } catch (error) {
+      console.error("Failed to create task:", error);
+      throw error;
     }
   };
 
@@ -182,6 +199,7 @@ export const GoalProvider = ({ token, children }) => {
         fetchAll,
         getSelectedGoal,
         createProject,
+        createGoal,
         createTask,
         updateTask,
         deleteTask,
