@@ -716,6 +716,7 @@ export interface components {
         "def-0": {
             UserSchema: {
                 id: string;
+                googleId: string;
                 name: string;
                 email: string;
                 picture: string;
@@ -792,6 +793,7 @@ export interface components {
                 isCompleted?: components["schemas"]["def-1"]["TaskSchema"]["isCompleted"];
                 deadline: components["schemas"]["def-1"]["TaskSchema"]["deadline"];
                 projectId: components["schemas"]["def-1"]["TaskSchema"]["projectId"];
+                userId: components["schemas"]["def-1"]["TaskSchema"]["userId"];
                 tagIds: components["schemas"]["def-1"]["TaskSchema"]["tagIds"];
             }[];
             UpdateTasksResponseSchema: components["schemas"]["def-1"]["TaskSchema"][];
@@ -843,6 +845,7 @@ export interface components {
                 userId: components["schemas"]["def-3"]["GoalSchema"]["id"];
                 projects: {
                     id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                    position: number;
                     title: string;
                     goalId: components["schemas"]["def-3"]["GoalSchema"]["id"];
                     tasks: {
@@ -876,6 +879,7 @@ export interface components {
         "def-4": {
             ProjectSchema: {
                 id: string;
+                position: number;
                 title: string;
                 goalId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
             };
