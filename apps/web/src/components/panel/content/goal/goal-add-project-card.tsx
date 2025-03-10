@@ -28,7 +28,7 @@ export const GoalAddProjectCard = () => {
           actions={[loading ? <Spin size="small" /> : <PlusCircleOutlined onClick={handleCreateProject} />]}
         >
           <Input.TextArea
-            size="large"
+            size="small"
             className={clsx(styles["create-project-input"], "ant-typography h3")}
             placeholder="Add a new project"
             aria-selected={true}
