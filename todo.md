@@ -18,3 +18,5 @@
 - Rewrite user.tsx provider (replace fetch requests)
 - When going through oauth, if the session is expired, check for more expired session.
 - FIX Check if when creating new tasks while opened one, description copies 
+- Sharing how many minutes, someone worked this year (sort of like spotify wrapped) - This would work by creating "work session" 
+- Sharing how many tasks someone did during the day
