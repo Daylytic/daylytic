@@ -11,6 +11,12 @@ export const GoalAddProjectCard = () => {
   const [projectName, setProjectName] = useState<string>("");
   const { getSelectedGoal, createProject } = useGoal();
 
+  const handleHideInput = async () => {
+    if (projectName === "") {
+      setShowInput(false);
+    }
+  }
+
   const handleInputChange = async (e) => {
     setProjectName(e.target.value);
   };
@@ -33,11 +39,7 @@ export const GoalAddProjectCard = () => {
             placeholder="Add a new project"
             aria-selected={true}
             onChange={handleInputChange}
-            onBlur={() => {
-              if (projectName === "") {
-                setShowInput(false);
-              }
-            }}
+            onBlur={handleHideInput}
             autoFocus={true}
             variant="borderless"
             autoSize
