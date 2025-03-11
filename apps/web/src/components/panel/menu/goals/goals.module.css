@@ -14,6 +14,11 @@
     cursor: pointer;
 }
 
+.card {
+    margin-top: var(--ant-padding-xs);
+}
+
+
 .card.selectable.selected {
     background-color: var(--ant-menu-item-selected-bg);
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
