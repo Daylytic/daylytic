@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Card, Typography } from "antd";
 import { clsx } from "clsx";
 
 import styles from "./goals.module.css";
@@ -26,12 +26,11 @@ export const GoalsCard = ({
 
   return (
     <Card
-      className={clsx(styles["card"], selected && styles.selected)}
-      title={title}
-      // extra={<a href="#">More</a>}
+      className={clsx(styles.card, selected && styles.selected, styles.selectable)}
       key={id}
       onClick={handleClick}
     >
+      <Typography.Title level={4}>{title}</Typography.Title>
       {description}
     </Card>
   );
