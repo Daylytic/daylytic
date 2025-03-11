@@ -1,6 +1,6 @@
 import { Flex, List, Typography } from "antd";
 import clsx from "clsx";
-import { styles } from "components/layout";
+import { styles } from ".";
 import { GoalCreatorCard } from "components/panel/menu/goals/goal-creator-card";
 import { GoalsCard } from "components/panel/menu/goals/goals-card";
 import { usePanel } from "hooks/use-panel";
@@ -14,11 +14,12 @@ export const Goals = () => {
   const { getContent } = usePanel();
 
   return (
-    <Flex vertical>
+    <Flex vertical className={styles["menu-wrapper"]}>
       <Typography.Title level={4}>Goals</Typography.Title>
-      <GoalCreatorCard />
+
       <List
         itemLayout="vertical"
+        header={<GoalCreatorCard />}
         dataSource={goals}
         id={styles.wrapper}
         className={clsx("css-var-r1", "ant-menu-css-var")}
