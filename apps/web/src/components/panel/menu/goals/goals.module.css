@@ -18,6 +18,9 @@
     margin-top: var(--ant-padding-xs);
 }
 
+.card :global(.ant-card-actions) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
 
 .card.selectable.selected {
     background-color: var(--ant-menu-item-selected-bg);
