@@ -12,18 +12,18 @@
     cursor: pointer;
 }
 
-.card.selected {
+.card.selectable.selected {
     background-color: var(--ant-menu-item-selected-bg);
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
 }
 
-.card:hover:not(.selected) {
+.card.selectable:hover:not(.selected) {
     background-color: var(--ant-menu-item-hover-bg);
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
 }
 
-.card.selected,
-.card.selected *:not(a) {
+.card.selectable.selected,
+.card.selectable.selected *:not(a) {
     color: var(--ant-menu-item-selected-color) !important;
 }
 
