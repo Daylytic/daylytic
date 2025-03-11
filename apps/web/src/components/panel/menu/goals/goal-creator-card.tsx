@@ -30,9 +30,9 @@ export const GoalCreatorCard = () => {
           ]}
         >
           <Input.TextArea
-            size="large"
-            className={clsx(styles["create-goal-input"], "ant-typography h3")}
-            placeholder="Add a new project"
+            size="small"
+            className={clsx(styles["create-goal-input-title"], "ant-typography h4")}
+            placeholder="Goal Title"
             aria-selected={true}
             onChange={handleInputChange}
             onBlur={() => {
