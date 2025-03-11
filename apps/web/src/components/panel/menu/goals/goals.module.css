@@ -38,6 +38,7 @@
 }
 
 .goal-creator {
+    width: 100%;
     min-height: var(--ant-card-header-height);
     display: flex;
     justify-content: start;
