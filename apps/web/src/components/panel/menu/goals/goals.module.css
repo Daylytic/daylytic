@@ -1,3 +1,8 @@
+.menu-wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
 #wrapper {
     overflow-y: auto;
     height: 100%;
