@@ -49,10 +49,15 @@
     width: 100%;
     display: flex;
     justify-content: start;
+    padding: 0 !important;
     margin-bottom: var(--ant-typography-title-margin-bottom);
     color: var(--ant-color-text-heading);
     font-weight: var(--ant-font-weight-strong);
     font-size: var(--ant-font-size-heading-4);
     line-height: var(--ant-line-height-heading-4);
     height: auto;
+}
+
+.create-goal-input-description {
+    padding: 0 !important;
 }
