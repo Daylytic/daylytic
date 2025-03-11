@@ -9,7 +9,7 @@
 
 .card {
     width: 100%;
-    background-color: var(--ant-color-white);
+    background-color: rgba(0, 0, 0, 0.02); /* TODO: Replace with ant designs variable color */
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
     cursor: pointer;
 }
