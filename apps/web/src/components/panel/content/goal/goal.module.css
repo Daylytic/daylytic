@@ -102,15 +102,12 @@
     width: 100%;
     display: flex;
     justify-content: start;
-    margin-bottom: var(--ant-typography-title-margin-bottom);
+    padding: 0 !important;
     color: var(--ant-color-text-heading);
     font-weight: var(--ant-font-weight-strong);
     font-size: var(--ant-font-size-heading-3);
     line-height: var(--ant-line-height-heading-3);
     height: auto;
-    /* font-family: "Poppins";
-    font-size: "24px";
-    font-weight: 600; */
 }
 
 .create-project-button {
