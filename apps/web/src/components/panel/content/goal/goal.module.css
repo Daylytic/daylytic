@@ -41,9 +41,37 @@
 }
 
 .task-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height:auto;
+    flex: 1;
 }
 
-.card {
+.task-card-dragged {
+    opacity: 0.5;
+}
+
+.task-card-button {
+    box-sizing: border-box;
+    flex: 1;
+}
+
+.task-card-button-details {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+}
+
+.task-card-button-title {
+    text-align: left;
+    white-space: normal;
+    margin-bottom: 0 !important;
+}
+
     width: 300px;
     height: min-content;
     /* transform: rotateX(180deg); */
