@@ -15,6 +15,21 @@
     margin-top: 0 !important;
 }
 
+.project-card-title {
+    margin-bottom: 0px !important;
+}
+
+.projects {
+    /* 
+        Needed spoce on the left of the project list otherwise 
+        the drop indicator would not show up when dragging a task to the left
+
+        We don't need it on the right, because there is add project card which 
+        adds space and the drop indicator shows up
+    */
+    margin-left: 5px; 
+}
+
 .projects-list {
     display: flex;
     width: 100%;
