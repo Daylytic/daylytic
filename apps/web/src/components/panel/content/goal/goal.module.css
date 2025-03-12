@@ -112,7 +112,7 @@
 
 .create-project-button {
     min-height: var(--ant-card-header-height);
-    width: 300px;
+    width: 100%;
 }
 
 .header-title {
