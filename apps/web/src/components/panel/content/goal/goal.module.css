@@ -95,8 +95,7 @@
 }
 
 .input {
-    width: auto;
-    margin-inline: var(--ant-margin-xs);
+    width: 100%;
 }
 
 .create-project-input {
