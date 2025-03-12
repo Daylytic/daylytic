@@ -40,9 +40,7 @@
     /* transform: rotateX(180deg); */
 }
 
-/* Keep scrollbar at the bottom or not? */
-.invert {
-    /* transform: rotateX(180deg); */
+.task-card {
 }
 
 .card {
