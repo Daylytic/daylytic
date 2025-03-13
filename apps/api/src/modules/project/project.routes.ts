@@ -67,11 +67,12 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
   server.route({
     url: "/",
     method: "PUT",
-    preHandler: [authController.authenticate, projectController.authenticateGoal],
-    handler: projectController.updateProject,
+    preHandler: [authController.authenticate],
+    handler: projectController.updateProjects,
     schema: {
       description: "Update project",
       tags: ["project"],
+      body: $ref("UpdateProjectsSchema"),
       headers: $refAuth("HeaderBearerSchema"),
       response: {
         201: $ref("ProjectSchema"),
