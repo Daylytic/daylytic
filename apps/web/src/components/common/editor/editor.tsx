@@ -38,6 +38,21 @@ export const Editor = ({ onChange, selectedTask }: EditorProps) => {
     }
   };
 
+  const Plugins = useMemo(
+    () => (
+      <>
+        <HistoryPlugin />
+        <MarkdownShortcutPlugin />
+        <CodeHighlightPlugin />
+        <LinkPlugin />
+        <ListPlugin />
+        <TabIndentationPlugin />
+        <CheckListPlugin />
+      </>
+    ),
+    [],
+  );
+
   return (
     <>
       <ToolbarPlugin
@@ -56,14 +71,7 @@ export const Editor = ({ onChange, selectedTask }: EditorProps) => {
         }
         ErrorBoundary={LexicalErrorBoundary}
       />
-      <HistoryPlugin />
-      <MarkdownShortcutPlugin />
-      <CodeHighlightPlugin />
-      <ShortcutsPlugin editor={activeEditor} setIsLinkEditMode={setIsLinkEditMode} />
-      <LinkPlugin />
-      <ListPlugin />
-      <TabIndentationPlugin />
-      <CheckListPlugin />
+
 
       {floatingAnchorElem && (
         <>
