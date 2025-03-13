@@ -1,6 +1,6 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ToolbarContext } from "components/common/editor/context/toolbar";
-import { Editor } from "components/common/editor";
+import Editor from "components/common/editor/editor";
 import { TaskNodes } from "components/common/editor/nodes/nodes";
 import { theme } from "./themes/daylytic-theme";
 import styles from "./lexical.module.css";
@@ -37,10 +37,7 @@ export const Lexical = ({ selectedTask, onChange }: LexicalProps) => {
 
   return (
     <div className={styles.wrapper}>
-      <LexicalComposer
-        key={selectedTask.id} // Or key={JSON.stringify(selectedTask.content)}
-        initialConfig={initialConfig}
-      >
+      <LexicalComposer key={selectedTask.id} initialConfig={initialConfig}>
         <ToolbarContext>
           <Editor onChange={onChange} selectedTask={selectedTask} />
         </ToolbarContext>
