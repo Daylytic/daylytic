@@ -3,52 +3,32 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { client } from "services/api-client";
 import { Goal, Project } from "types/goal";
-import { Task } from "types/task";
 
 interface GoalContextType {
   goals: Goal[];
-  projects: Project[];
-  tasks: Task[];
   selectedGoal: React.MutableRefObject<Goal | undefined>;
-  selectedProject: React.MutableRefObject<Project | undefined>;
-  selectedTask: React.MutableRefObject<Task | undefined>;
 
   fetched: boolean;
   fetchAll: () => Promise<void>;
   getSelectedGoal: () => Goal | undefined;
-  createProject: (goalId: string, title: string) => Promise<void>;
+
   createGoal: (title: string, description: string) => Promise<void>;
-  createTask: (goalId: string, projectId: string, title: string) => Promise<void>;
-  updateTask: (task: Task) => Promise<void>;
-  deleteTask: (task: Task) => Promise<void>;
+  deleteGoal: (goalId: string) => Promise<void>;
+  updateGoal: (goal: Goal) => Promise<void>;
 }
 
 const GoalContext = React.createContext<GoalContextType | undefined>(undefined);
 
 export const GoalProvider = ({ token, children }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
 
   const selectedGoal = useRef<Goal | undefined>(undefined);
-  const selectedProject = useRef<Project | undefined>(undefined);
-  const selectedTask = useRef<Task | undefined>(undefined);
 
   const [fetched, setFetched] = useState<boolean>(false);
 
-  const globalUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  const pendingChangesRef = useRef<Map<string, Task>>(new Map());
-
-  const { goalId, projectId } = useParams();
+  const { goalId } = useParams();
 
   const getSelectedGoal = () => goals.find((goal) => goal.id === goalId);
-
-  const recalculatePositions = (tasks: Task[]): Task[] => {
-    return tasks
-      .sort((a, b) => a.position - b.position)
-      .map((task, index) => ({ ...task, position: index }));
-  };
 
   const fetchAll = async () => {
     try {
@@ -58,12 +38,6 @@ export const GoalProvider = ({ token, children }) => {
 
       const goalsData = data ?? [];
       setGoals(goalsData);
-
-      const projectsData = goalsData.flatMap((goal) => goal.projects || []);
-      setProjects(projectsData);
-
-      const tasksData = projectsData.flatMap((project) => project.tasks || []);
-      setTasks(tasksData);
 
       setFetched(true);
     } catch (error) {
@@ -87,95 +61,36 @@ export const GoalProvider = ({ token, children }) => {
     }
   };
 
-  const createProject = async (goalId: string, title: string) => {
+  const deleteGoal = async (goalId: string) => {
     try {
-      const { data } = await client.POST("/goal/{goalId}/project/", {
+      setGoals((prevGoals) => prevGoals.filter((filterGoal) => filterGoal.id !== goalId));
+
+      await client.DELETE("/goal/{goalId}", {
         params: {
           path: { goalId },
           header: { authorization: `Bearer ${token}` },
         },
-        body: { title },
       });
-
-      setProjects((prevProjects) => [...prevProjects, data!]);
     } catch (error) {
       console.error("Failed to create task:", error);
       throw error;
     }
   };
 
-  const createTask = async (goalId: string, projectId: string, title: string) => {
+  const updateGoal = async (goal: Goal) => {
     try {
-      const { data } = await client.POST("/goal/{goalId}/project/{projectId}/task/", {
-        params: {
-          path: { goalId, projectId },
-          header: { authorization: `Bearer ${token}` },
-        },
-        body: { title },
-      });
-      setTasks((prevTasks) => recalculatePositions([...prevTasks, data!]));
-    } catch (error) {
-      console.error("Failed to create task:", error);
-      throw error;
-    }
-  };
+      setGoals((prevGoals) =>
+        prevGoals.map((existingGoal) => (existingGoal.id === goal.id ? goal : existingGoal)),
+      );
 
-  const updateTask = async (task: Task) => {
-    setTasks((prevTasks) => {
-      const index = prevTasks.findIndex((t) => t.id === task.id);
-      if (index === -1) return prevTasks;
-      const updatedTask = { ...prevTasks[index], ...task };
-      const updatedTasks = [...prevTasks];
-      updatedTasks[index] = updatedTask;
-      pendingChangesRef.current.set(task.id, updatedTask);
-      return updatedTasks;
-    });
-
-    // Reset the global debounce timer.
-    if (globalUpdateTimeout.current) {
-      clearTimeout(globalUpdateTimeout.current);
-    }
-    globalUpdateTimeout.current = setTimeout(async () => {
-      // When timer fires, extract all pending changes.
-      const tasksToUpdate = Array.from(pendingChangesRef.current.values());
-      if (tasksToUpdate.length > 0) {
-        try {
-          await client.PUT("/goal/{goalId}/project/{projectId}/task/", {
-            params: {
-              header: { authorization: `Bearer ${token}` },
-              path: {
-                goalId: getSelectedGoal()!.id,
-                projectId: task.projectId!,
-              },
-            },
-            body: tasksToUpdate,
-          });
-          console.log("Tasks updated successfully in the database.");
-          // Clear the pending changes after the successful update.
-          pendingChangesRef.current.clear();
-        } catch (error) {
-          console.error("Failed to update tasks:", error);
-        }
-      }
-    }, 3000); // Global debounce delay: 3 seconds
-  };
-
-  const deleteTask = async (task: Task) => {
-    setTasks((prevTasks) => recalculatePositions(prevTasks.filter((filterTask) => filterTask.id !== task.id)));
-
-    try {
-      await client.DELETE("/goal/{goalId}/project/{projectId}/task/{taskId}", {
+      await client.PUT("/goal/", {
         params: {
           header: { authorization: `Bearer ${token}` },
-          path: {
-            goalId: getSelectedGoal()!.id,
-            projectId: task.projectId!,
-            taskId: task.id,
-          },
         },
+        body: goal,
       });
     } catch (error) {
-      console.error("Failed to delete task:", error);
+      console.error("Failed to update goal:", error);
       throw error;
     }
   };
@@ -190,19 +105,13 @@ export const GoalProvider = ({ token, children }) => {
     <GoalContext.Provider
       value={{
         goals,
-        projects,
-        tasks,
         selectedGoal,
-        selectedProject,
-        selectedTask,
         fetched,
         fetchAll,
         getSelectedGoal,
-        createProject,
         createGoal,
-        createTask,
-        updateTask,
-        deleteTask,
+        deleteGoal,
+        updateGoal,
       }}
     >
       {children}
