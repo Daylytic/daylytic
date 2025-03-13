@@ -106,7 +106,7 @@ const main = async () => {
   server.register(authHandler, { prefix: "/oauth2" });
   server.register(routineHandler, { prefix: "/routine" });
   server.register(goalHandler, { prefix: "/goal" });
-  server.register(projectHandler, { prefix: "/goal/:goalId/project" });
+  server.register(projectHandler, { prefix: "/goal" });
   server.register(taskHandler, {
     prefix: "/goal/:goalId/project/:projectId/task",
   });
