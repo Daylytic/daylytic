@@ -15,7 +15,7 @@ const edgeToOrientationMap: Record<Edge, Orientation> = {
 
 export function Line({
   edge,
-  gap = '0px',
+  gap,
   indent = '0px',
   strokeColor = "var(--ant-color-primary)",
   strokeWidth = "2px",
