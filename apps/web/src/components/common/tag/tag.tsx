@@ -24,9 +24,9 @@ export const Tag = ({
   ...rest
 }: TagProps) => {
   const palette = generate(tag.color);
-  const backgroundColor = palette[1];
-  const outlineColor = adjustColor(palette[3]);
-  const textColor = adjustColor(palette[7]);
+  const backgroundColor = palette[5];
+  const outlineColor = adjustColor(palette[6]);
+  const textColor = adjustColor(palette[0]);
 
   return (
     <AntTag
