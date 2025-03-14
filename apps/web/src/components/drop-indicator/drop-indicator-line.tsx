@@ -18,7 +18,7 @@ export function Line({
   gap = '0px',
   indent = '0px',
   strokeColor = "var(--ant-color-primary)",
-  strokeWidth = "1px",
+  strokeWidth = "2px",
 }: {
   edge: Edge;
   indent?: string;
