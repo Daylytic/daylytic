@@ -1,5 +1,4 @@
-import { theme, ColorPickerProps, Row, Col, Divider } from "antd";
-import { styles } from "components/common/tag";
+import { theme, ColorPickerProps, Row } from "antd";
 import { useTags } from "providers/tag";
 import { useState } from "react";
 import { generatePresets, pallets } from "utils/color";
@@ -11,18 +10,9 @@ export const useTagCreator = () => {
   const [color, setColor] = useState(token.colorPrimary);
   const [loading, setLoading] = useState(false);
   const presets = generatePresets(pallets);
-  const colorPickerPanel: ColorPickerProps["panelRender"] = (
-    _,
-    { components: { Picker, Presets } },
-  ) => (
+  const colorPickerPanel: ColorPickerProps["panelRender"] = (_, { components: { Presets } }) => (
     <Row justify="space-between" wrap={false}>
-      <Col span={12}>
-        <Presets />
-      </Col>
-      <Divider type="vertical" className={styles["color-picker-divder"]} />
-      <Col flex="auto">
-        <Picker />
-      </Col>
+      <Presets />
     </Row>
   );
 
