@@ -31,6 +31,64 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(project.title);
   const titleRef = useRef(project.title);
+
+  const moveProject = async (startIndex: number, finishIndex: number) => {
+    const reorderedProjects = reorder({
+      list: projects,
+      startIndex,
+      finishIndex,
+    });
+
+    await updateProjects(reorderedProjects);
+  };
+
+  const deleteCurrentProject = async () => {
+    deleteProject(project.goalId, project.id);
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      label: "Move To The Left",
+      key: "1",
+      icon: <BorderLeftOutlined />,
+      onClick: async () => {
+        console.log("1");
+        const startIndex = projects.map((proj) => proj.id).indexOf(project.id);
+        if (startIndex !== -1) {
+          console.log("2");
+          await moveProject(startIndex, startIndex - 1);
+        }
+      },
+    },
+    {
+      label: "Move To The Right",
+      key: "2",
+      icon: <BorderRightOutlined />,
+      onClick: async () => {
+        const startIndex = projects.map((proj) => proj.id).indexOf(project.id);
+        if (startIndex !== -1) {
+          await moveProject(startIndex, startIndex + 1);
+        }
+      },
+    },
+    {
+      label: (
+        <Popconfirm
+          title="Are you sure you want to delete this project?"
+          onConfirm={deleteCurrentProject}
+          okText="Yes"
+          cancelText="No"
+        >
+          Delete
+        </Popconfirm>
+      ),
+      key: "3",
+      icon: <DeleteOutlined />,
+      danger: true,
+      onClick: async () => {},
+    },
+  ];
+
   return (
     <div
       style={{
@@ -94,24 +152,17 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
           >
             {title}
           </Title>
-
-          <Flex vertical>
-            {sortedTasks.map((task) => (
-              <GoalTaskCard
-                key={task.id}
-                item={task}
-                onClick={() => {
-                  selectedTask.current = task;
-                  navigate(getGoalRoute(getSelectedGoal()!.id, task.id));
-                }}
-                onCheckboxChange={function (): Promise<void> {
-                  throw new Error("Function not implemented.");
-                }}
-                tags={[]}
-              />
-            ))}
-          </Flex>
-        </div>
+          <Dropdown menu={{ items }} trigger={["click"]}>
+            <Button type="text">
+              <EllipsisOutlined />
+            </Button>
+          </Dropdown>
+        </Flex>
+        <ul className={styles["project-card-tasks"]}>
+          {sortedTasks.map((task) => (
+            <GoalTaskCard key={task.id} item={task} goalId={project.goalId} tags={[]} />
+          ))}
+        </ul>
       </Card>
       {closestEdge && <DropIndicator edge={closestEdge} gap={"10px"} />}
     </div>
