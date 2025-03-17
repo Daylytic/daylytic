@@ -222,7 +222,11 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
-            requestBody?: never;
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-3"]["UpdateGoalSchema"];
+                };
+            };
             responses: {
                 /** @description Default Response */
                 201: {
@@ -324,7 +328,7 @@ export interface paths {
                     authorization: string;
                 };
                 path: {
-                    id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                    goalId: components["schemas"]["def-3"]["GoalSchema"]["id"];
                 };
                 cookie?: never;
             };
@@ -346,7 +350,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/goal/{goalId}/project/": {
+    "/goal/{goalId}/project": {
         parameters: {
             query?: never;
             header?: never;
@@ -378,31 +382,7 @@ export interface paths {
                 };
             };
         };
-        /** @description Update project */
-        put: {
-            parameters: {
-                query?: never;
-                header: {
-                    authorization: string;
-                };
-                path: {
-                    goalId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Default Response */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["def-4"]["ProjectSchema"];
-                    };
-                };
-            };
-        };
+        put?: never;
         /** @description Create project */
         post: {
             parameters: {
@@ -474,6 +454,48 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goal/project": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Update project */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-4"]["UpdateProjectsSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-4"]["ProjectSchema"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -834,9 +856,12 @@ export interface components {
                 description: components["schemas"]["def-3"]["GoalSchema"]["description"];
             };
             DeleteGoalInputSchema: {
-                id: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                goalId: components["schemas"]["def-3"]["GoalSchema"]["id"];
             };
-            UpdateGoalSchema: components["schemas"]["def-3"]["GoalSchema"];
+            UpdateGoalSchema: {
+                title: components["schemas"]["def-3"]["GoalSchema"]["title"];
+                description: components["schemas"]["def-3"]["GoalSchema"]["description"];
+            };
             FetchGoalsResponseSchema: components["schemas"]["def-3"]["GoalSchema"][];
             FetchAllResponseSchema: {
                 id: components["schemas"]["def-3"]["GoalSchema"]["id"];
@@ -890,7 +915,7 @@ export interface components {
                 goalId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
                 projectId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
             };
-            UpdateProjectSchema: components["schemas"]["def-4"]["ProjectSchema"];
+            UpdateProjectsSchema: components["schemas"]["def-4"]["ProjectSchema"][];
         };
     };
     responses: never;
