@@ -27,106 +27,10 @@ interface GoalProjectsCardProps {
 }
 
 export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [taskName, setTaskName] = useState<string>("");
-  const { createTask, getSelectedGoal, selectedTask, tasks } = useGoal();
-  const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
-  const [draggedOver, setDraggedOver] = useState<string | null>(null); // NEW
-
-  const handleInputChange = async (e) => {
-    setTaskName(e.target.value);
-  };
-
-  const handleTaskCreate = async () => {
-    setLoading(true);
-    await createTask(project.goalId, project.id, taskName);
-    setTaskName("");
-    setLoading(false);
-  };
-
-  const projectTasks = tasks
-    .filter((task) => task.projectId === project.id)
-    // Maintain the order of tasks as they appear in the tasks array
-    .sort((a, b) => tasks.indexOf(a) - tasks.indexOf(b));
-
-  /* Drop Target */
-
-  const [isDraggedOver, setIsDraggedOver] = useState(false);
-  const projectRef = useRef<HTMLDivElement | null>(null);
-  const headerRef = useRef<HTMLDivElement | null>(null);
-  const cardListRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const projectEl = projectRef.current;
-    const headerEl = headerRef.current;
-    const cardListEl = cardListRef.current;
-
-    invariant(projectEl);
-    invariant(headerEl);
-    invariant(cardListEl);
-
-    console.log("THEY GOT SET");
-
-    // Set up the drop target for the column element
-    return combine(
-      draggable({
-        element: projectEl,
-        dragHandle: headerEl,
-        onDragStart: () => {
-          setIsDraggedOver(true); 
-        },
-        onDrop: () => {
-          setIsDraggedOver(false);  
-        },
-        getInitialData: () => ({ projectId: project.id, index: project.position, type: "project" }),
-      }),
-      dropTargetForElements({
-        element: cardListEl,
-        onDragStart: () => setIsDraggedOver(true),
-        canDrop: (args) => args.source.data.type === "task-card",
-        onDragEnter: () => setIsDraggedOver(true),
-        onDragLeave: () => setIsDraggedOver(false),
-        onDrop: () => setIsDraggedOver(false),
-        getData: () => ({ projectId: project.id }),
-        getIsSticky: () => true,
-      }),
-      dropTargetForElements({
-        element: projectEl,
-        canDrop: (args) => args.source.data.type === "project",
-        getIsSticky: () => true,
-        getData: ({ input, element }) => {
-          const data = {
-            projectId: project.id,
-            type: "project",
-          };
-          return attachClosestEdge(data, {
-            input,
-            element,
-            allowedEdges: ["left", "right"],
-          });
-        },
-        onDragEnter: ({ source, self }) => {
-          if (source.data === undefined) return;
-          const closestEdge = extractClosestEdge(self.data);
-          setClosestEdge(closestEdge);
-        },
-        onDrag: ({ source, self }) => {
-          if (source.data === undefined) return;
-          setClosestEdge(extractClosestEdge(self.data));
-        },
-        onDragLeave: () => {
-
-          setClosestEdge(null);
-        },
-        onDrop: () => {
-          setClosestEdge(null);
-        },
-      }),
-    );
-  }, [projectRef, headerRef, cardListRef]);
-
-  const sortedTasks = [...projectTasks].sort((a, b) => a.position - b.position);
+  const { updateProjects, projects, deleteProject } = useProject();
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(project.title);
+  const titleRef = useRef(project.title);
   return (
     <div
       style={{
@@ -160,9 +64,35 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
           </Flex>,
         ]}
       >
-        <div className={styles["project-card-content"]}>
-          <Title ref={headerRef} level={3} className={styles["project-card-title"]}>
-            {project.title}
+        <Flex justify="space-between" align="start" className={styles["project-card-header"]}>
+          <Title
+            ref={headerRef}
+            level={3}
+            editable={{
+              onStart: () => {
+                setEditing(true);
+              },
+              onChange: (text) => {
+                setTitle(text);
+                titleRef.current = text;
+              },
+              onEnd: async () => {
+                // Use the ref’s current value which is updated synchronously
+                if (titleRef.current !== project.title) {
+                  project.title = titleRef.current;
+                  setEditing(false);
+                  await updateProjects([project]);
+                }
+              },
+              text: project.title,
+              editing: editing,
+              icon: <EditOutlined className={styles["project-card-title-icon"]} />,
+              triggerType: ["icon"],
+              enterIcon: null,
+            }}
+            className={clsx(styles["project-card-title"], styles["project-card-editable"])}
+          >
+            {title}
           </Title>
 
           <Flex vertical>
