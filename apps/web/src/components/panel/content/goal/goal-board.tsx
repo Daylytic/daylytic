@@ -26,18 +26,20 @@ export const GoalBoard = () => {
 }, []);
 
   return (
-    <Space direction="horizontal" className={styles["projects-list"]}>
-      <Flex className={styles.projects} gap={"10px"}>
-        {projects
-          .filter((p) => p.goalId === selectedGoal.current!.id)
-          .map((project) => (
-            <GoalProjectsCard
-              key={project.id}
-              project={project}
-            />
-          ))}
-        <GoalAddProjectCard />
-      </Flex>
-    </Space>
+    <Flex className={styles["projects-list-wrapper"]}>
+      {fetched ? (
+        <ul className={styles["projects-list"]}>
+          {projects
+            .filter((p) => p.goalId === selectedGoal.current?.id)
+            .sort((a, b) => a.position - b.position)
+            .map((project) => (
+              <GoalProjectsCard key={project.id} project={project} />
+            ))}
+          <GoalAddProjectCard />
+        </ul>
+      ) : (
+        <GoalProjectsCardSkeleton />
+      )}
+    </Flex>
   );
 };
