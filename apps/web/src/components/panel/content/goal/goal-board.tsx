@@ -1,29 +1,12 @@
-import { Flex, Space } from "antd";
 import { styles } from ".";
-import { useGoal } from "providers/goal";
-import { GoalAddProjectCard } from "./goal-add-project-card";
 import { GoalProjectsCard } from "./goal-projects-card";
-import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { useEffect } from "react";
+import { GoalAddProjectCard } from "components/panel/content/goal/goal-add-project-card";
+import { Flex } from "antd";
+import { useGoalBoard } from "components/panel/content/goal/use-board";
+import { GoalProjectsCardSkeleton } from "components/panel/content/goal/skeleton/goal-projects-card-skeleton";
 
 export const GoalBoard = () => {
-  const { selectedGoal, projects } = useGoal();
-
-  useEffect(() => {
-    return monitorForElements({
-        onDrop({ source, location }) {
-            const destination = location.current.dropTargets[0];
-            if (!destination) {
-                // if dropped outside of any drop targets
-                return;
-            }
-            const destinationLocation = destination.data.location;
-            const sourceLocation = source.data.location;
-            const pieceType = source.data.taskId;
-            console.log([destinationLocation, sourceLocation, pieceType]);  
-        },
-    });
-}, []);
+  const { selectedGoal, projects, fetched } = useGoalBoard();
 
   return (
     <Flex className={styles["projects-list-wrapper"]}>
