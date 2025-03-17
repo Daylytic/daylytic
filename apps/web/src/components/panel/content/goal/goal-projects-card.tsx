@@ -1,32 +1,40 @@
-import { Card, Flex, Input, Spin } from "antd";
+import { Button, Card, Dropdown, Flex, Input, MenuProps, Popconfirm, Spin } from "antd";
 import { styles } from ".";
-import { useEffect, useRef, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  BorderLeftOutlined,
+  BorderRightOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import { Project } from "types/goal";
-import { useGoal } from "providers/goal";
-import { useNavigate } from "react-router";
-import { getGoalRoute } from "utils/routes";
 import { GoalTaskCard } from "components/panel/content/goal/goal-task-card";
-import invariant from "tiny-invariant";
-import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine"; // NEW
-import {
-  draggable,
-  dropTargetForElements,
-} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import clsx from "clsx";
-import {
-  attachClosestEdge,
-  Edge,
-  extractClosestEdge,
-} from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"; // NEW
 import DropIndicator from "components/drop-indicator/drop-indicator";
+import { useProjectsCard } from "components/panel/content/goal/use-projects-card";
+import React, { useRef, useState } from "react";
+import { useProject } from "providers/project";
+import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
 
 interface GoalProjectsCardProps {
   project: Project;
 }
 
 export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
+  const {
+    loading,
+    isDraggedOver,
+    handleInputChange,
+    handleTaskCreate,
+    sortedTasks,
+    closestEdge,
+    projectRef,
+    cardListRef,
+    headerRef,
+    taskName,
+  } = useProjectsCard(project);
   const { updateProjects, projects, deleteProject } = useProject();
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(project.title);
@@ -90,19 +98,13 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
   ];
 
   return (
-    <div
-      style={{
-
-        position: "relative",
-      }}
-      ref={cardListRef}
-    >
+    <li className={styles["project-card-wrapper"]} ref={cardListRef}>
       <Card
         ref={projectRef}
+        data-project-id={project.id}
         className={clsx(
           styles["project-card"],
           isDraggedOver && styles["project-card-dragged-over"],
-          draggedOver === project.id && styles["project-card-dragged-over"],
         )}
         actions={[
           <Flex className={styles["input-wrapper"]}>
@@ -164,7 +166,7 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
           ))}
         </ul>
       </Card>
-      {closestEdge && <DropIndicator edge={closestEdge} gap={"10px"} />}
-    </div>
+      {closestEdge && <DropIndicator edge={closestEdge} />}
+    </li>
   );
 };
