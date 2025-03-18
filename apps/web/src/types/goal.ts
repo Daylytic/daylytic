@@ -3,6 +3,10 @@ export interface Goal {
     title: string;
     description: string;
     userId: string;
+
+    /* Local Data */
+    // progress: number;
+    // updatedAt: string;
 }
 
 export interface Project {
