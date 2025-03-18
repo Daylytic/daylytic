@@ -1,7 +1,7 @@
 #content {
     background: var(--ant-color-white);
     border-radius: var(--ant-border-radius-lg);
-    padding: var(--ant-padding-md);
+    padding: var(--ant-padding-md) 0 0 var(--ant-padding-md);
     width: 100%;
     height: 100%;
     display: flex;
@@ -11,33 +11,154 @@
     overflow: hidden;
 }
 
-.header-description {
-    margin-top: 0 !important;
+.project-card-title {
+    cursor: grab;
 }
 
-.project-card-title {
+.goal-card-title {
     margin-bottom: 0px !important;
 }
 
-.projects {
+.project-card-editable :global(.ant-typography-edit) {
+    opacity: 0;
+}
+
+.project-card-editable:hover :global(.ant-typography-edit) {
+    opacity: 1;
+}
+
+.project-card-title-icon {
+    color: var(--ant-color-primary-text);
+}
+
+.projects-list-wrapper {
+    height: 100%;
+    overflow-x: auto;
+    border-radius: var(--ant-border-radius-lg);
+}
+
+.projects-list {
+    height: 100%;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: var(--ant-padding-xs);
+    margin: 0;
+    padding: 0;
+    padding-bottom: var(--ant-padding-xs);
+
     /* 
         Needed spoce on the left of the project list otherwise 
         the drop indicator would not show up when dragging a task to the left
 
         We don't need it on the right, because there is add project card which 
         adds space and the drop indicator shows up
+        Row gap / 2 + 2px of divider width
     */
-    margin-left: 5px; 
+    padding-left: calc(var(--ant-padding-xs) / 2 + 2px);
 }
 
-.projects-list {
-    display: flex;
-    width: 100%;
+.project-card-wrapper {
+    width: 300px;
+    display: inline-block;
+    flex-shrink: 0;
+    position: relative;
     height: 100%;
-    align-items: start;
-    /* Change to end if inverted*/
-    overflow: scroll;
-    /* transform: rotateX(180deg); */
+    overflow: none;
+}
+
+.project-card {
+    position: relative;
+    flex: initial;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    height: min-content;
+    max-height: 100%;
+}
+
+.project-card-header {
+    text-wrap: auto;
+}
+
+.project-card-title {
+    overflow: hidden;
+    /* height: auto !important; */
+    text-wrap: auto;
+}
+
+.project-card-title>textarea {}
+
+div:has(> .project-card-skeleton) {
+    height: 100%;
+}
+
+.project-card-skeleton {
+    position: relative;
+    flex: initial;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+}
+
+.project-card :global(.ant-card-body) {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card-content {
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+    height: 100%;
+    overflow-y: hidden;
+    gap: var(--ant-padding-xs);
+}
+
+.project-card-tasks {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    gap: var(--ant-padding-xs);
+    height: 100%;
+    overflow-y: auto;
+    padding-block: calc(var(--ant-padding-xs) / 2 + 2px);
+}
+
+.project-card :global(.ant-card-actions) {
+    position: relative;
+    /* overflow: auto; */
+    /* overflow:auto; */
+}
+
+.input-wrapper {
+    padding-inline: var(--ant-card-body-padding-sm);
+}
+
+.project-card-creator {
+    width: 300px;
+    display: inline-block;
+    height: min-content;
+    flex-shrink: 0;
+}
+
+.project-card-dragged-over {
+    border-color: var(--ant-color-primary);
+}
+
+.task-card-wrapper {
+    position: relative;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 .task-card {
@@ -46,7 +167,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height:auto;
+    height: auto;
     flex: 1;
 }
 
@@ -55,43 +176,16 @@
 }
 
 .task-card-button {
+    min-height: var(--ant-control-height);
+    height: auto;
     box-sizing: border-box;
     flex: 1;
-}
-
-.task-card-button-details {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: left;
 }
 
 .task-card-button-title {
     text-align: left;
     white-space: normal;
     margin-bottom: 0 !important;
-}
-
-.project-card {
-    position: relative;
-    width: 300px;
-}
-
-.project-card-content {
-    flex: 1;
-
-    display: flex;
-    flex-direction: column;
-}
-
-.project-card-dragged-over {
-    border-color:var(--ant-color-primary);
-}
-
-.input-wrapper {
-    width: 100%;
-    height: 100%;
-    padding-inline: var(--ant-card-body-padding-sm);
 }
 
 .input {
@@ -110,9 +204,12 @@
     height: auto;
 }
 
-.create-project-button {
+.project-card-button-creator {
+    width: 300px;
+    display: inline-block;
+    flex-shrink: 0;
     min-height: var(--ant-card-header-height);
-    width: 100%;
+    margin-right: var(--ant-padding-md);
 }
 
 .header-title {
