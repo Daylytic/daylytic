@@ -7,7 +7,7 @@ import { authController } from "modules/auth/auth.controller.js";
 export const projectHandler: FastifyPluginAsync = async (server, _) => {
   // Create project POST /goal/:goalId/project
   server.route({
-    url: "/",
+    url: "/:goalId/project",
     method: "POST",
     preHandler: [
       authController.authenticate,
@@ -27,7 +27,7 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
 
   // Fetch all projects GET /goal/:id/project
   server.route({
-    url: "/",
+    url: "/:goalId/project",
     method: "GET",
     preHandler: [authController.authenticate, projectController.authenticateGoal],
     handler: projectController.fetchProjects,
@@ -46,7 +46,7 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
 
   // Delete specific project DELETE /goal/:id/project/:id
   server.route({
-    url: "/:projectId",
+    url: "/:goalId/project/:projectId",
     method: "DELETE",
     preHandler: [authController.authenticate, projectController.authenticateGoal],
     handler: projectController.deleteProject,
@@ -65,13 +65,14 @@ export const projectHandler: FastifyPluginAsync = async (server, _) => {
 
   // Update specific project PUT /goal/:id/project
   server.route({
-    url: "/",
+    url: "/project",
     method: "PUT",
-    preHandler: [authController.authenticate, projectController.authenticateGoal],
-    handler: projectController.updateProject,
+    preHandler: [authController.authenticate],
+    handler: projectController.updateProjects,
     schema: {
       description: "Update project",
       tags: ["project"],
+      body: $ref("UpdateProjectsSchema"),
       headers: $refAuth("HeaderBearerSchema"),
       response: {
         201: $ref("ProjectSchema"),

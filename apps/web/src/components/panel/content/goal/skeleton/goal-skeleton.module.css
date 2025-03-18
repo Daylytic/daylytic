@@ -1,0 +1,7 @@
+div:has(> .project-card-skeleton) {
+    height: 100%;
+}
+
+.description {
+    margin-bottom: 1em;
+}

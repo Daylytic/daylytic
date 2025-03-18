@@ -1,47 +1,68 @@
+.menu-wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
 #wrapper {
     overflow-y: auto;
     height: 100%;
     width: 100%;
     position: relative;
+    /* margin-top: var(--ant-padding-xs); */
+    border-radius: var(--ant-border-radius-lg);
 }
 
 .card {
     width: 100%;
-    background-color: var(--ant-color-white);
+    background-color: rgba(0, 0, 0, 0.02); /* TODO: Replace with ant designs variable color */
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
     cursor: pointer;
 }
 
-.card.selected {
+.card {
+    margin-top: var(--ant-padding-xs);
+}
+
+.card :global(.ant-card-actions) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.card.selectable.selected {
     background-color: var(--ant-menu-item-selected-bg);
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
 }
 
-.card:hover:not(.selected) {
+.card.selectable:hover:not(.selected) {
     background-color: var(--ant-menu-item-hover-bg);
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
 }
 
-.card.selected,
-.card.selected *:not(a) {
+.card.selectable.selected,
+.card.selectable.selected *:not(a) {
     color: var(--ant-menu-item-selected-color) !important;
 }
 
 .goal-creator {
+    width: 100%;
     min-height: var(--ant-card-header-height);
     display: flex;
     justify-content: start;
     align-items: center;
 }
 
-.create-goal-input {
+.create-goal-input-title {
     width: 100%;
     display: flex;
     justify-content: start;
+    padding: 0 !important;
     margin-bottom: var(--ant-typography-title-margin-bottom);
     color: var(--ant-color-text-heading);
     font-weight: var(--ant-font-weight-strong);
-    font-size: var(--ant-font-size-heading-3);
-    line-height: var(--ant-line-height-heading-3);
+    font-size: var(--ant-font-size-heading-4);
+    line-height: var(--ant-line-height-heading-4);
     height: auto;
+}
+
+.create-goal-input-description {
+    padding: 0 !important;
 }

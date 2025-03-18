@@ -47,7 +47,7 @@ export const useSettings = ({ selectedTask, onChange, onConfirmDeletetion }: Use
     const containsTask = tag.taskIds.includes(selectedTask.id);
 
     const palette = generate(tag.color);
-    const textColor = adjustColor(palette[7]);
+    const textColor = adjustColor(palette[0]);
 
     const newTag = (
       <Tag

@@ -7,7 +7,7 @@ import { Flex } from "antd";
 
 export const Menu = () => (
   <Sider width={400} id={styles.sider}>
-    <Flex vertical gap={"large"}>
+    <Flex vertical gap={"large"} id={styles["sider-content-wrapper"]}>
       <Header />
       <Tags />
       <Goals />

@@ -25,3 +25,19 @@ export const formatDate = (dateStr: string): string  =>{
   
   return `${time} ${dayWithSuffix} ${month} ${year}`;
 }
+
+export const getTimeAgo = (date) => {
+  if (!date) return "No recent activity";
+
+  const diffInSeconds = Math.floor((Date.now() - date) / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+  const diffInWeeks = Math.floor(diffInDays / 7);
+
+  if (diffInSeconds < 60) return `now`;
+  if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+  if (diffInHours < 24) return `${diffInHours} hours ago`;
+  if (diffInDays < 7) return `${diffInDays} days ago`;
+  return `${diffInWeeks} weeks ago`;
+};

@@ -28,7 +28,6 @@ export const TaskHeader = ({selectedTask, onChange}: TaskHeaderProps) => {
           },
           icon: <EditOutlined className={styles["header-edit-icon"]} />,
           triggerType: ["icon"],
-          autoSize: { maxRows: 1 },
         }}
         className={styles["header-title"]}
       >

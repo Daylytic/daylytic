@@ -20,9 +20,9 @@ const FetchGoalsSchema = GoalSchema.pick({ userId: true });
 const FetchGoalWithIdSchema = GoalSchema.pick({ id: true, userId: true });
 const FetchGoalsResponseSchema = z.array(GoalSchema);
 const FetchAllResponseSchema = z.array(GoalSchema.extend({ projects: z.array(ProjectSchema.extend({ tasks: z.array(TaskSchema) })) }));
-const DeleteGoalInputSchema = GoalSchema.pick({ id: true });
+const DeleteGoalInputSchema = z.object({ goalId: IdSchema });
 const DeleteGoalSchema = GoalSchema.pick({ id: true, userId: true });
-const UpdateGoalSchema = GoalSchema;
+const UpdateGoalSchema = GoalSchema.omit({ id: true, userId: true });
 
 export type GoalSchema = z.infer<typeof GoalSchema>;
 

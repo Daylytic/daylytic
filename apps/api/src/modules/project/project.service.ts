@@ -6,14 +6,21 @@ import {
   FetchProjectWithIdAndGoalIdSchema,
   FetchProjectWithIdSchema,
   ProjectSchema,
-  UpdateProjectSchema,
+  UpdateProjectsSchema,
 } from "./project.schema.js";
 import { RequestError } from "utils/error.js";
 
 const createProject = async (data: CreateProjectSchema) => {
   try {
+    const maxPosition = await prisma.project.aggregate({
+      where: { goalId: data.goalId },
+      _max: { position: true },
+    });
+
+    const newPosition = (maxPosition._max.position ?? -1) + 1;
+
     return await prisma.project.create({
-      data: data,
+      data: { ...data, position: newPosition },
     });
   } catch (err) {
     throw new RequestError("Problem occured while creating project", 500, err);
@@ -73,15 +80,17 @@ const deleteProject = async (data: DeleteProjectSchema) => {
   }
 };
 
-const updateProject = async (data: UpdateProjectSchema) => {
+const updateProjects = async (data: UpdateProjectsSchema) => {
   try {
-    return await prisma.project.update({
-      where: {
-        id: data.id,
-        goalId: data.goalId,
-      },
-      data: data,
-    });
+    for (const project of data) {
+      await prisma.project.update({
+        where: {
+          id: project.id,
+          goalId: project.goalId,
+        },
+        data: project,
+      });
+    }
   } catch (err) {
     throw new RequestError("Could not update project", 500, err);
   }
@@ -93,5 +102,5 @@ export const projectService = {
   fetchProjectWithIdAndGoalId,
   fetchProjectWithId,
   deleteProject,
-  updateProject,
+  updateProjects,
 };

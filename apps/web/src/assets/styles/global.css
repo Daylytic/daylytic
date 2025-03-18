@@ -123,7 +123,6 @@ section {
     box-shadow: none !important;
     font-size: inherit !important;
     line-height: inherit !important;
-    height: auto !important;
 }
 
 .ant-typography-edit-content {
@@ -138,4 +137,8 @@ section {
     /* Match original alignment */
     margin-left: 0 !important;
     padding-left: 0 !important;
+}
+
+.ant-list .ant-list-header, .ant-list .ant-list-footer {
+    padding-block: 0;
 }

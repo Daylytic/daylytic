@@ -8,16 +8,35 @@ import { useState } from "react";
 export const GoalCreatorCard = () => {
   const [showInput, setShowInput] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [projectName, setProjectName] = useState<string>("");
-  const { getSelectedGoal, createProject } = useGoal();
+  const [goalTitle, setGoalTitle] = useState<string>("");
+  const [goalDescription, setGoalDescription] = useState<string>("");
+  const { createGoal } = useGoal();
 
-  const handleInputChange = async (e) => {
-    setProjectName(e.target.value);
+  const handleHideInput = async () => {
+    if (goalTitle == "" && goalDescription == "") {
+      setShowInput(false);
+    }
+  }
+
+  const handleTitleChange = async (e) => {
+    setGoalTitle(e.target.value);
   };
 
-  const handleCreateProject = async () => {
+  const handleDescriptionChange = async (e) => {
+    setGoalDescription(e.target.value);
+  };
+
+  const handleCreateGoal = async () => {
+    if(goalTitle === "" || goalDescription === "") {
+      return;
+    }
+
     setLoading(true);
-    await createProject(getSelectedGoal()!.id, projectName);
+    await createGoal(goalTitle, goalDescription);
+    setLoading(false);
+    setGoalTitle("");
+    setGoalDescription("");
+    setShowInput(false);
   };
 
   return (
@@ -26,25 +45,35 @@ export const GoalCreatorCard = () => {
         <Card
           className={styles.card}
           actions={[
-            loading ? <Spin size="small" /> : <PlusCircleOutlined onClick={handleCreateProject} />,
+            loading ? <Spin size="small" /> : <PlusCircleOutlined onClick={handleCreateGoal} />,
           ]}
         >
           <Input.TextArea
-            size="large"
-            className={clsx(styles["create-goal-input"], "ant-typography h3")}
-            placeholder="Add a new project"
+            size="small"
+            className={clsx(styles["create-goal-input-title"], "ant-typography h4")}
+            placeholder="Goal Title"
             aria-selected={true}
-            onChange={handleInputChange}
-            onBlur={() => {
-              if (projectName === "") {
-                setShowInput(false);
-              }
-            }}
+            onChange={handleTitleChange}
+            onBlur={handleHideInput}
             autoFocus={true}
             variant="borderless"
             autoSize
-            value={projectName}
-            onPressEnter={handleCreateProject}
+            value={goalTitle}
+            onPressEnter={handleCreateGoal}
+            aria-label="New task input"
+            disabled={loading}
+          />
+          <Input.TextArea
+            size="small"
+            className={clsx(styles["create-goal-input-description"], "ant-typography")}
+            placeholder="Goal description"
+            aria-selected={true}
+            onChange={handleDescriptionChange}
+            onBlur={handleHideInput}
+            variant="borderless"
+            autoSize
+            value={goalDescription}
+            onPressEnter={handleCreateGoal}
             aria-label="New task input"
             disabled={loading}
           />
@@ -56,8 +85,9 @@ export const GoalCreatorCard = () => {
           variant="filled"
           size="large"
           className={clsx(styles["goal-creator"])}
+          icon={<PlusCircleOutlined />}
         >
-          Add A New Project
+          Add A New Goal
         </Button>
       )}
     </>

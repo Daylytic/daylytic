@@ -5,6 +5,7 @@ import {
   CreateProjectInputSchema,
   DeleteProjectParamsInputSchema,
   ProjectSchema,
+  UpdateProjectsSchema,
 } from "./project.schema.js";
 import { goalService } from "modules/goal/goal.service.js";
 import { AuthenticateGoalParamsInput, GoalSchema } from "modules/goal/goal.schema.js";
@@ -63,21 +64,26 @@ const deleteProject = async (req: ProjectRequest, rep: FastifyReply) => {
   }
 };
 
-const updateProject = async (req: ProjectRequest, rep: FastifyReply) => {
+const updateProjects = async (req: ProjectRequest, rep: FastifyReply) => {
   try {
-    const goal = req.goal!;
-    const project = req.body as ProjectSchema;
+    const userId = req.user!.id!;
+    const projects = req.body as UpdateProjectsSchema;
+    const ownedGoals = await goalService.fetchGoals({ userId });
+    const projectsToUpdate = [];
 
-    //TODO: Check if we remove goalId from update input schema, whether goalId would update if user provided goalId
-    if (project.goalId !== goal.id) {
-      throw new RequestError(
-        "You do not have access to this project.",
-        403,
-        null
-      );
+    for (const project of projects) {
+      if (ownedGoals.find((goal) => goal.id === project.goalId)) {
+        projectsToUpdate.push(project);
+      } else {
+        throw new RequestError(
+          "You do not have access to all of the projects.",
+          403,
+          null
+        );
+      }
     }
 
-    return await projectService.updateProject(project);
+    return await projectService.updateProjects(projectsToUpdate);
   } catch (err) {
     handleControllerError(err, rep);
   }
@@ -88,5 +94,5 @@ export const projectController = {
   createProject,
   fetchProjects,
   deleteProject,
-  updateProject,
+  updateProjects,
 };

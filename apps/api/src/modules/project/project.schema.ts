@@ -6,6 +6,7 @@ import { z } from "zod";
 
 export const ProjectSchema = z.object({
   id: IdSchema,
+  position: z.number(),
   title: z.string(),
   goalId: IdSchema,
 });
@@ -18,7 +19,7 @@ const FetchProjectWithIdAndGoalIdSchema = ProjectSchema.pick({id: true, goalId: 
 const FetchProjectWithIdSchema = ProjectSchema.pick({id: true});
 const DeleteProjectParamsInputSchema = z.object({ goalId: IdSchema, projectId: IdSchema });
 const DeleteProjectSchema = z.object({ goalId: IdSchema, projectId: IdSchema });
-const UpdateProjectSchema = ProjectSchema;
+const UpdateProjectsSchema = z.array(ProjectSchema);
 
 export type ProjectSchema = z.infer<typeof ProjectSchema>;
 
@@ -30,14 +31,14 @@ export type FetchProjectWithIdAndGoalIdSchema = z.infer<typeof FetchProjectWithI
 export type FetchProjectWithIdSchema = z.infer<typeof FetchProjectWithIdSchema>;
 export type DeleteProjectParamsInputSchema = z.infer<typeof DeleteProjectParamsInputSchema>;
 export type DeleteProjectSchema = z.infer<typeof DeleteProjectSchema>;
-export type UpdateProjectSchema = z.infer<typeof UpdateProjectSchema>;
+export type UpdateProjectsSchema = z.infer<typeof UpdateProjectsSchema>;
 
 export const { schemas: projectSchemas, $ref } = buildJsonSchemas(
   {
     ProjectSchema,
     CreateProjectInputSchema,
     DeleteProjectParamsInputSchema,
-    UpdateProjectSchema,
+    UpdateProjectsSchema,
   },
   { $id: "ProjectSchemas" }
 );
