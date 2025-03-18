@@ -1,141 +1,78 @@
-import { List, Checkbox, Button, Flex, Typography } from "antd";
+import { Checkbox, Button, Flex, CheckboxChangeEvent } from "antd";
 import { Tag as TagModel, Task } from "types/task";
 import { styles } from ".";
 import { Tag } from "components/common/tag";
-import { useRef, useEffect, useState } from "react";
-import {
-  draggable,
-  dropTargetForElements,
-} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import invariant from "tiny-invariant";
 import clsx from "clsx";
-import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine"; // NEW
-import {
-  attachClosestEdge,
-  Edge,
-  extractClosestEdge,
-} from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge"; // NEW
 import DropIndicator from "components/drop-indicator/drop-indicator";
+import { useTaskCard } from "components/panel/content/goal/use-task-card";
+import React, { useCallback } from "react";
+import { useNavigate, useParams } from "react-router";
+import { getGoalRoute } from "utils/routes";
+import { useSelectedTask } from "providers/selected-task";
+import { useTask } from "providers/task";
 
 interface GoalTaskCardProps {
   item: Task;
-  onClick: () => void;
-  onCheckboxChange: () => Promise<void>;
+  goalId: string;
   tags: TagModel[];
   style?: React.CSSProperties;
 }
 
-export const GoalTaskCard = ({ item, onClick, onCheckboxChange, tags }: GoalTaskCardProps) => {
-  const ref = useRef(null);
-  const [dragging, setDragging] = useState<boolean>(false); // NEW
-  const [closestEdge, setClosestEdge] = useState<Edge | null>(null); // NEW
+export const GoalTaskCard = React.memo(
+  ({ item, goalId, tags }: GoalTaskCardProps) => {
+    const { selectedTask, setSelectedTask } = useSelectedTask();
+    const { updateTasks } = useTask();
+    const { taskId } = useParams();
+    const { ref, closestEdge, dragging } = useTaskCard({
+      item,
+      selectedTask: selectedTask,
+    });
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const el = ref.current;
-    invariant(el);
+    const handleTaskClick = useCallback(
+      (task: Task) => {
+        if (selectedTask?.id === task.id) {
+          navigate(getGoalRoute(goalId));
+          setSelectedTask(undefined);
 
-    return combine(
-      draggable({
-        element: el,
-        onDragStart: () => setDragging(true), // NEW
-        onDrop: () => {
-          setDragging(false);
-          setClosestEdge(null);
-        },
-        getInitialData: () => ({ type: "task-card", taskId: item.id, index: item.position }),
-      }),
-      dropTargetForElements({
-        element: el,
-        canDrop: ({ source }) => source.data.taskId !== item.id && source.data.type ==="task-card",
-        getData: ({ input, element }) => {
-          // To attach card data to a drop target
-          const data = { type: "task-card", taskId: item.id, index: item.position };
-
-          // Attaches the closest edge (top or bottom) to the data object
-          // This data will be used to determine where to drop card relative
-          // to the target card.
-          return attachClosestEdge(data, {
-            input,
-            element,
-            allowedEdges: ["top", "bottom"],
-          });
-        },
-        getIsSticky: () => true, // To make a drop target "sticky"
-        onDragEnter: ({ source, self }) => {
-          if(source.data === undefined) return;
-
-            const closestEdge = extractClosestEdge(self.data);
-
-            const sourceIndex = source.data.index;
-            console.log([sourceIndex, item.position]);
-            if(typeof sourceIndex !== 'number') return;  
-            // invariant(typeof sourceIndex === 'number');
-
-            const isItemBeforeSource = item.position === sourceIndex - 1;
-            const isItemAfterSource = item.position === sourceIndex + 1;
-
-            const isDropIndicatorHidden =
-            (isItemBeforeSource && closestEdge === 'bottom') ||
-            (isItemAfterSource && closestEdge === 'top');
-
-            if (isDropIndicatorHidden) {
-            setClosestEdge(null);
-            return;
-            }
-
-            setClosestEdge(closestEdge);
-        },
-        onDrag: ({ source, self }) => {
-          if (source.data.taskId !== item.id) {
-            setClosestEdge(extractClosestEdge(self.data));
-          }
-
-          if(source.data === undefined) return;
-
-          const closestEdge = extractClosestEdge(self.data);
-
-          const sourceIndex = source.data.index;
-          // invariant(typeof sourceIndex === 'number');
-          if(typeof sourceIndex !== 'number') return;  
-
-          const isItemBeforeSource = item.position === sourceIndex - 1;
-          const isItemAfterSource = item.position === sourceIndex + 1;
-
-          const isDropIndicatorHidden =
-          (isItemBeforeSource && closestEdge === 'bottom') ||
-          (isItemAfterSource && closestEdge === 'top');
-
-          if (isDropIndicatorHidden) {
-          setClosestEdge(null);
           return;
-          }
-
-          setClosestEdge(closestEdge);
-        },
-        onDragLeave: () => {
-          setClosestEdge(null);
-        },
-        onDrop: () => {
-          setClosestEdge(null);
-        },
-      }),
+        }
+        setSelectedTask(task);
+        navigate(getGoalRoute(goalId, task.id));
+      },
+      [navigate, selectedTask],
     );
-  }, [item.id]);
 
-  return (
-    <div style={{ position: "relative" }} ref={ref}>
-      <List.Item className={clsx(styles["task-card"], dragging && styles["task-card-dragged"])}>
-        <Button type="text" onClick={onClick} className={styles["task-card-button"]}>
+    const onCheckboxChange = async (e: CheckboxChangeEvent) => {
+      item.isCompleted = e.target.checked;
+      await updateTasks({ [goalId]: [item] }, true);
+    };
+
+    return (
+      <li
+        ref={ref}
+        data-task-id={item.id}
+        className={clsx(styles["task-card"], dragging && styles["task-card-dragged"])}
+      >
+        <Button
+          type="text"
+          variant={selectedTask?.id === item.id && taskId ? "filled" : undefined}
+          color="primary"
+          onClick={() => handleTaskClick(item)}
+          className={clsx(
+            styles["task-card-button"],
+            selectedTask?.id === item.id && "task-card-button-selected",
+          )}
+        >
           <Flex flex={1} gap={12} wrap className={styles["task-card-button-details"]}>
-            <Flex gap="small">
+            <Flex gap="small" align="start">
               <Checkbox
                 className={styles.checkbox}
-                checked={item.isCompleted}
+                defaultChecked={item.isCompleted}
                 onChange={onCheckboxChange}
+                onClick={(e) => e.stopPropagation()} // Prevents click event from reaching Button
               />
-              <Typography.Paragraph className={styles["task-card-button-title"]}>
-                {item.title}
-              </Typography.Paragraph>
+              <span className={styles["task-card-button-title"]}>{item.title}</span>
             </Flex>
             <Flex wrap gap="small">
               {item.tagIds.map((tagId) => {
@@ -146,9 +83,8 @@ export const GoalTaskCard = ({ item, onClick, onCheckboxChange, tags }: GoalTask
             </Flex>
           </Flex>
         </Button>
-        {closestEdge && <DropIndicator edge={closestEdge}/>}
-      </List.Item>
-
-    </div>
-  );
-};
+        {closestEdge && <DropIndicator edge={closestEdge} />}
+      </li>
+    );
+  },
+);
