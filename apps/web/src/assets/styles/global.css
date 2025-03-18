@@ -123,7 +123,6 @@ section {
     box-shadow: none !important;
     font-size: inherit !important;
     line-height: inherit !important;
-    height: auto !important;
 }
 
 .ant-typography-edit-content {
