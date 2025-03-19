@@ -30,6 +30,7 @@ const main = async () => {
     ...goalSchemas,
     ...projectSchemas,
     ...statsSchemas,
+    ...contactSchemas,
   ]) {
     server.addSchema(schema);
   }
@@ -113,6 +114,7 @@ const main = async () => {
   });
   server.register(tagHandler, { prefix: "/tag" });
   server.register(statsHandler, { prefix: "/stats" });
+  server.register(contactHandler, { prefix: "/contact" });
 
   try {
     await server.listen({ port: 8084 });
