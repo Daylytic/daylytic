@@ -12,6 +12,8 @@ import {
   GoogleAccountSchema,
   Session,
   UpdateLastSeen,
+  UpdateThemeSchema,
+  UpdateTimezoneSchema,
   User,
 } from "./auth.schema.js";
 
@@ -34,6 +36,7 @@ const createAuthenticationProfile = async (
   const googleAccount = GoogleAccountSchema.parse({
     ...rawGoogleAccount,
     timeZone: data.timeZone,
+    theme: data.theme,
   });
 
   /* Create User if doesnt exist, else get existing user data from google account id */
@@ -119,10 +122,40 @@ const updateLastSeen = async (data: UpdateLastSeen): Promise<User> => {
   };
 };
 
+const updateTimezone = async (data: UpdateTimezoneSchema): Promise<User> => {
+  try {
+    return await prisma.user.update({
+      where: {id: data.id},
+      data: {
+        timeZone: data.timeZone,
+      },
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while updating last seen for user", 500, err);
+  };
+};
+
+const updateTheme = async (data: UpdateThemeSchema): Promise<User> => {
+  try {
+    return await prisma.user.update({
+      where: {id: data.id},
+      data: {
+        theme: data.theme,
+      },
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while updating last seen for user", 500, err);
+  };
+};
+
+
 export const authService = {
   createUser,
+  getUser,
   createAuthenticationProfile,
   getAuthenticationProfile,
   deleteSession,
   updateLastSeen,
+  updateTimezone,
+  updateTheme,
 };
