@@ -19,7 +19,22 @@ datasource db {
 // Preferably just like in backend, for conversion we will use dayjs lib
 
 model User {
+  id          String       @unique @default(cuid())
+  googleId    String       @unique
+  email       String       @unique
+  name        String
+  picture     String
+  createdAt   DateTime     @default(now())
+  lastSeenAt  DateTime     @default(now())
+  timeZone    String
+  theme       String
+  sessions    Session[]
+  routine     Task[]
+  tags        Tag[]
+  goals       Goal[]
+  assistances Assistance[]
   analytics   Analytics?
+  timelytic   Timelytic?
 }
 
 model Session {
@@ -60,15 +75,17 @@ model Goal {
   projects    Project[]
   userId      String
   user        User?     @relation(fields: [userId], references: [id])
+  archived    Boolean   @default(false)
 }
 
 model Project {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   position Int
   title    String
   goalId   String
-  goal     Goal   @relation(fields: [goalId], references: [id])
+  goal     Goal    @relation(fields: [goalId], references: [id])
   tasks    Task[]
+  archived Boolean @default(false)
 }
 
 enum TaskType {
