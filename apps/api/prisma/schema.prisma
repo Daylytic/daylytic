@@ -72,21 +72,23 @@ enum Priority {
 }
 
 model Task {
-  id          String    @id @default(cuid())
-  position    Int
-  taskType    TaskType
-  priority    Priority?
-  title       String
-  content     Json
-  isCompleted Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deadline    DateTime?
-  userId      String? // Relation field to ToDoList
-  user        User?     @relation(fields: [userId], references: [id])
-  tagIds      String[]
-  project     Project?  @relation(fields: [projectId], references: [id])
-  projectId   String?
+  id            String    @id @default(cuid())
+  position      Int
+  taskType      TaskType
+  priority      Priority?
+  title         String
+  content       Json
+  isCompleted   Boolean   @default(false)
+  timelyticTask Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  completedAt   DateTime?
+  updatedAt     DateTime  @updatedAt
+  deadline      DateTime?
+  userId        String? // Relation field to ToDoList
+  user          User?     @relation(fields: [userId], references: [id])
+  tagIds        String[]
+  project       Project?  @relation(fields: [projectId], references: [id])
+  projectId     String?
 }
 
 model Tag {
