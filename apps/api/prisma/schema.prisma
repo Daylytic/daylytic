@@ -97,3 +97,12 @@ model Tag {
   userId  String?
   user    User?    @relation(fields: [userId], references: [id])
 }
+
+model Assistance {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  questions Json
+  response  String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
