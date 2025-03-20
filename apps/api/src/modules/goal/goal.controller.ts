@@ -50,10 +50,8 @@ const updateGoal = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const userId = req.user!.id;
     const goal = req.body as GoalSchema;
-    
-    if (goal.userId !== userId) {
-      throw new RequestError("You do not have access to this goal.", 403, null);
-    }
+
+    await goalService.fetchGoalWithId({ userId, id: goal.id })
 
     return await goalService.updateGoal(goal);
   } catch (err) {

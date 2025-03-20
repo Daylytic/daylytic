@@ -5,7 +5,7 @@ import { ResetDailyTaskInputSchema } from "./routine.schema.js";
 const resetDailyTasks = async (data: ResetDailyTaskInputSchema) => {
   try {
     await prisma.task.updateMany({
-      where: data,
+      where: { userId: data.id, taskType: "ROUTINE" },
       data: {
         isCompleted: false,
       },
