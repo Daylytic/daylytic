@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// WARNING!
+// In this database all dates are kept in UTC format.
+// For the purpose of simplicity we only convert the time on data send
+// Preferably just like in backend, for conversion we will use dayjs lib
+
 model User {
   analytics   Analytics?
 }
