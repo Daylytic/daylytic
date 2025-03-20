@@ -14,19 +14,7 @@ datasource db {
 }
 
 model User {
-  id         String     @unique @default(cuid())
-  googleId   String     @unique
-  email      String     @unique
-  name       String
-  picture    String
-  createdAt  DateTime   @default(now())
-  lastSeenAt DateTime   @default(now())
-  timeZone   String
-  sessions   Session[]
-  routine    Task[]
-  tags       Tag[]
-  goals      Goal[]
-  analytics  Analytics?
+  analytics   Analytics?
 }
 
 model Session {
@@ -37,17 +25,19 @@ model Session {
 }
 
 model Analytics {
-  id          String       @id @default(cuid())
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String       @unique
-  routineData RoutineData? @relation
+  id                     String   @id @default(cuid())
+  user                   User     @relation(fields: [userId], references: [id])
+  userId                 String   @unique
+  loginStreak            Int      @default(1)
+  recordLoginStreak      Int      @default(1)
+  routineStreak          Int      @default(0)
+  recordRoutineStreak    Int      @default(0)
+  timelyticTasksFinished Int      @default(0)
+  timelyticTimeSpent     Int      @default(0)
+  timelyticSessions      Int      @default(0)
+  lastRoutineReset       DateTime @default(now())
 }
 
-model RoutineData {
-  id               String    @id @default(cuid())
-  analytics        Analytics @relation(fields: [analyticsId], references: [id])
-  analyticsId      String    @unique
-  lastRoutineReset DateTime  @default(now())
 }
 
 model Goal {

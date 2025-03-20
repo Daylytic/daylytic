@@ -12,6 +12,12 @@ import { projectHandler } from "modules/project/project.routes.js";
 import { goalSchemas } from "modules/goal/goal.schema.js";
 import { projectSchemas } from "modules/project/project.schema.js";
 import { taskHandler } from "modules/task/task.routes.js";
+import { analyticsSchemas } from "modules/analytics/analytics.schema.js";
+import { analyticsHandler } from "modules/analytics/analytics.routes.js";
+import { statsHandler } from "modules/misc/stats/stats.routes.js";
+import { statsSchemas } from "modules/misc/stats/stats.schema.js";
+import { contactSchemas } from "modules/misc/contact/contact.schema.js";
+import { contactHandler } from "modules/misc/contact/contact.routes.js";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -29,6 +35,7 @@ const main = async () => {
     ...tagSchemas,
     ...goalSchemas,
     ...projectSchemas,
+    ...assistanceSchemas,
     ...statsSchemas,
     ...contactSchemas,
   ]) {
@@ -106,7 +113,7 @@ const main = async () => {
   });
 
   server.register(authHandler, { prefix: "/oauth2" });
-  server.register(routineHandler, { prefix: "/routine" });
+  server.register(analyticsHandler, { prefix: "/analytics" });
   server.register(goalHandler, { prefix: "/goal" });
   server.register(projectHandler, { prefix: "/goal" });
   server.register(taskHandler, {
