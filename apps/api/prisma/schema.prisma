@@ -38,6 +38,14 @@ model Analytics {
   lastRoutineReset       DateTime @default(now())
 }
 
+model Timelytic {
+  id         String    @id @default(cuid())
+  isRunning  Boolean   @default(false)
+  deadline   DateTime?
+  duration   Int?
+  pausedTime DateTime?
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String    @unique
 }
 
 model Goal {
