@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
   CreateTagSchema,
-  DeleteTagSchema,
-  FetchTagsInputSchema,
+  DeleteTagInputSchema,
+  UpdateTagInputSchema,
 } from "./tag.schema.js";
 import { tagService } from "./tag.service.js";
 import { handleControllerError } from "utils/error.js";
@@ -33,15 +33,26 @@ const createTag = async (req: FastifyRequest, rep: FastifyReply) => {
 const deleteTag = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
     const userId = req.user!.id;
-    const { id } = req.body as DeleteTagSchema;
-    return await tagService.deleteTag({ id: id, userId: userId });
+    const { tagId } = req.params as DeleteTagInputSchema;
+    return await tagService.deleteTag({ id: tagId, userId: userId });
   } catch (err) {
     handleControllerError(err, rep);
   }
 };
 
+const updateTag = async (req: FastifyRequest, rep: FastifyReply) => {
+  try {
+    const userId = req.user!.id;
+    const { name, color, id } = req.body as UpdateTagInputSchema;
+    tagService.updateTag({ name, color, id, userId })
+  } catch (err) {
+    handleControllerError(err, rep);
+  }
+}
+
 export const tagController = {
   fetchTags,
   createTag,
   deleteTag,
+  updateTag,
 };
