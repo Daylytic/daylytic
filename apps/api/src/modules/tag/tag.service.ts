@@ -6,7 +6,7 @@ import {
   FetchTagsResponseSchema,
   FetchTagsWithIdsSchema,
   TagSchema,
-  UpdateTagInputSchema,
+  UpdateTagSchema,
   UpdateTasksForTagSchema,
 } from "./index.js";
 import { RequestError } from "utils/error.js";
@@ -34,17 +34,39 @@ const createTag = async (data: CreateTagSchema): Promise<TagSchema> => {
 };
 
 const deleteTag = async (data: DeleteTagSchema) => {
+  const { id, userId } = data;
   try {
-    await prisma.tag.delete({ where: data });
+    await prisma.$transaction(async (tx) => {
+      // Find all tasks for the given user that contain the tag id
+      const tasks = await tx.task.findMany({
+        where: {
+          userId,
+          tagIds: {
+            has: id,
+          },
+        },
+      });
+
+      // For each task, remove the tag id from the tagIds array
+      for (const task of tasks) {
+        const updatedTagIds = task.tagIds.filter(tagId => tagId !== id);
+        await tx.task.update({
+          where: { id: task.id },
+          data: { tagIds: updatedTagIds },
+        });
+      }
+
+      await tx.tag.delete({ where: { id } });
+    });
   } catch (err) {
     throw new RequestError("Tag with given ID does not exist.", 404, err);
   }
 };
 
-const updateTag = async (data: UpdateTagInputSchema): Promise<TagSchema> => {
+const updateTag = async (data: UpdateTagSchema): Promise<TagSchema> => {
   try {
     return await prisma.tag.update({
-      where: { id: data.id },
+      where: { id: data.id, userId: data.userId },
       data: { color: data.color, name: data.name },
     });
   } catch (err) {
