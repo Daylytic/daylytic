@@ -2,6 +2,7 @@ import { prisma } from "utils/prisma.js";
 import {
   CreateProjectSchema,
   DeleteProjectSchema,
+  FetchProjectsForUserSchema,
   FetchProjectsSchema,
   FetchProjectWithIdAndGoalIdSchema,
   FetchProjectWithIdSchema,
@@ -24,6 +25,19 @@ const createProject = async (data: CreateProjectSchema) => {
     });
   } catch (err) {
     throw new RequestError("Problem occured while creating project", 500, err);
+  }
+};
+
+const fetchProjectsForUser = async (data: FetchProjectsForUserSchema): Promise<ProjectSchema[]> => {
+  try {
+    return await prisma.project.findMany({
+      where: {
+        goal:
+          data
+      },
+    });
+  } catch (err) {
+    throw new RequestError("Problem occurred while fetching projects", 500, err);
   }
 };
 
@@ -103,4 +117,5 @@ export const projectService = {
   fetchProjectWithId,
   deleteProject,
   updateProjects,
+  fetchProjectsForUser,
 };
