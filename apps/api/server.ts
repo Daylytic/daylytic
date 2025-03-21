@@ -3,8 +3,6 @@ import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { authHandler } from "./src/modules/auth/index.js";
 import { Session, User, userSchemas } from "./src/modules/auth/auth.schema.js";
-
-import { routineHandler } from "./src/modules/routine/routine.routes.js";
 import { taskSchemas } from "./src/modules/task/index.js";
 import { tagHandler, tagSchemas } from "modules/tag/index.js";
 import { goalHandler } from "modules/goal/goal.routes.js";
@@ -12,10 +10,15 @@ import { projectHandler } from "modules/project/project.routes.js";
 import { goalSchemas } from "modules/goal/goal.schema.js";
 import { projectSchemas } from "modules/project/project.schema.js";
 import { taskHandler } from "modules/task/task.routes.js";
+import { timelyticSchemas } from "modules/timelytic/timelytic.schema.js";
+import { timelyticHandler } from "modules/timelytic/timelytic.routes.js";
 import { analyticsSchemas } from "modules/analytics/analytics.schema.js";
 import { analyticsHandler } from "modules/analytics/analytics.routes.js";
+import { assistanceSchemas } from "modules/assistance/assistance.schema.js";
+import { assistanceHandler } from "modules/assistance/index.js";
 import { statsHandler } from "modules/misc/stats/stats.routes.js";
 import { statsSchemas } from "modules/misc/stats/stats.schema.js";
+import fastifyCron from "fastify-cron";
 import { contactSchemas } from "modules/misc/contact/contact.schema.js";
 import { contactHandler } from "modules/misc/contact/contact.routes.js";
 
@@ -97,34 +100,36 @@ const main = async () => {
       deepLinking: false,
     },
     uiHooks: {
-      onRequest: function (request, reply, next) {
+      onRequest: function (_request, _reply, next) {
         next();
       },
-      preHandler: function (request, reply, next) {
+      preHandler: function (_request, _reply, next) {
         next();
       },
     },
     staticCSP: true,
     transformStaticCSP: (header) => header,
-    transformSpecification: (swaggerObject, request, reply) => {
+    transformSpecification: (swaggerObject, _request, _reply) => {
       return swaggerObject;
     },
     transformSpecificationClone: true,
   });
 
   server.register(authHandler, { prefix: "/oauth2" });
+  server.register(timelyticHandler, { prefix: "/timelytic" });
   server.register(analyticsHandler, { prefix: "/analytics" });
   server.register(goalHandler, { prefix: "/goal" });
   server.register(projectHandler, { prefix: "/goal" });
+  server.register(assistanceHandler, { prefix: "/assistance" });
   server.register(taskHandler, {
-    prefix: "/goal/:goalId/project/:projectId/task",
+    prefix: "/task",
   });
   server.register(tagHandler, { prefix: "/tag" });
   server.register(statsHandler, { prefix: "/stats" });
   server.register(contactHandler, { prefix: "/contact" });
 
   try {
-    await server.listen({ port: 8084 });
+    await server.listen({ port: 8084, host: "0.0.0.0" });
     console.log(`Server listening at https://localhost:8084`);
   } catch (err) {
     console.error(err);
