@@ -31,6 +31,23 @@ declare module "fastify" {
 
 const server = Fastify({ logger: true });
 
+// server.register(fastifyCron as any, {
+//   jobs: [
+//     {
+//       cronTime: '*/1 * * * *',
+//       onTick: () => {
+//         console.log('This task runs every 1 minutes:', new Date().toISOString());
+//         // Your task logic here
+//       },
+//     },
+//   ],
+// });
+
+// await server.register(import('@fastify/rate-limit'), {
+//   max: 100,
+//   timeWindow: '1 minute'
+// })
+
 const main = async () => {
   for (const schema of [
     ...userSchemas,
@@ -38,12 +55,20 @@ const main = async () => {
     ...tagSchemas,
     ...goalSchemas,
     ...projectSchemas,
+    ...timelyticSchemas,
+    ...analyticsSchemas,
     ...assistanceSchemas,
     ...statsSchemas,
     ...contactSchemas,
   ]) {
     server.addSchema(schema);
   }
+
+  // Start jobs when ready
+  // server.addHook('onReady', () => {
+  //   server.cron.startAllJobs();
+  // });
+
 
   server.addHook("onRequest", async (request, reply) => {
     reply.header("Access-Control-Allow-Origin", "*");
