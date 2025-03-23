@@ -5,17 +5,19 @@ import { App } from "./app.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { CookiesProvider } from "react-cookie";
 import { UserProvider } from "./providers/user.tsx";
+import { NotificationProvider } from "./providers/notification.tsx";
 
-// eslint-disable-next-line
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <GoogleOAuthProvider clientId="706835003528-uk37jmqoc4str6spfv0l37mdoi4jqais.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <CookiesProvider defaultSetOptions={{ path: "/" }}>
       <UserProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
+        <NotificationProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </NotificationProvider>
       </UserProvider>
     </CookiesProvider>
-  </GoogleOAuthProvider>
+  </GoogleOAuthProvider>,
 );
