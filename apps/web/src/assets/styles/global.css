@@ -31,14 +31,6 @@
     font-family: "Poppins";
 }
 
-:root {
-    --color1: #e2cfea;
-    --color2: #a06cd5;
-    --color3: #6247aa;
-    --color4: #102b3f;
-    --color5: #062726;
-}
-
 section {
     display: flex;
     flex-direction: column;
