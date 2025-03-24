@@ -132,6 +132,7 @@ section:last-child {
     box-shadow: none !important;
     font-size: inherit !important;
     line-height: inherit !important;
+    overflow-y: hidden;
 }
 
 .ant-typography-edit-content {
