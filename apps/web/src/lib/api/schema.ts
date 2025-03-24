@@ -66,7 +66,293 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/routine/": {
+    "/oauth2/timezone/{timeZone}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Updates current timezone for user */
+        patch: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    timeZone: components["schemas"]["def-0"]["UserSchema"]["timeZone"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-0"]["UserSchema"];
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/oauth2/theme/{theme}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Updates current theme for user */
+        patch: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path: {
+                    theme: components["schemas"]["def-0"]["UserSchema"]["theme"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-0"]["UserSchema"];
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/timelytic/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetches timelytic from specific user */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-5"]["TimelyticSchema"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/timelytic/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Resets the timelytic data */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-5"]["ResetTimelyticInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-5"]["TimelyticSchema"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/timelytic/pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Pauses the timelytic timer */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-5"]["TimelyticWithTimeInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-5"]["TimelyticSchema"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/timelytic/end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Ends timelytic timer */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-5"]["TimelyticWithTimeInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-5"]["TimelyticSchema"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/timelytic/continue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Updates the data of timelytic object */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-5"]["TimelyticWithTimeInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-5"]["TimelyticSchema"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/analytics/": {
         parameters: {
             query?: never;
             header?: never;
@@ -91,92 +377,14 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["def-1"]["FetchTasksResponseSchema"];
+                        "application/json": components["schemas"]["def-6"]["AnalyticsSchema"];
                     };
                 };
             };
         };
-        /** @description Updates the data of the daily tasks */
-        put: {
-            parameters: {
-                query?: never;
-                header: {
-                    authorization: string;
-                };
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["def-1"]["UpdateTasksInputSchema"];
-                };
-            };
-            responses: {
-                /** @description Default Response */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["def-1"]["UpdateTasksResponseSchema"];
-                    };
-                };
-            };
-        };
-        /** @description Create new daily task */
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    authorization: string;
-                };
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["def-1"]["CreateTaskInputSchema"];
-                };
-            };
-            responses: {
-                /** @description Default Response */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["def-1"]["TaskSchema"];
-                    };
-                };
-            };
-        };
-        /** @description Deletes daily task */
-        delete: {
-            parameters: {
-                query?: never;
-                header: {
-                    authorization: string;
-                };
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["def-1"]["DeleteTaskInputSchema"];
-                };
-            };
-            responses: {
-                /** @description Succesfully deleted daily task */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": unknown;
-                    };
-                };
-            };
-        };
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -501,24 +709,85 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/goal/{goalId}/project/{projectId}/task/": {
+    "/assistance/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** @description Fetch tasks from project */
+        /** @description Fetch users assistances */
         get: {
             parameters: {
                 query?: never;
                 header: {
                     authorization: string;
                 };
-                path: {
-                    goalId: string;
-                    projectId: string;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-7"]["FetchAssistancesResponseSchema"];
+                    };
                 };
+            };
+        };
+        put?: never;
+        /** @description Create assistance */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-7"]["QuestionResponsesSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-7"]["AssistanceSchema"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/task/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch all the existing tasks */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
                 cookie?: never;
             };
             requestBody?: never;
@@ -541,10 +810,7 @@ export interface paths {
                 header: {
                     authorization: string;
                 };
-                path: {
-                    goalId: string;
-                    projectId: string;
-                };
+                path?: never;
                 cookie?: never;
             };
             requestBody?: {
@@ -571,15 +837,12 @@ export interface paths {
                 header: {
                     authorization: string;
                 };
-                path: {
-                    goalId: string;
-                    projectId: string;
-                };
+                path?: never;
                 cookie?: never;
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["def-1"]["CreateProjectTaskInputSchema"];
+                    "application/json": components["schemas"]["def-1"]["CreateTaskWithIdsSchema"];
                 };
             };
             responses: {
@@ -600,7 +863,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/goal/{goalId}/project/{projectId}/task/{taskId}": {
+    "/task/routine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch all routine tasks */
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-1"]["FetchTasksResponseSchema"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/task/{taskId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -618,8 +919,6 @@ export interface paths {
                     authorization: string;
                 };
                 path: {
-                    goalId: components["schemas"]["def-1"]["TaskSchema"]["id"];
-                    projectId: components["schemas"]["def-1"]["TaskSchema"]["id"];
                     taskId: components["schemas"]["def-1"]["TaskSchema"]["id"];
                 };
                 cookie?: never;
@@ -672,7 +971,31 @@ export interface paths {
                 };
             };
         };
-        put?: never;
+        /** @description Update tag */
+        put: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-2"]["UpdateTagInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         /** @description Create new tag */
         post: {
             parameters: {
@@ -700,6 +1023,22 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tag/{tagId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** @description Delete tag */
         delete: {
             parameters: {
@@ -707,14 +1046,12 @@ export interface paths {
                 header: {
                     authorization: string;
                 };
-                path?: never;
+                path: {
+                    tagId: components["schemas"]["def-2"]["TagSchema"]["id"];
+                };
                 cookie?: never;
             };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["def-2"]["DeleteTagInputSchema"];
-                };
-            };
+            requestBody?: never;
             responses: {
                 /** @description Default Response */
                 200: {
@@ -725,6 +1062,82 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/stats/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Fetch statistics from Daylytic platform */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["def-8"]["StatsSchema"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/contact/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Fetch statistics from Daylytic platform */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-9"]["ContactInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Sent email successfully */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+            };
+        };
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -747,10 +1160,12 @@ export interface components {
                 /** Format: date-time */
                 lastSeenAt: string;
                 timeZone: string;
+                theme: string;
             };
             CreateUserInputSchema: {
                 token: string;
-                timeZone: string;
+                timeZone: components["schemas"]["def-0"]["UserSchema"]["timeZone"];
+                theme: components["schemas"]["def-0"]["UserSchema"]["theme"];
             };
             GoogleAccountSchema: {
                 id: string;
@@ -758,14 +1173,22 @@ export interface components {
                 email: string;
                 name: string;
                 picture: string;
-                timeZone: string;
+                timeZone: components["schemas"]["def-0"]["UserSchema"]["timeZone"];
+                theme: components["schemas"]["def-0"]["UserSchema"]["theme"];
             };
             HeaderBearerSchema: {
                 authorization: string;
             };
             LoadUserInputSchema: {
                 token: string;
-                timeZone?: string;
+                timeZone: components["schemas"]["def-0"]["UserSchema"]["timeZone"];
+                theme: components["schemas"]["def-0"]["UserSchema"]["theme"];
+            };
+            UpdateTimezoneInputSchema: {
+                timeZone: components["schemas"]["def-0"]["UserSchema"]["timeZone"];
+            };
+            UpdateThemeInputSchema: {
+                theme: components["schemas"]["def-0"]["UserSchema"]["theme"];
             };
         };
         /** TaskSchemas */
@@ -782,13 +1205,13 @@ export interface components {
                 };
                 /** @default false */
                 isCompleted: boolean;
-                /**
-                 * Format: date-time
-                 * @default {}
-                 */
+                /** @default false */
+                timelyticTask: boolean;
+                /** Format: date-time */
                 createdAt: string;
                 /** Format: date-time */
                 updatedAt: string;
+                completedAt: string | null;
                 deadline: string | null;
                 projectId: components["schemas"]["def-1"]["TaskSchema"]["id"] | null;
                 userId: components["schemas"]["def-1"]["TaskSchema"]["id"] | null;
@@ -798,30 +1221,19 @@ export interface components {
                 title: components["schemas"]["def-1"]["TaskSchema"]["title"];
                 taskType: components["schemas"]["def-1"]["TaskSchema"]["taskType"];
             };
-            CreateProjectTaskInputSchema: {
+            CreateTaskWithIdsSchema: {
                 title: components["schemas"]["def-1"]["TaskSchema"]["title"];
+                taskType: components["schemas"]["def-1"]["TaskSchema"]["taskType"];
+                userId?: components["schemas"]["def-1"]["TaskSchema"]["id"];
+                projectId?: components["schemas"]["def-1"]["TaskSchema"]["id"];
             };
             FetchTasksResponseSchema: components["schemas"]["def-1"]["TaskSchema"][];
             DeleteTaskInputSchema: {
                 id: components["schemas"]["def-1"]["TaskSchema"]["id"];
             };
-            UpdateTasksInputSchema: {
-                id: components["schemas"]["def-1"]["TaskSchema"]["id"];
-                position: components["schemas"]["def-1"]["TaskSchema"]["position"];
-                taskType: components["schemas"]["def-1"]["TaskSchema"]["taskType"];
-                priority: components["schemas"]["def-1"]["TaskSchema"]["priority"];
-                title: components["schemas"]["def-1"]["TaskSchema"]["title"];
-                content: components["schemas"]["def-1"]["TaskSchema"]["content"];
-                isCompleted?: components["schemas"]["def-1"]["TaskSchema"]["isCompleted"];
-                deadline: components["schemas"]["def-1"]["TaskSchema"]["deadline"];
-                projectId: components["schemas"]["def-1"]["TaskSchema"]["projectId"];
-                userId: components["schemas"]["def-1"]["TaskSchema"]["userId"];
-                tagIds: components["schemas"]["def-1"]["TaskSchema"]["tagIds"];
-            }[];
+            UpdateTasksInputSchema: components["schemas"]["def-1"]["TaskSchema"][];
             UpdateTasksResponseSchema: components["schemas"]["def-1"]["TaskSchema"][];
             DeleteTaskParamsInputSchema: {
-                goalId: components["schemas"]["def-1"]["TaskSchema"]["id"];
-                projectId: components["schemas"]["def-1"]["TaskSchema"]["id"];
                 taskId: components["schemas"]["def-1"]["TaskSchema"]["id"];
             };
         };
@@ -839,9 +1251,20 @@ export interface components {
                 color: components["schemas"]["def-2"]["TagSchema"]["color"];
             };
             DeleteTagInputSchema: {
-                id: components["schemas"]["def-2"]["TagSchema"]["id"];
+                tagId: components["schemas"]["def-2"]["TagSchema"]["id"];
             };
             FetchTagsResponseSchema: components["schemas"]["def-2"]["TagSchema"][];
+            UpdateTagSchema: {
+                id: components["schemas"]["def-2"]["TagSchema"]["id"];
+                name: components["schemas"]["def-2"]["TagSchema"]["name"];
+                color: components["schemas"]["def-2"]["TagSchema"]["color"];
+                userId: components["schemas"]["def-2"]["TagSchema"]["userId"];
+            };
+            UpdateTagInputSchema: {
+                color: components["schemas"]["def-2"]["TagSchema"]["color"];
+                name: components["schemas"]["def-2"]["TagSchema"]["name"];
+                id: components["schemas"]["def-2"]["TagSchema"]["id"];
+            };
         };
         /** GoalSchemas */
         "def-3": {
@@ -850,6 +1273,7 @@ export interface components {
                 title: string;
                 description: string;
                 userId: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                archived: boolean;
             };
             CreateGoalInputSchema: {
                 title: components["schemas"]["def-3"]["GoalSchema"]["title"];
@@ -859,8 +1283,10 @@ export interface components {
                 goalId: components["schemas"]["def-3"]["GoalSchema"]["id"];
             };
             UpdateGoalSchema: {
+                id: components["schemas"]["def-3"]["GoalSchema"]["id"];
                 title: components["schemas"]["def-3"]["GoalSchema"]["title"];
                 description: components["schemas"]["def-3"]["GoalSchema"]["description"];
+                archived: components["schemas"]["def-3"]["GoalSchema"]["archived"];
             };
             FetchGoalsResponseSchema: components["schemas"]["def-3"]["GoalSchema"][];
             FetchAllResponseSchema: {
@@ -868,11 +1294,13 @@ export interface components {
                 title: components["schemas"]["def-3"]["GoalSchema"]["title"];
                 description: components["schemas"]["def-3"]["GoalSchema"]["description"];
                 userId: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                archived: components["schemas"]["def-3"]["GoalSchema"]["archived"];
                 projects: {
                     id: components["schemas"]["def-3"]["GoalSchema"]["id"];
                     position: number;
                     title: string;
                     goalId: components["schemas"]["def-3"]["GoalSchema"]["id"];
+                    archived: boolean;
                     tasks: {
                         id: components["schemas"]["def-3"]["GoalSchema"]["id"];
                         position: number;
@@ -885,13 +1313,13 @@ export interface components {
                         };
                         /** @default false */
                         isCompleted: boolean;
-                        /**
-                         * Format: date-time
-                         * @default {}
-                         */
+                        /** @default false */
+                        timelyticTask: boolean;
+                        /** Format: date-time */
                         createdAt: string;
                         /** Format: date-time */
                         updatedAt: string;
+                        completedAt: string | null;
                         deadline: string | null;
                         projectId: components["schemas"]["def-3"]["GoalSchema"]["id"] | null;
                         userId: components["schemas"]["def-3"]["GoalSchema"]["id"] | null;
@@ -907,6 +1335,7 @@ export interface components {
                 position: number;
                 title: string;
                 goalId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
+                archived: boolean;
             };
             CreateProjectInputSchema: {
                 title: components["schemas"]["def-4"]["ProjectSchema"]["title"];
@@ -916,6 +1345,77 @@ export interface components {
                 projectId: components["schemas"]["def-4"]["ProjectSchema"]["id"];
             };
             UpdateProjectsSchema: components["schemas"]["def-4"]["ProjectSchema"][];
+        };
+        /** TimelyticSchemas */
+        "def-5": {
+            TimelyticSchema: {
+                id: string;
+                userId: components["schemas"]["def-5"]["TimelyticSchema"]["id"];
+                deadline: string | null;
+                duration: (1800000 | 2700000 | 3600000) | null;
+                pausedTime: string | null;
+                /** @default false */
+                isRunning: boolean;
+            };
+            UpdateTimelyticInputSchema: components["schemas"]["def-5"]["TimelyticSchema"];
+            ResetTimelyticInputSchema: {
+                duration: components["schemas"]["def-5"]["TimelyticSchema"]["duration"];
+                time: string;
+            };
+            TimelyticWithTimeInputSchema: {
+                time: components["schemas"]["def-5"]["ResetTimelyticInputSchema"]["time"];
+            };
+        };
+        /** AnalyticsSchemas */
+        "def-6": {
+            AnalyticsSchema: {
+                id: string;
+                userId: components["schemas"]["def-6"]["AnalyticsSchema"]["id"];
+                /** Format: date-time */
+                lastRoutineReset: string;
+                loginStreak: number;
+                recordLoginStreak: components["schemas"]["def-6"]["AnalyticsSchema"]["loginStreak"];
+                routineStreak: components["schemas"]["def-6"]["AnalyticsSchema"]["loginStreak"];
+                recordRoutineStreak: components["schemas"]["def-6"]["AnalyticsSchema"]["loginStreak"];
+                timelyticTasksFinished: components["schemas"]["def-6"]["AnalyticsSchema"]["loginStreak"];
+                timelyticTimeSpent: components["schemas"]["def-6"]["AnalyticsSchema"]["loginStreak"];
+                timelyticSessions: components["schemas"]["def-6"]["AnalyticsSchema"]["loginStreak"];
+            };
+        };
+        /** AssistanceSchemas */
+        "def-7": {
+            AssistanceSchema: {
+                id: string;
+                userId: components["schemas"]["def-7"]["AssistanceSchema"]["id"];
+                response: null | string;
+                questions: {
+                    [key: string]: string | number;
+                };
+                /** Format: date-time */
+                createdAt: string;
+            };
+            FetchAssistancesResponseSchema: components["schemas"]["def-7"]["AssistanceSchema"][];
+            CreateAssistanceInputSchema: {
+                questions: components["schemas"]["def-7"]["AssistanceSchema"]["questions"];
+            };
+            QuestionResponsesSchema: components["schemas"]["def-7"]["AssistanceSchema"]["questions"];
+        };
+        /** StatsSchemas */
+        "def-8": {
+            StatsSchema: {
+                reachedGoals: number;
+                completedTasks: number;
+                completedProjects: number;
+            };
+        };
+        /** ContactSchema */
+        "def-9": {
+            ContactInputSchema: {
+                name: string;
+                /** Format: email */
+                email: string;
+                message: string;
+            };
         };
     };
     responses: never;
