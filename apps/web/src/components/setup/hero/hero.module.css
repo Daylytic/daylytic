@@ -1,0 +1,14 @@
+.hero {
+    height:100% !important;
+    min-height: unset !important;
+}
+
+.inner {
+    width:100%;
+    height: auto;
+}
+
+.content {
+    max-height: 200px;
+    overflow: auto;
+}
