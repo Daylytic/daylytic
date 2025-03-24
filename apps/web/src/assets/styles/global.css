@@ -86,7 +86,6 @@ section:last-child {
 }
 
 /* Ant Design Changes */
-
 .ant-anchor-link {
     height: 64px;
     line-height: 64px;
@@ -141,14 +140,17 @@ section:last-child {
     padding-left: 0 !important;
 }
 
-/* Ensure text alignment matches original */
 .ant-typography-edit-content textarea {
     text-align: inherit !important;
-    /* Match original alignment */
     margin-left: 0 !important;
     padding-left: 0 !important;
 }
 
-.ant-list .ant-list-header, .ant-list .ant-list-footer {
+.ant-list .ant-list-header,
+.ant-list .ant-list-footer {
     padding-block: 0;
+}
+
+.ant-anchor-wrapper-horizontal .ant-anchor {
+    overflow: unset !important;
 }
