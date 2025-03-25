@@ -62,9 +62,9 @@ export const theme: EditorThemeClasses = {
   link: styles.link,
   list: {
     checklist: styles.checklist,
-    listitem: clsx(styles.listItem, ""),
-    listitemChecked: clsx(styles.listItemChecked, "ant-checkbox-inner"), //styles.listItemChecked,
-    listitemUnchecked: clsx(styles.listItemUnchecked, "ant-checkbox-inner"), // styles.listItemUnchecked
+    listitem: styles.listItem,
+    listitemChecked: clsx(styles.listItemChecked, "ant-checkbox-inner"),
+    listitemUnchecked: clsx(styles.listItemUnchecked, "ant-checkbox-inner"),
     nested: {
       listitem: styles.nestedListItem,
     },
