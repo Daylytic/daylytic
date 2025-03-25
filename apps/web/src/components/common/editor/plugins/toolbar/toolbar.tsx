@@ -26,7 +26,7 @@ import {
 } from "lexical";
 import { Dispatch, useCallback, useEffect, useState } from "react";
 import * as React from "react";
-import { blockTypeToBlockName, useToolbarState } from "components/common/editor/context/toolbar";
+import { blockTypeToBlockName, useToolbarState } from "~/components/common/editor/context/toolbar";
 import {
   formatParagraph,
   formatHeading,
@@ -35,7 +35,7 @@ import {
   formatCheckList,
   formatQuote,
   formatCode,
-} from "components/common/editor/plugins/toolbar/utils";
+} from "~/components/common/editor/plugins/toolbar/utils";
 import { Button, Divider, Tooltip, Space, Select, Flex } from "antd";
 import {
   AlignLeftOutlined,
@@ -51,14 +51,14 @@ import {
   UndoOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import { IS_APPLE } from "utils/environment";
+import { IS_APPLE } from "~/utils/environment";
 
 import { GrBlockQuote } from "react-icons/gr";
-import { getSelectedNode } from "utils/get-selected-note";
-import { SHORTCUTS } from "components/common/editor/plugins/shortcuts/shortcuts-list";
+import { getSelectedNode } from "~/utils/get-selected-note";
+import { SHORTCUTS } from "~/components/common/editor/plugins/shortcuts/shortcuts-list";
 
 import styles from "./toolbar.module.css";
-import { sanitizeUrl } from "utils/url";
+import { sanitizeUrl } from "~/utils/url";
 
 // eslint-disable-next-line
 const rootTypeToRootName = {
@@ -268,9 +268,7 @@ export const ToolbarPlugin = ({
   setActiveEditor: Dispatch<LexicalEditor>;
   setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element => {
-  //   const [selectedElementKey, setSelectedElementKey] = useState<NodeKey | null>(null);
   const [_, setSelectedElementKey] = useState<NodeKey | null>(null);
-  //   const [modal, showModal] = useModal();
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
   const { toolbarState, updateToolbarState } = useToolbarState();
 

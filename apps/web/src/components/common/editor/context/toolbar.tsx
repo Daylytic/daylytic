@@ -5,7 +5,7 @@ import React, {
   useContext,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
 export const blockTypeToBlockName = {
   bullet: 'Bulleted List',
@@ -37,7 +37,6 @@ const INITIAL_TOOLBAR_STATE = {
 
 type ToolbarState = typeof INITIAL_TOOLBAR_STATE;
 
-// Utility type to get keys and infer value types
 type ToolbarStateKey = keyof ToolbarState;
 type ToolbarStateValue<Key extends ToolbarStateKey> = ToolbarState[Key];
 

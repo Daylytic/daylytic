@@ -20,11 +20,11 @@ import {
 import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { getSelectedNode } from "utils/get-selected-note";
-import { sanitizeUrl } from "utils/url";
-import { setFloatingElemPositionForLinkEditor } from "utils/set-floating-elem-position-for-link-editor";
+import { getSelectedNode } from "~/utils/get-selected-note";
+import { sanitizeUrl } from "~/utils/url";
+import { setFloatingElemPositionForLinkEditor } from "~/utils/set-floating-elem-position-for-link-editor";
 import { CloseOutlined, CheckOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Space, Input, Button, Typography, Flex } from "antd";
+import { Space, Input, Button, Typography } from "antd";
 import clsx from "clsx";
 
 const preventDefault = (

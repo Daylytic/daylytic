@@ -1,7 +1,5 @@
 .editor {
   width: 100%;
-  /* padding-block: 4px;
-    padding-inline: 15px; */
   overflow: hidden;
   height: var(--ant-menu-item-height);
   padding-block: var(--ant-button-padding-block);
@@ -11,7 +9,6 @@
 }
 
 .editor > :global(.ant-space-item):first-child {
-  /* height: 100%; */
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--ant-color-link);
@@ -39,7 +36,7 @@
   opacity: 0;
   background-color: #fff;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
+  border-radius: var(--ant-border-radius-lg);
   transition: opacity 0.5s;
   will-change: transform;
 }

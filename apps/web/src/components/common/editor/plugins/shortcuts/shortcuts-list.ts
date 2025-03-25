@@ -1,4 +1,4 @@
-import { IS_APPLE } from "utils/environment";
+import { IS_APPLE } from "~/utils/environment";
 
 export const SHORTCUTS = Object.freeze({
   // (Ctrl|⌘) + (Alt|Option) + <key> shortcuts
@@ -16,8 +16,6 @@ export const SHORTCUTS = Object.freeze({
   QUOTE: IS_APPLE ? '⌘+Opt+Q' : 'Ctrl+Alt+Q',
 
   // (Ctrl|⌘) + Shift + <key> shortcuts
-  INCREASE_FONT_SIZE: IS_APPLE ? '⌘+Shift+.' : 'Ctrl+Shift+.',
-  DECREASE_FONT_SIZE: IS_APPLE ? '⌘+Shift+,' : 'Ctrl+Shift+,',
   INSERT_CODE_BLOCK: IS_APPLE ? '⌘+Shift+C' : 'Ctrl+Shift+C',
   STRIKETHROUGH: IS_APPLE ? '⌘+Shift+S' : 'Ctrl+Shift+S',
   LOWERCASE: IS_APPLE ? '⌘+Shift+1' : 'Ctrl+Shift+1',
@@ -216,20 +214,6 @@ export function isInsertCodeBlock(event: KeyboardEvent): boolean {
   const {code, shiftKey, altKey, metaKey, ctrlKey} = event;
   return (
     code === 'KeyC' && shiftKey && !altKey && controlOrMeta(metaKey, ctrlKey)
-  );
-}
-
-export function isIncreaseFontSize(event: KeyboardEvent): boolean {
-  const {code, shiftKey, altKey, metaKey, ctrlKey} = event;
-  return (
-    code === 'Period' && shiftKey && !altKey && controlOrMeta(metaKey, ctrlKey)
-  );
-}
-
-export function isDecreaseFontSize(event: KeyboardEvent): boolean {
-  const {code, shiftKey, altKey, metaKey, ctrlKey} = event;
-  return (
-    code === 'Comma' && shiftKey && !altKey && controlOrMeta(metaKey, ctrlKey)
   );
 }
 

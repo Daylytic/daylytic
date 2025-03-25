@@ -1,24 +1,12 @@
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
-
-import { ShortcutsPlugin } from "components/common/editor/plugins/shortcuts";
-import { ToolbarPlugin } from "components/common/editor/plugins/toolbar";
-import { useMemo, useRef, useState } from "react";
+import React, { lazy, Suspense, useMemo, useRef, useState } from "react";
+import { Spin } from "antd";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { CodeHighlightPlugin } from "components/common/editor/plugins/code-highlight";
-import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
-import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
-import { LexicalContentEditable } from "components/common/editor/ui/content-editable";
-import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
-import { FloatingLinkEditorPlugin } from "components/common/editor/plugins/floating-link-editor";
-import { LinkPlugin } from "components/common/editor/plugins/link";
-import { OnChangePlugin } from "components/common/editor/plugins/on-change";
-
-import styles from "./lexical.module.css";
 import clsx from "clsx";
-import { Task } from "types/task";
+import styles from "./lexical.module.css";
+import { EditorType } from "~/components/common/editor";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { LexicalContentEditable } from "~/components/common/editor/ui/content-editable";
+
 
 interface EditorProps {
   selectedTask: Task;

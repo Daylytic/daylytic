@@ -1,7 +1,7 @@
-import type {EditorThemeClasses} from 'lexical';
+import type {EditorThemeClasses} from "lexical";
 
-import styles from './daylytic-theme.module.css';
-import clsx from 'clsx';
+import styles from "./daylytic-theme.module.css";
+import clsx from "clsx";
 
 export const theme: EditorThemeClasses = {
   autocomplete: styles.autocomplete,

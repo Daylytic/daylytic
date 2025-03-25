@@ -1,10 +1,9 @@
-import type {JSX} from 'react';
+import type {JSX} from "react";
 
-import styles from './content-editable.module.css';
+import styles from "./content-editable.module.css";
 
-import {ContentEditable} from '@lexical/react/LexicalContentEditable';
-import * as React from 'react';
-import clsx from 'clsx';
+import {ContentEditable} from "@lexical/react/LexicalContentEditable";
+import * as React from "react";
 
 type LexicalContentEditableProps = {
   className?: string;

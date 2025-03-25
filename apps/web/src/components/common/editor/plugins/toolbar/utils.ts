@@ -1,34 +1,27 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-import {$createCodeNode} from '@lexical/code';
+import { $createCodeNode } from "@lexical/code";
 import {
   INSERT_CHECK_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
-} from '@lexical/list';
-import {$isDecoratorBlockNode} from '@lexical/react/LexicalDecoratorBlockNode';
+} from "@lexical/list";
+import { $isDecoratorBlockNode } from "@lexical/react/LexicalDecoratorBlockNode";
 import {
   $createHeadingNode,
   $createQuoteNode,
   $isHeadingNode,
   $isQuoteNode,
   HeadingTagType,
-} from '@lexical/rich-text';
-import {$patchStyleText, $setBlocksType} from '@lexical/selection';
-import {$isTableSelection} from '@lexical/table';
-import {$getNearestBlockElementAncestorOrThrow} from '@lexical/utils';
+} from "@lexical/rich-text";
+import { $setBlocksType } from "@lexical/selection";
+import { $isTableSelection } from "@lexical/table";
+import { $getNearestBlockElementAncestorOrThrow } from "@lexical/utils";
 import {
   $createParagraphNode,
   $getSelection,
   $isRangeSelection,
   $isTextNode,
   LexicalEditor,
-} from 'lexical';
+} from "lexical";
 
 export const formatParagraph = (editor: LexicalEditor) => {
   editor.update(() => {
@@ -124,10 +117,7 @@ export const clearFormatting = (editor: LexicalEditor) => {
       }
 
       nodes.forEach((node, idx) => {
-        // We split the first and last node by the selection
-        // So that we don't format unselected text inside those nodes
         if ($isTextNode(node)) {
-          // Use a separate variable to ensure TS does not lose the refinement
           let textNode = node;
           if (idx === 0 && anchor.offset !== 0) {
             textNode = textNode.splitText(anchor.offset)[1] || textNode;
@@ -135,14 +125,6 @@ export const clearFormatting = (editor: LexicalEditor) => {
           if (idx === nodes.length - 1) {
             textNode = textNode.splitText(focus.offset)[0] || textNode;
           }
-          /**
-           * If the selected text has one format applied
-           * selecting a portion of the text, could
-           * clear the format to the wrong portion of the text.
-           *
-           * The cleared text is based on the length of the selected text.
-           */
-          // We need this in case the selected text only has one format
           const extractedTextNode = extractedNodes[0];
           if (nodes.length === 1 && $isTextNode(extractedTextNode)) {
             textNode = extractedTextNode;
