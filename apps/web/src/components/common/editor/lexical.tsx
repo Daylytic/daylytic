@@ -1,45 +1,64 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { ToolbarContext } from "components/common/editor/context/toolbar";
-import Editor from "components/common/editor/editor";
-import { TaskNodes } from "components/common/editor/nodes/nodes";
+import { ToolbarContext } from "~/components/common/editor/context/toolbar";
+import Editor from "~/components/common/editor/editor";
+import { TaskNodes } from "~/components/common/editor/nodes/nodes";
 import { theme } from "./themes/daylytic-theme";
 import styles from "./lexical.module.css";
-import { Task } from "types/task";
-import { $createParagraphNode, $getRoot } from "lexical";
+import { $getRoot, EditorState, RootNode } from "lexical";
 
 const onError = (error) => {
   console.error(error);
 };
 
-interface LexicalProps {
-  selectedTask: Task;
-  onChange: (editor, task: Task) => void;
+export enum EditorType {
+  plain,
+  rich,
 }
 
-export const Lexical = ({ selectedTask, onChange }: LexicalProps) => {
+interface LexicalProps {
+  id: string;
+  type: EditorType;
+  editable: boolean;
+  showToolbar: boolean;
+  generateDefaultContent: (root: RootNode) => RootNode;
   // eslint-disable-next-line
-  const content = JSON.stringify(selectedTask!.content) as any;
+  defaultContent: any;
+  onChange: (editor: EditorState) => void;
+}
+
+export const Lexical = ({
+  id,
+  defaultContent,
+  onChange,
+  editable,
+  showToolbar,
+  type,
+  generateDefaultContent,
+}: LexicalProps) => {
+  // eslint-disable-next-line
+  const content = JSON.stringify(defaultContent) as any;
   const initialConfig = {
     namespace: "daylytic",
     theme: theme,
     onError,
-    nodes: [...TaskNodes],
-
+    nodes: [
+      ...TaskNodes,
+    ],
+    editable: editable,
     editorState:
       content === "{}"
         ? () => {
-            const initialParagraph = $createParagraphNode();
             const root = $getRoot();
-            root.append(initialParagraph);
+            generateDefaultContent(root);
           }
         : content,
   };
 
   return (
     <div className={styles.wrapper}>
-      <LexicalComposer key={selectedTask.id} initialConfig={initialConfig}>
+      <LexicalComposer key={id} initialConfig={initialConfig}>
         <ToolbarContext>
-          <Editor onChange={onChange} selectedTask={selectedTask} />
+          <Editor showToolbar={showToolbar} onChange={onChange} type={type} />
         </ToolbarContext>
       </LexicalComposer>
     </div>
