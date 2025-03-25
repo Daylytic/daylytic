@@ -6,7 +6,7 @@
 }
 
 .code {
-  background-color: rgb(240, 242, 245);
+  background-color: var(--ant-color-fill-secondary);
   font-family: Menlo, Consolas, Monaco, monospace;
   display: block;
   padding: 8px 8px 8px 52px;
@@ -22,12 +22,11 @@
 .code:before {
   content: attr(data-gutter);
   position: absolute;
-  background-color: #eee;
+  background-color: var(--ant-color-fill-secondary);
   left: 0;
   top: 0;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--ant-color-text-secondary);
   padding: 8px;
-  color: #777;
   white-space: pre-wrap;
   text-align: right;
   min-width: 25px;
@@ -138,7 +137,7 @@
   vertical-align: super;
 }
 .textCode {
-  background-color: rgb(240, 242, 245);
+  background-color: var(--ant-color-fill-secondary);
   padding: 1px 0.25rem;
   font-family: Menlo, Consolas, Monaco, monospace;
   font-size: 94%;
@@ -189,7 +188,6 @@
   margin: 0px 25px 30px 0px;
 }
 .tableScrollableWrapper > .table {
-  /* Remove the table's vertical margin and put it on the wrapper */
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -229,10 +227,7 @@
   outline: none;
   overflow: auto;
 }
-/*
-    A firefox workaround to allow scrolling of overflowing table cell
-    ref: https://bugzilla.mozilla.org/show_bug.cgi?id=1904159
-  */
+
 .tableCell > * {
   overflow: inherit;
 }
@@ -272,7 +267,6 @@
   cursor: pointer;
 }
 .tableAddColumns:after {
-  /* background-image: url(../images/icons/plus.svg); TODO*/
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -298,7 +292,6 @@
   cursor: pointer;
 }
 .tableAddRows:after {
-  /* background-image: url(../images/icons/plus.svg); TODO */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
