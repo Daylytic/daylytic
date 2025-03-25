@@ -18,7 +18,7 @@ export const LexicalContentEditable = ({
 }: LexicalContentEditableProps): JSX.Element =>  {
   return (
     <ContentEditable
-      className={clsx(className ?? styles.wrapper)}
+      className={className ?? styles.wrapper}
       aria-placeholder={placeholder}
       placeholder={
         <div className={placeholderClassName ?? styles.placeholder}>
