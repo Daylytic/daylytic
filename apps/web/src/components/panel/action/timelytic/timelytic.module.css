@@ -1,0 +1,39 @@
+#sider {
+    border-radius: var(--ant-border-radius-lg);
+    padding: var(--ant-padding-md);
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#wrapper {
+    height: 100%;
+    display: flex;
+}
+
+.title {
+    margin-bottom: 0 !important;
+}
+
+.suggestions {
+    height: 100%;
+    overflow: auto;
+}
+
+.card {
+    width: 100%;
+    flex: 1 1 150px;
+    height:auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: unset;
+    height: auto;
+}
+
+.row:not(:last-child) {
+    margin-bottom: var(--ant-padding-xs);
+}
