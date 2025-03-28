@@ -1,20 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
-import { client } from "services/api-client";
-import { Tag } from "types/task";
+import { usePanelFetcher } from "~/providers/panel-fetcher";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { client } from "~/services/api-client";
+import { Tag } from "~/types/task";
 
 interface TagContextType {
   tags: Tag[];
   fetched: boolean;
   fetchTags: () => Promise<void>;
-  updateCachedTag: (tag: Tag) => Promise<void>;
+  updateLocalTag: (tag: Tag) => Promise<void>;
+  updateTag: (tag: Tag) => Promise<void>;
+  deleteTag: (id: string) => Promise<void>;
   createTag: (name: string, color: string) => Promise<void>;
 }
 
 const TagContext = React.createContext<TagContextType | undefined>(undefined);
 
-export const TagProvider = ({ token, children }) => {
+export const TagProvider = ({ children }) => {
+  const { token } = usePanelFetcher();
   const [tags, setTags] = useState<Tag[]>([]);
   const [fetched, setFetched] = useState<boolean>(false);
+  const fetching = useRef<boolean>(false);
 
   const fetchTags = async () => {
     try {
@@ -23,6 +28,7 @@ export const TagProvider = ({ token, children }) => {
       });
       setTags(data ?? []);
       setFetched(true);
+      fetching.current = false;
     } catch (error) {
       console.error("Failed to fetch tags:", error);
     }
@@ -35,7 +41,7 @@ export const TagProvider = ({ token, children }) => {
         body: {
           name: name,
           color: color,
-        }
+        },
       });
       setTags((prevTags) => [...prevTags, data!]);
     } catch (error) {
@@ -43,7 +49,31 @@ export const TagProvider = ({ token, children }) => {
     }
   };
 
-  const updateCachedTag = async (tag: Tag) => {
+  const deleteTag = async (id: string) => {
+    setTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
+    try {
+      await client.DELETE("/tag/{tagId}", {
+        params: { path: { tagId: id }, header: { authorization: `Bearer ${token}` } },
+      });
+    } catch (error) {
+      console.error("Failed to fetch tags:", error);
+    }
+  };
+
+  const updateTag = async (tag: Tag) => {
+    await updateLocalTag(tag);
+
+    try {
+      await client.PUT("/tag/", {
+        params: { header: { authorization: `Bearer ${token}` } },
+        body: tag,
+      });
+    } catch (error) {
+      console.error("Failed to fetch tags:", error);
+    }
+  };
+
+  const updateLocalTag = async (tag: Tag) => {
     try {
       setTags((prevTags) =>
         prevTags.map((oldTag) => (oldTag.id === tag.id ? { ...oldTag, ...tag } : oldTag)),
@@ -54,7 +84,8 @@ export const TagProvider = ({ token, children }) => {
   };
 
   useEffect(() => {
-    if (token && tags.length === 0) {
+    if (token && tags.length === 0 && !fetching.current) {
+      fetching.current = true;
       fetchTags();
     }
   }, [token]);
@@ -65,7 +96,9 @@ export const TagProvider = ({ token, children }) => {
         fetched,
         fetchTags,
         createTag,
-        updateCachedTag,
+        deleteTag,
+        updateTag,
+        updateLocalTag,
         tags,
       }}
     >
@@ -77,7 +110,7 @@ export const TagProvider = ({ token, children }) => {
 export const useTags = () => {
   const context = useContext(TagContext);
   if (!context) {
-    throw new Error("useDailyTasks must be used within a DailyTasksProvider");
+    throw new Error("useTags must be used within a DailyTasksProvider");
   }
   return context;
 };
