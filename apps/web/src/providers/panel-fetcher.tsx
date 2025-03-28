@@ -1,43 +1,7 @@
-/* eslint-disable */
-import { components } from "lib/api/schema";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
-import { client } from "services/api-client";
-
-// Define the Task type
-type Task = {
-  id: components["schemas"]["def-3"]["GoalSchema"]["id"];
-  position: number;
-  taskType: "ROUTINE" | "PROJECT";
-  priority: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL" | null;
-  title: string;
-  content: number | string | boolean | unknown[] | { [key: string]: unknown };
-  isCompleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deadline: string | null;
-  projectId: components["schemas"]["def-3"]["GoalSchema"]["id"] | null;
-  userId: components["schemas"]["def-3"]["GoalSchema"]["id"] | null;
-  tagIds: components["schemas"]["def-3"]["GoalSchema"]["id"][];
-};
-
-// Define the Project type
-type Project = {
-  id: components["schemas"]["def-3"]["GoalSchema"]["id"];
-  position: number;
-  title: string;
-  goalId: components["schemas"]["def-3"]["GoalSchema"]["id"];
-  tasks: Task[];
-};
-
-// Define the Goal type
-type Goal = {
-  id: components["schemas"]["def-3"]["GoalSchema"]["id"];
-  title: components["schemas"]["def-3"]["GoalSchema"]["title"];
-  description: components["schemas"]["def-3"]["GoalSchema"]["description"];
-  userId: components["schemas"]["def-3"]["GoalSchema"]["id"];
-  projects: Project[];
-};
+import { client } from "~/services/api-client";
+import { Goal, Project } from "~/types/goal";
+import { Task } from "~/types/task";
 
 interface PanelFetcherContextType {
   getGoalsData: () => Goal[];
@@ -52,30 +16,57 @@ const PanelFetcherContext = React.createContext<PanelFetcherContextType | undefi
 
 export const PanelFetcherProvider = ({ token, children }) => {
   const [data, setData] = useState<Goal[] | undefined>([]);
+  const [routineData, setRoutineData] = useState<Task[] | undefined>([]);
 
   const [fetched, setFetched] = useState<boolean>(false);
+  const fetching = useRef<boolean>(false);
 
   const fetchAll = async () => {
-
     try {
       const { data } = await client.GET("/goal/all", {
         params: { header: { authorization: `Bearer ${token}` } },
       });
 
+      const { data: routineData } = await client.GET("/task/routine", {
+        params: { header: { authorization: `Bearer ${token}` } },
+      });
+
+      setRoutineData(routineData);
       setData(data);
       setFetched(true);
+      fetching.current = false;
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
     }
   };
 
-  const getGoalsData = () => data ?? [];
-  const getProjectsData = () => data!.flatMap((goal) => goal.projects || []);
-  const getTasksData = () =>
-    data!.flatMap((goal) => goal.projects || []).flatMap((project) => project.tasks || []);
+  /*
+
+  I know for a fact this is not the best approach for dividing the data, but I don't have time to refactor it right now.
+  I will leave it as is for now, but please consider refactoring it in the future.
+  
+  */
+
+  // eslint-disable-next-line
+  const getGoalsData = (): Goal[] => data?.map(({ projects, ...rest }) => ({ ...rest })) ?? [];
+  const getProjectsData = (): Project[] =>
+    data?.flatMap(({ projects }) =>
+      // eslint-disable-next-line
+      (projects || []).map(({ tasks, ...rest }) => rest),
+    ) ?? [];
+
+  const getTasksData = (): Task[] =>
+    data
+      ? data!
+          // eslint-disable-next-line
+          .flatMap((goal) => (goal as any).projects || [])
+          .flatMap((project) => project.tasks || [])
+          .concat(routineData ?? [])
+      : [];
 
   useEffect(() => {
-    if (token && data?.length === 0) {
+    if (token && data?.length === 0 && !fetching.current) {
+      fetching.current = true;
       fetchAll();
     }
   }, [token]);
