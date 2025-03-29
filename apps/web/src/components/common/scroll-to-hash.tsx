@@ -1,20 +1,22 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router';
+import { useEffect } from "react";
+import { useLocation } from "react-router";
+import { useHeaderHeight, scrollToElement } from "~/utils/scroll";
 
-export const ScrollToHash: React.FC = () => {
+export const ScrollToHash = () => {
     const { hash } = useLocation();
+    const headerHeight = useHeaderHeight();
 
     useEffect(() => {
-        if (hash) {
-            // Remove the '#' from the hash to get the element's id
-            const id = hash.replace('#', '');
-            const targetElement = document.getElementById(id);
+      if (hash) {
+        const id = hash.replace('#', '');
+        
+        // First scroll immediately to approximate position
+        scrollToElement(id, headerHeight);
+        
+        // Then adjust after a small delay to ensure accurate positioning
+        setTimeout(() => scrollToElement(id, headerHeight), 100);
+      }
+    }, [hash, headerHeight]);
 
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    }, [hash]);
-
-    return null; // This component does not render anything
+    return null;
 };
