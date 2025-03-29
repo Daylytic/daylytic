@@ -17,8 +17,10 @@ export interface Task {
   title: string;
   content: string | number | boolean | unknown[] | { [key: string]: unknown };
   isCompleted: boolean;
+  timelyticTask: boolean;
   createdAt: string;
   updatedAt: string;
+  completedAt: string | null;
   deadline: string | null;
   userId: string | null;
   projectId: string | null;
