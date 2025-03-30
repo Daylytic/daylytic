@@ -1,10 +1,9 @@
-/* eslint-disable */
-import { usePanelFetcher } from "providers/panel-fetcher";
+
+import { usePanelFetcher } from "~/providers/panel-fetcher";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { client } from "services/api-client";
-import { Goal, Project } from "types/goal";
-import { Task } from "types/task";
+import { client } from "~/services/api-client";
+import { Project } from "~/types/goal";
 
 interface ProjectContextType {
   projects: Project[];
@@ -19,19 +18,14 @@ interface ProjectContextType {
 const ProjectContext = React.createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectProvider = ({ children }) => {
-  const { getProjectsData, token, data } = usePanelFetcher();
+  const { getProjectsData, token, fetched: goalsFetched } = usePanelFetcher();
 
   const [projects, setProjects] = useState<Project[]>([]);
 
   const selectedProject = useRef<Project | undefined>(undefined);
 
   const [fetched, setFetched] = useState<boolean>(false);
-
-  const globalUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  const pendingChangesRef = useRef<Map<string, Task>>(new Map());
-
-  const { goalId, projectId } = useParams();
+  const { goalId } = useParams();
   const recalculatePositions = (projects: Project[]): Project[] => {
     return projects
       .sort((a, b) => a.position - b.position)
@@ -40,9 +34,9 @@ export const ProjectProvider = ({ children }) => {
 
   const fetchAll = async () => {
     try {
+      if (!goalsFetched) return;
       const data = getProjectsData();
       setProjects(data);
-
       setFetched(true);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
@@ -69,7 +63,9 @@ export const ProjectProvider = ({ children }) => {
   const deleteProject = async (goalId: string, projectId: string) => {
     try {
       setProjects((prevProjects) =>
-        recalculatePositions(prevProjects.filter((filterProject) => filterProject.id !== projectId)),
+        recalculatePositions(
+          prevProjects.filter((filterProject) => filterProject.id !== projectId),
+        ),
       );
 
       await client.DELETE("/goal/{goalId}/project/{projectId}", {
@@ -86,28 +82,21 @@ export const ProjectProvider = ({ children }) => {
 
   const updateProjects = async (updatedProjects: Project[]) => {
     try {
-      // Recalculate positions based on the array order
-      const projectsWithPositions = updatedProjects.map((project, index) => ({
-        ...project,
-        position: index,
-      }));
-
       setProjects((prevProjects) =>
         prevProjects.map((project) => {
           if (project.goalId === goalId) {
-            const updated = projectsWithPositions.find((p) => p.id === project.id);
+            const updated = updatedProjects.find((p) => p.id === project.id);
             return updated ? { ...project, ...updated } : project;
           }
           return project;
         }),
       );
 
-      // Send update to backend (adjust the endpoint as needed)
       await client.PUT("/goal/project", {
         params: {
           header: { authorization: `Bearer ${token}` },
         },
-        body: projectsWithPositions,
+        body: updatedProjects,
       });
     } catch (error) {
       console.error("Failed to update projects:", error);
@@ -119,7 +108,7 @@ export const ProjectProvider = ({ children }) => {
     if (token && projects.length === 0) {
       fetchAll();
     }
-  }, [data]);
+  }, [token, goalsFetched]);
 
   return (
     <ProjectContext.Provider
