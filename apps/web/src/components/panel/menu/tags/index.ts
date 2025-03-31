@@ -1,2 +1,3 @@
 export * from "./tags";
-export {default as styles} from "./tags.module.css";
+export * from "./use-tags-navigation";
+export { default as styles } from "./tags.module.css";
