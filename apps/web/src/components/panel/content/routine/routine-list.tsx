@@ -1,41 +1,16 @@
-import { TaskList, TaskCard } from "components/common/task";
-import { useDailyTasks } from "providers/daily-tasks";
-import { useTags } from "providers/tag";
-import { ReactNode } from "react";
-import { useNavigate } from "react-router";
-import { Task } from "types/task";
-import { getTaskRoute } from "utils/routes";
+import { Task } from "~/types/task";
+import { TaskList } from "~/components/common/task/task-list";
+import { useList } from ".";
 
 export const RoutineList = () => {
-  const { tasks, updateTask, fetched, selectedTask } = useDailyTasks();
-  const navigate = useNavigate();
-  const { tags } = useTags();
-
+  const { filteredTasks, fetched, handleTaskClick, updateTasks } = useList();
   return (
     <TaskList
-      orderable={true}
+      tasks={filteredTasks}
       fetched={fetched}
-      tasks={tasks}
-      updateTask={(task: Task) => {
-        updateTask(task);
-      }}
-      renderItem={(item: Task): ReactNode => {
-        return (
-          <TaskCard
-            orderable={true}
-            key={item.id}
-            item={item}
-            onClick={() => {
-              const task = tasks.find((task) => task.id === item.id);
-              selectedTask.current = task;
-              navigate(getTaskRoute(item.id));
-            }}
-            onCheckboxChange={async (): Promise<void> => {
-              await updateTask({ ...item, isCompleted: !item.isCompleted });
-            }}
-            tags={tags}
-          />
-        );
+      handleTaskClick={handleTaskClick}
+      handleTaskUpdate={async (task: Task): Promise<void> => {
+        await updateTasks([task], true);
       }}
     />
   );
