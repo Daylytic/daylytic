@@ -1,9 +1,8 @@
-import { Content } from "antd/es/layout/layout";
-import {styles} from ".";
+import { Content } from "../";
 import { TagHeader, TagList } from ".";
 
 export const Tag = () => (
-  <Content id={styles.content}>
+  <Content>
     <TagHeader />
     <TagList />
   </Content>
