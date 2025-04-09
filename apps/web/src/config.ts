@@ -1,26 +1,55 @@
-export const config = {
+import { theme } from "antd";
+
+export const config = ({ darkMode }: { darkMode: boolean }) => ({
   hashed: false,
   cssVar: true,
+  algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
   token: {
-    // Seed Token
-    colorPrimary: "#6247aa",
+    colorPrimary: darkMode ? "#7e65bf" : "#6247aa",
     borderRadius: 5,
     fontFamily: "Poppins",
     colorBgLayout: "#f5f5f5",
     colorWhite: "#fafafa",
+    red: "#ffb6b1",
+    orange: "#ffb350",
+    yellow: "#ffde56",
+    lime: "#69df73",
+    blue: "#4d9eff",
+    purple: "#cc7df5",
+    colorError: "#ff6e64",
+    colorSuccess: "#a8ecae",
+    colorWarning: "#ffd49d",
+    colorInfo: "#9ac8ff",
+    colorLink: "#9ac8ff",
+    paddingXXS: 4,
+    paddingXS: 4,
+    paddingSM: 8,
+    padding: 8,
+    paddingMD: 16,
+    paddingXL: 32,
+    paddingLG: 16,
+    lineWidth: 1,
   },
   components: {
+    Calendar: {
+      fullBg: "transparent",
+    },
+    Progress: {
+      defaultColor: "var(--ant-color-primary)",
+    },
     Layout: {
-      headerBg: "#f5f5f5",
-      headerColor: "#f5f5f5",
+      headerBg: darkMode ? "#2f2d34" : "#f5f5f5",
+      headerColor: darkMode ? "#2f2d34" : "#f5f5f5",
+      footerBg: darkMode ? "#2f2d34" : "#f5f5f5",
+      footerColor: darkMode ? "#2f2d34" : "#f5f5f5",
       headerPadding: 0,
-      colorBgContainer: "#fafafa",
-      bodyBg: "#fafafa",
-      siderBg: "#f5f5f5",
+      colorBgContainer: darkMode ? "#1a181f" : "#fafafa",
+      bodyBg: darkMode ? "#1a181f" : "#fafafa",
+      siderBg: darkMode ? "#2f2d34" : "#f5f5f5",
     },
     Menu: {
       popupBg: "#f5f5f5",
-      itemBg: "#f5f5f5",
+      itemBg: "transparent",
       activeBarBorderWidth: 0,
       itemMarginInline: 0,
     },
@@ -29,4 +58,4 @@ export const config = {
       itemPadding: "4px 0",
     },
   },
-};
+});
