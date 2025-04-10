@@ -154,40 +154,6 @@ div:has(> .project-card-skeleton) {
     border-color: var(--ant-color-primary);
 }
 
-.task-card-wrapper {
-    position: relative;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-.task-card {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-    flex: 1;
-}
-
-.task-card-dragged {
-    opacity: 0.5;
-}
-
-.task-card-button {
-    min-height: var(--ant-control-height);
-    height: auto;
-    box-sizing: border-box;
-    flex: 1;
-}
-
-.task-card-button-title {
-    text-align: left;
-    white-space: normal;
-    margin-bottom: 0 !important;
-}
-
 .input {
     width: 100%;
 }
