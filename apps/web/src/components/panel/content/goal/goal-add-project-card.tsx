@@ -1,51 +1,56 @@
 import { Button, Card, Input, Spin } from "antd";
-import { styles } from ".";
+import { styles, useAddProjectCard } from ".";
 import clsx from "clsx";
-import { useState } from "react";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { useGoal } from "providers/goal";
-import { useProject } from "providers/project";
 
-export const GoalAddProjectCard = () => {
-  const [showInput, setShowInput] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [projectName, setProjectName] = useState<string>("");
-  const { getSelectedGoal } = useGoal();
-  const { createProject } = useProject();
-
-  const handleHideInput = async () => {
-    if (projectName === "") {
-      setShowInput(false);
-    }
+interface GoalAddProjectCardProps {
+  alwaysShowInput?: boolean;
+  setup?: {
+    onChange: (projectName: string) => void;
   };
+}
 
-  const handleInputChange = async (e) => {
-    setProjectName(e.target.value);
-  };
-
-  const handleCreateProject = async () => {
-    setLoading(true);
-    await createProject(getSelectedGoal()!.id, projectName);
-    setLoading(false);
-    setProjectName("");
-  };
+export const GoalAddProjectCard = ({ alwaysShowInput = false, setup }: GoalAddProjectCardProps) => {
+  const {
+    isValidLength,
+    showInput,
+    loading,
+    handleCreateProject,
+    projectName,
+    handleInputChange,
+    handleHideInput,
+    handleShowInput,
+  } = useAddProjectCard({ alwaysShowInput, setup });
 
   return (
     <>
-      {showInput ? (
+      {showInput || alwaysShowInput ? (
         <Card
-          className={styles["project-card-creator"]}
-          actions={[
-            loading ? <Spin size="small" /> : <PlusCircleOutlined onClick={handleCreateProject} />,
-          ]}
+          className={clsx(
+            styles["project-card-creator"],
+            setup && styles["project-card-creator-setup"],
+          )}
+          actions={
+            setup
+              ? undefined
+              : [
+                  loading ? (
+                    <Spin size="small" />
+                  ) : (
+                    <PlusCircleOutlined onClick={handleCreateProject} />
+                  ),
+                ]
+          }
         >
           <Input.TextArea
             size="small"
             className={clsx(styles["create-project-input"], "ant-typography h3")}
-            placeholder="Add a new project"
+            placeholder="Create A New Project"
             aria-selected={true}
+            status={projectName.length > 0 && !isValidLength(projectName) ? "error" : undefined}
             onChange={handleInputChange}
             onBlur={handleHideInput}
+            aria-multiline={false}
             autoFocus={true}
             variant="borderless"
             autoSize
@@ -57,13 +62,13 @@ export const GoalAddProjectCard = () => {
         </Card>
       ) : (
         <Button
-          onClick={() => setShowInput((prevShowInput) => !prevShowInput)}
+          onClick={handleShowInput}
           color="default"
           variant="filled"
           size="large"
           className={styles["project-card-button-creator"]}
         >
-          Add A New Project
+          Create A New Project
         </Button>
       )}
     </>
