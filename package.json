@@ -6,7 +6,8 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "turbo run format",
-    "generate:api": "npx openapi-typescript ./apps/web/src/lib/api/api.json -o ./apps/web/src/lib/api/schema.ts "
+    "generate:api": "npx openapi-typescript ./apps/web/src/lib/api/api.json -o ./apps/web/src/lib/api/schema.ts",
+    "preview": "turbo run build && serve -s apps/web/build"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

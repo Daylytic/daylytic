@@ -4,7 +4,17 @@
   "type": "module",
   "private": true,
   "exports": {
-    "./constants": "./src/constants.ts"
+    "./constants": {
+      "types": "./src/constants.ts",
+      "default": "./dist/constants.js"
+    }
   },
-  "main": "./src/constants.ts"
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "typescript": "^5.8.2"
+  },
+  "devDependencies": {}
 }

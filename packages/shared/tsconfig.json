@@ -1,8 +1,9 @@
 {
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "dist",
+    "rootDir": "src",
     "module": "esnext",
     "target": "es2015",
     "declaration": true,
