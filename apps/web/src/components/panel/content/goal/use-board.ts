@@ -1,13 +1,14 @@
-import { useGoal } from "providers/goal";
+import { useGoal } from "~/providers/goal";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { useEffect } from "react";
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { reorderWithEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/util/reorder-with-edge";
 import { flushSync } from "react-dom";
-import { triggerPostMoveFlash } from "components/flourish/trigger-post-move-flash";
-import { useProject } from "providers/project";
-import { useTask } from "providers/task";
-import { Task } from "types/task";
+import { triggerPostMoveFlash } from "~/components/common/flourish/trigger-post-move-flash";
+import { useProject } from "~/providers/project";
+import { useTask } from "~/providers/task";
+import { Task } from "~/types/task";
+import { Project } from "~/types/goal";
 
 export const useGoalBoard = () => {
   const { selectedGoal, fetched } = useGoal();
@@ -19,23 +20,6 @@ export const useGoalBoard = () => {
       return tasks
         .filter((task) => task.projectId === projectId)
         .sort((a, b) => a.position - b.position);
-    };
-
-    const generateFinalTasks = (reorderedTasks) => {
-      const finalTasks = {} as Record<string, Task[]>;
-
-      for (const task of reorderedTasks) {
-        const parentProject = projects.find((project) => project.id === task.projectId);
-        if (!parentProject) continue;
-
-        if (!finalTasks[parentProject.goalId]) {
-          finalTasks[parentProject.goalId] = [];
-        }
-
-        finalTasks[parentProject.goalId].push(task);
-      }
-
-      return finalTasks;
     };
 
     const reorderAndUpdate = ({ list, startIndex, indexOfTarget, closestEdgeOfTarget }) => {
@@ -50,10 +34,8 @@ export const useGoalBoard = () => {
         position: index,
       }));
 
-      const finalTasks = generateFinalTasks(reordered);
-
       flushSync(async () => {
-        await updateTasks(finalTasks, true);
+        await updateTasks(reordered, true);
       });
     };
 
@@ -149,7 +131,10 @@ export const useGoalBoard = () => {
                 indexOfTarget,
                 closestEdgeOfTarget,
                 axis: "horizontal",
-              }),
+              }).map((project, index) => ({
+                ...project as Project,
+                position: index,
+              })),
             );
           });
 
