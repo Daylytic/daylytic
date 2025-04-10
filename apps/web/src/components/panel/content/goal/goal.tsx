@@ -1,15 +1,14 @@
-import { Content } from "antd/es/layout/layout";
-import { GoalHeader, styles } from ".";
-import { GoalBoard } from "components/panel/content/goal/goal-board";
+import { GoalHeader, GoalBoard } from ".";
 import { redirect, useParams } from "react-router";
-import { useGoal } from "providers/goal";
-import { Routes } from "utils/routes";
+import { useGoal } from "~/providers/goal";
+import { Routes } from "~/utils/routes";
+import { Content } from "../";
 
 export const Goals = () => {
   const { goalId } = useParams();
   const { goals, selectedGoal } = useGoal();
 
-  if(!goalId) {
+  if (!goalId) {
     redirect(Routes.PANEL_DASHBOARD);
   }
 
@@ -18,7 +17,7 @@ export const Goals = () => {
   }
 
   return (
-    <Content id={styles.content}>
+    <Content>
       <GoalHeader />
       <GoalBoard />
     </Content>
