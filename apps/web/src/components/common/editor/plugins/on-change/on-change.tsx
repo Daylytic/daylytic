@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { Task } from "types/task";
+import { EditorState } from "lexical";
 
 interface OnChangePluginProps {
-  selectedTask: Task;
-  onChange: (editor, task: Task) => void;
+  onChange: (editor: EditorState) => void;
 }
 
-export const OnChangePlugin = ({ onChange, selectedTask }: OnChangePluginProps) => {
+export const OnChangePlugin = ({ onChange }: OnChangePluginProps) => {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
     const unregister = editor.registerUpdateListener(({ editorState }) => {
-      onChange(editorState, selectedTask);
+      onChange(editorState);
     });
     return () => {
       unregister();

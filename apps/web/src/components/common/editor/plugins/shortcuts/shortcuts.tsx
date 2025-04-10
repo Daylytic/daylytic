@@ -10,7 +10,7 @@ import {
   OUTDENT_CONTENT_COMMAND,
 } from "lexical";
 import { Dispatch, useEffect } from "react";
-import { useToolbarState } from "components/common/editor/context/toolbar";
+import { useToolbarState } from "~/components/common/editor/context/toolbar";
 import {
   isFormatParagraph,
   isFormatHeading,
@@ -32,11 +32,9 @@ import {
   isSubscript,
   isSuperscript,
   isInsertCodeBlock,
-  isIncreaseFontSize,
-  isDecreaseFontSize,
   isClearFormatting,
   isInsertLink,
-} from "components/common/editor/plugins/shortcuts/shortcuts-list";
+} from "~/components/common/editor/plugins/shortcuts/shortcuts-list";
 import {
   formatParagraph,
   formatHeading,
@@ -46,8 +44,8 @@ import {
   formatCode,
   formatQuote,
   clearFormatting,
-} from "components/common/editor/plugins/toolbar/utils";
-import { sanitizeUrl } from "utils/url";
+} from "~/components/common/editor/plugins/toolbar/utils";
+import { sanitizeUrl } from "~/utils/url";
 
 export const ShortcutsPlugin = ({
   editor,

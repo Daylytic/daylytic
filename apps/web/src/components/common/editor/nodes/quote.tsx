@@ -1,5 +1,5 @@
-import { DecoratorNode } from 'lexical';
-import { ReactNode } from 'react';
+import { DecoratorNode } from "lexical";
+import { ReactNode } from "react";
 
 export class QuoteNode extends DecoratorNode<ReactNode> {
   static getType(): string {
