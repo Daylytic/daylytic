@@ -3,7 +3,27 @@
 }
 
 .goal-card-title {
+    display: block !important;
+    width: 100%;
     margin-bottom: 0px !important;
+    padding: 0px !important;
+}
+
+.goal-description {
+    margin-bottom: var(--ant-typography-title-margin-bottom);
+}
+
+.goal-header-wrapper {
+    width: 100%;
+}
+
+.goal-card-title-textarea {
+    resize: none;
+    min-height: 0px !important;
+    height: min-content;
+    overflow: hidden;
+    outline: none !important;
+    border: none !important
 }
 
 .project-card-editable :global(.ant-typography-edit) {
@@ -12,10 +32,6 @@
 
 .project-card-editable:hover :global(.ant-typography-edit) {
     opacity: 1;
-}
-
-.project-card-title-icon {
-    color: var(--ant-color-primary-text);
 }
 
 .projects-list-wrapper {
@@ -36,14 +52,14 @@
     padding-bottom: var(--ant-padding-xs);
 
     /* 
-        Needed spoce on the left of the project list otherwise 
+        Needed space on the left of the project list otherwise 
         the drop indicator would not show up when dragging a task to the left
 
         We don't need it on the right, because there is add project card which 
         adds space and the drop indicator shows up
         Row gap / 2 + 2px of divider width
     */
-    padding-left: calc(var(--ant-padding-xs) / 2 + 2px);
+    padding-left: calc(var(--ant-padding-xs) / 2 + 3px);
 }
 
 .project-card-wrapper {
@@ -69,13 +85,15 @@
     text-wrap: auto;
 }
 
-.project-card-title {
-    overflow: hidden;
-    /* height: auto !important; */
-    text-wrap: auto;
+.project-card-title :global(.ant-typography) {
+    cursor: grab;
+    user-select: none;
 }
 
-.project-card-title>textarea {}
+.project-card-title {
+    overflow: hidden;
+    text-wrap: auto;
+}
 
 div:has(> .project-card-skeleton) {
     height: 100%;
@@ -108,22 +126,8 @@ div:has(> .project-card-skeleton) {
     gap: var(--ant-padding-xs);
 }
 
-.project-card-tasks {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    padding: 0;
-    margin: 0;
-    gap: var(--ant-padding-xs);
-    height: 100%;
-    overflow-y: auto;
-    padding-block: calc(var(--ant-padding-xs) / 2 + 2px);
-}
-
 .project-card :global(.ant-card-actions) {
     position: relative;
-    /* overflow: auto; */
-    /* overflow:auto; */
 }
 
 .input-wrapper {
@@ -135,6 +139,10 @@ div:has(> .project-card-skeleton) {
     display: inline-block;
     height: min-content;
     flex-shrink: 0;
+}
+
+.project-card-creator-setup {
+    width: 100%;
 }
 
 .project-card-dragged-over {
@@ -167,4 +175,8 @@ div:has(> .project-card-skeleton) {
 
 .header-title {
     margin-bottom: 0 !important;
+}
+
+.goal-header-button {
+    height: calc(var(--ant-line-height-heading-1) * var(--ant-font-size-heading-1));
 }
