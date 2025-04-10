@@ -1,0 +1,21 @@
+.content {
+    border-radius: var(--ant-border-radius-lg);
+    padding: var(--ant-padding-md);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.mobile {
+    padding: 0 !important;
+}
+
+.title {
+    margin: 0 !important;
+}
+
+.menu {
+    height: calc(var(--ant-line-height-heading-1) * var(--ant-font-size-heading-1));
+}

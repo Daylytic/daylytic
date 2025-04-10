@@ -1,16 +1,11 @@
-import Sider from "antd/es/layout/Sider";
-import { Goals } from "./goals";
-import styles from "./menu.module.css";
-import { Header } from "./header";
-import { Tags } from "./tags";
-import { Flex } from "antd";
+import { Grid } from "antd";
+import { MenuDrawer, MenuSider } from ".";
 
-export const Menu = () => (
-  <Sider width={400} id={styles.sider}>
-    <Flex vertical gap={"large"} id={styles["sider-content-wrapper"]}>
-      <Header />
-      <Tags />
-      <Goals />
-    </Flex>
-  </Sider>
-);
+const { useBreakpoint } = Grid;
+
+export const Menu = () => {
+  const screens = useBreakpoint();
+  const isMobile = !screens.xl;
+
+  return isMobile ? <MenuDrawer /> : <MenuSider />;
+};

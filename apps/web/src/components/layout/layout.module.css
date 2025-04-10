@@ -4,3 +4,9 @@
     display: flex;
     flex-direction: row;
 }
+
+.home {
+    gap: var(--ant-padding-lg);
+    display:flex;
+    flex-direction: column;
+}

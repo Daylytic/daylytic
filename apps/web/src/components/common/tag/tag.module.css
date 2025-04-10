@@ -1,4 +1,6 @@
 .tag {
+    display: inline-flex;
+    align-items: center;
     margin-inline-end: 0 !important;
 }
 

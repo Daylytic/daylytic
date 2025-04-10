@@ -1,15 +1,8 @@
 import { Menu } from "antd";
-import { useNavigate } from "react-router";
-import { getGeneralMenuItems } from "utils/menu-items";
-import { usePanel } from "hooks/use-panel";
+import { useGeneralMenu } from ".";
 
 export const General = () => {
-  const navigate = useNavigate();
-  const { getMenu } = usePanel();
-
-  const currentMenu = getMenu();
-
-  const generalItems = getGeneralMenuItems();
+  const { currentMenu, generalItems, handleMenuClick } = useGeneralMenu();
 
   return (
     <Menu
@@ -17,7 +10,7 @@ export const General = () => {
       defaultSelectedKeys={[currentMenu]}
       selectedKeys={[currentMenu]}
       defaultOpenKeys={[currentMenu]}
-      onClick={({ key }) => navigate(`/panel/${key}`)}
+      onClick={handleMenuClick}
       items={generalItems}
     />
   );

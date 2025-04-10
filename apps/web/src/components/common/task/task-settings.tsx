@@ -1,12 +1,18 @@
-import { CalendarOutlined, EllipsisOutlined, FlagOutlined, TagsOutlined } from "@ant-design/icons";
-import { Button, Divider, Dropdown, Flex, Popover, Select, TimePicker } from "antd";
-import {styles} from ".";
-import { timeFormat } from "utils/date";
+import {
+  CalendarOutlined,
+  ClockCircleOutlined,
+  EllipsisOutlined,
+  FlagOutlined,
+  TagsOutlined,
+} from "@ant-design/icons";
+import { Button, DatePicker, Divider, Dropdown, Flex, Popover, Select, TimePicker } from "antd";
+import { styles } from ".";
+import { dateFormat, timeFormat } from "~/utils/date";
 import dayjs from "dayjs";
 import { TaskSettingsSkeleton, useSettings } from ".";
 import clsx from "clsx";
-import { TagCreator } from "components/common/tag";
-import { Task } from "types/task";
+import { TagManager } from "~/components/common/tag";
+import { Task } from "~/types/task";
 
 interface TaskSettingsProps {
   selectedTask: Task | undefined;
@@ -29,12 +35,26 @@ export const TaskSettings = ({
     onConfirmDeletetion,
   });
 
-  return (
-    <Flex gap="small" id={styles.settings}>
+  const timelinePicker =
+    selectedTask.taskType === "PROJECT" ? (
+      <DatePicker
+        format={dateFormat}
+        variant="filled"
+        prefix={<CalendarOutlined />}
+        suffixIcon={<></>}
+        className={styles["settings-button"]}
+        placeholder="Date"
+        defaultValue={dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null}
+        onChange={(e) => {
+          selectedTask.deadline = e.toISOString();
+          onChange(selectedTask);
+        }}
+      />
+    ) : (
       <TimePicker
         format={timeFormat}
         variant="filled"
-        prefix={<CalendarOutlined />}
+        prefix={<ClockCircleOutlined />}
         suffixIcon={<></>}
         className={styles["settings-button"]}
         placeholder="Time"
@@ -43,12 +63,17 @@ export const TaskSettings = ({
           selectedTask.deadline = e.toISOString();
           onChange(selectedTask);
         }}
-      ></TimePicker>
+      />
+    );
+
+  return (
+    <Flex gap="small" id={styles.settings}>
+      {timelinePicker}
       <Popover
         placement="bottom"
         content={
-          <Flex vertical className={styles["tag-popover"]} gap={"small"}>
-            <Flex wrap gap={"small"}>
+          <Flex vertical className={styles["tag-popover"]} gap="small">
+            <Flex wrap gap="small">
               {selectedTagOptions}
             </Flex>
             {selectedTagOptions.length > 0 && tagOptions.length > 0 ? (
@@ -56,11 +81,11 @@ export const TaskSettings = ({
             ) : (
               <></>
             )}
-            <Flex wrap gap={"small"}>
+            <Flex wrap gap="small">
               {tagOptions}
             </Flex>
-            <Flex gap={"small"}>
-              <TagCreator />
+            <Flex gap="small">
+              <TagManager />
             </Flex>
           </Flex>
         }

@@ -1,12 +1,12 @@
+import { Task } from "~/types/task";
+
 export interface Goal {
     id: string;
     title: string;
     description: string;
     userId: string;
-
-    /* Local Data */
-    // progress: number;
-    // updatedAt: string;
+    archived: boolean;
+    projects?: Project[];
 }
 
 export interface Project {
@@ -14,4 +14,6 @@ export interface Project {
     title: string;
     position: number;
     goalId: string;
+    archived: boolean;
+    tasks?: Task[];
 }

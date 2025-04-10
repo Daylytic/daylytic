@@ -8,13 +8,12 @@
     height: 100%;
     width: 100%;
     position: relative;
-    /* margin-top: var(--ant-padding-xs); */
     border-radius: var(--ant-border-radius-lg);
 }
 
 .card {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.02); /* TODO: Replace with ant designs variable color */
+    background-color: var(--ant-color-fill-quaternary);
     transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
     cursor: pointer;
 }
@@ -24,7 +23,7 @@
 }
 
 .card :global(.ant-card-actions) {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: var(--ant-color-fill-quaternary);
 }
 
 .card.selectable.selected {

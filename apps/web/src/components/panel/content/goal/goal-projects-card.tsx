@@ -1,22 +1,17 @@
-import { Button, Card, Dropdown, Flex, Input, MenuProps, Popconfirm, Spin } from "antd";
-import { styles } from ".";
+import { Button, Card, Dropdown, Flex, Input, Spin } from "antd";
+import { styles, useProjectsCard } from ".";
 import {
-  BorderLeftOutlined,
-  BorderRightOutlined,
-  DeleteOutlined,
-  EditOutlined,
   EllipsisOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import Title from "antd/es/typography/Title";
-import { Project } from "types/goal";
-import { GoalTaskCard } from "components/panel/content/goal/goal-task-card";
+import { Project } from "~/types/goal";
 import clsx from "clsx";
-import DropIndicator from "components/drop-indicator/drop-indicator";
-import { useProjectsCard } from "components/panel/content/goal/use-projects-card";
-import React, { useRef, useState } from "react";
-import { useProject } from "providers/project";
-import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
+import { DropIndicator } from "~/components/common/drop-indicator/drop-indicator";
+import React from "react";
+import { TextArea } from "~/components/common/text-area";
+import { Task } from "~/types/task";
+import { TaskList } from "~/components/common/task/task-list";
+import { PROJECT_TITLE_MAX_LENGTH, PROJECT_TITLE_MIN_LENGTH } from "@daylytic/shared/constants";
 
 interface GoalProjectsCardProps {
   project: Project;
@@ -34,68 +29,16 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
     cardListRef,
     headerRef,
     taskName,
+    isValidLength,
+    handleStartEditing,
+    handleEndEditing,
+    handleCancelEditing,
+    editing,
+    items,
+    fetched,
+    handleTaskClick,
+    updateTasks,
   } = useProjectsCard(project);
-  const { updateProjects, projects, deleteProject } = useProject();
-  const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState(project.title);
-  const titleRef = useRef(project.title);
-
-  const moveProject = async (startIndex: number, finishIndex: number) => {
-    const reorderedProjects = reorder({
-      list: projects,
-      startIndex,
-      finishIndex,
-    });
-
-    await updateProjects(reorderedProjects);
-  };
-
-  const deleteCurrentProject = async () => {
-    deleteProject(project.goalId, project.id);
-  };
-
-  const items: MenuProps["items"] = [
-    {
-      label: "Move To The Left",
-      key: "1",
-      icon: <BorderLeftOutlined />,
-      onClick: async () => {
-        console.log("1");
-        const startIndex = projects.map((proj) => proj.id).indexOf(project.id);
-        if (startIndex !== -1) {
-          console.log("2");
-          await moveProject(startIndex, startIndex - 1);
-        }
-      },
-    },
-    {
-      label: "Move To The Right",
-      key: "2",
-      icon: <BorderRightOutlined />,
-      onClick: async () => {
-        const startIndex = projects.map((proj) => proj.id).indexOf(project.id);
-        if (startIndex !== -1) {
-          await moveProject(startIndex, startIndex + 1);
-        }
-      },
-    },
-    {
-      label: (
-        <Popconfirm
-          title="Are you sure you want to delete this project?"
-          onConfirm={deleteCurrentProject}
-          okText="Yes"
-          cancelText="No"
-        >
-          Delete
-        </Popconfirm>
-      ),
-      key: "3",
-      icon: <DeleteOutlined />,
-      danger: true,
-      onClick: async () => {},
-    },
-  ];
 
   return (
     <li className={styles["project-card-wrapper"]} ref={cardListRef}>
@@ -112,7 +55,8 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
               size="middle"
               className={styles.input}
               prefix={<PlusOutlined />}
-              placeholder="Add a new task"
+              placeholder="Create A New task"
+              status={taskName.length > 0 && !isValidLength(taskName) ? "error" : undefined}
               autoFocus={false}
               value={taskName}
               onChange={handleInputChange}
@@ -125,48 +69,34 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
         ]}
       >
         <Flex justify="space-between" align="start" className={styles["project-card-header"]}>
-          <Title
+          <TextArea
+            type="h4"
             ref={headerRef}
-            level={3}
-            editable={{
-              onStart: () => {
-                setEditing(true);
-              },
-              onChange: (text) => {
-                setTitle(text);
-                titleRef.current = text;
-              },
-              onEnd: async () => {
-                // Use the ref’s current value which is updated synchronously
-                if (titleRef.current !== project.title) {
-                  project.title = titleRef.current;
-                  setEditing(false);
-                  await updateProjects([project]);
-                }
-              },
-              text: project.title,
-              editing: editing,
-              icon: <EditOutlined className={styles["project-card-title-icon"]} />,
-              triggerType: ["icon"],
-              enterIcon: null,
-            }}
-            className={clsx(styles["project-card-title"], styles["project-card-editable"])}
-          >
-            {title}
-          </Title>
+            defaultValue={project.title ?? ""}
+            minLength={PROJECT_TITLE_MIN_LENGTH}
+            maxLength={PROJECT_TITLE_MAX_LENGTH}
+            editing={editing}
+            className={!editing && styles["project-card-title"]}
+            onStart={handleStartEditing}
+            onCancel={handleCancelEditing}
+            onEnd={handleEndEditing}
+          />
           <Dropdown menu={{ items }} trigger={["click"]}>
             <Button type="text">
               <EllipsisOutlined />
             </Button>
           </Dropdown>
         </Flex>
-        <ul className={styles["project-card-tasks"]}>
-          {sortedTasks.map((task) => (
-            <GoalTaskCard key={task.id} item={task} goalId={project.goalId} tags={[]} />
-          ))}
-        </ul>
+        <TaskList
+          tasks={sortedTasks}
+          fetched={fetched}
+          handleTaskClick={handleTaskClick}
+          handleTaskUpdate={async (task: Task): Promise<void> => {
+            await updateTasks([task], true);
+          }}
+        />
       </Card>
-      {closestEdge && <DropIndicator edge={closestEdge} />}
+      {closestEdge && <DropIndicator edge={closestEdge} divider={false} />}
     </li>
   );
 };

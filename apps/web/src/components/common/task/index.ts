@@ -1,5 +1,3 @@
-
-export * from "./task-list.tsx";
 export * from "./task-card.tsx";
 export * from "./task-editor.tsx";
 export * from "./task-settings.tsx";

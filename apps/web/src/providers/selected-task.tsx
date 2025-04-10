@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { Task } from "types/task";
+import { Task } from "~/types/task";
 
 interface SelectedTaskContextType {
   selectedTask: Task | undefined;

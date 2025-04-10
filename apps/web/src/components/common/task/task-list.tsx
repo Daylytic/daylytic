@@ -1,71 +1,59 @@
-import { List } from "antd";
-import { DndContext, closestCenter } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { restrictToVerticalAxis, restrictToParentElement } from "@dnd-kit/modifiers";
-import { arrayMove } from "@dnd-kit/sortable";
-import { styles } from ".";
-import { TaskListSkeleton } from "./skeleton";
-import { Task } from "types/task";
-import { ReactNode } from "react";
+import { Flex, CheckboxChangeEvent, Divider } from "antd";
+import { styles, TaskCard, TaskListSkeleton } from ".";
+import { Task } from "~/types/task";
+import { useTags } from "~/providers/tag";
 
 interface TaskListProps {
-  fetched: boolean;
-  orderable: boolean;
   tasks: Task[];
-  updateTask: (task: Task) => void;
-  renderItem: (item: Task, index: number) => ReactNode;
+  fetched: boolean;
+  dnd?: boolean;
+  handleTaskClick: (task: Task) => void;
+  handleTaskUpdate: (task: Task) => Promise<void>;
+  showDelete?: boolean;
+  onDelete?: (task: Task) => void;
 }
 
-export const TaskList = ({ fetched, orderable, tasks, updateTask, renderItem }: TaskListProps) => {
-  if (!fetched) {
-    return <TaskListSkeleton />;
-  }
+export const TaskList = ({
+  tasks,
+  dnd,
+  fetched,
+  handleTaskClick,
+  handleTaskUpdate,
+  showDelete,
+  onDelete,
+}: TaskListProps) => {
+  const { tags } = useTags();
 
-  const sortedTasks = [...tasks].sort((a, b) => a.position - b.position);
-
-  const handleDragEnd = ({ active, over }) => {
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = sortedTasks.findIndex((task) => task.id === active.id);
-    const newIndex = sortedTasks.findIndex((task) => task.id === over?.id);
-
-    const updatedTasks = arrayMove(sortedTasks, oldIndex, newIndex);
-
-    const reorderedTasks = updatedTasks.map((task, index) => ({
-      ...task,
-      position: index,
-    }));
-
-    reorderedTasks.forEach((task) => {
-      updateTask(task);
-    });
-  };
-
-  const list = (
-    <List
-      itemLayout="vertical"
-      dataSource={sortedTasks}
-      className={styles["tasks-list"]}
-      renderItem={renderItem}
-    />
-  );
-
-  if (!orderable) {
-    return list;
+  if (tasks.length < 1 && fetched) {
+    return <></>;
   }
 
   return (
-    <DndContext
-      collisionDetection={closestCenter}
-      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={sortedTasks.map((task) => task.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        {list}
-      </SortableContext>
-    </DndContext>
+    <ul className={styles["tasks-list"]} data-tour-id="task-list">
+      {fetched ? (
+        tasks.map((task) => {
+          return (
+            <Flex key={task.id} gap="small" vertical>
+              <TaskCard
+                item={task}
+                tags={tags}
+                dnd={dnd}
+                onDelete={onDelete}
+                showDelete={showDelete}
+                onTaskClick={handleTaskClick}
+                onCheckboxChange={async (e: CheckboxChangeEvent) => {
+                  task.isCompleted = e.target.checked;
+                  await handleTaskUpdate(task);
+                }}
+              />
+
+              {tasks.indexOf(task) !== tasks.length - 1 ? <Divider style={{ margin: 0 }} /> : <></>}
+            </Flex>
+          );
+        })
+      ) : (
+        <TaskListSkeleton />
+      )}
+    </ul>
   );
 };

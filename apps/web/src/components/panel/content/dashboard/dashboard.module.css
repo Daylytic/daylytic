@@ -1,0 +1,120 @@
+.title {
+  margin: 0px !important;
+}
+
+.description {
+  font-weight: normal !important;
+  margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ant-padding-xs);
+  flex-wrap:wrap;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.calendar {
+  height: 100%;
+  width: 100%;
+}
+
+.cell {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.row:not(:last-child) {
+  margin-bottom: var(--ant-padding-xs);
+}
+
+.scrollable {
+  overflow-x: auto;
+}
+
+.card {
+  width: 100%;
+  flex: 1 1 150px;
+}
+
+.ai {
+  min-height: 80px;
+  flex: 1 1 150px;
+  height: unset !important;
+}
+
+.ai.available {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    border-color: var(--ant-color-primary-bg);
+  }
+
+  50% {
+    border-color: var(--ant-color-primary-hover);
+  }
+
+  100% {
+    border-color: var(--ant-color-primary-bg);
+  }
+}
+
+.grid {
+  width: 100%;
+  overflow: auto;
+}
+
+.cell {
+  width: 12px;
+  height: 12px;
+  margin-bottom: 4px;
+  border-radius: var(--ant-border-radius-xs);
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 2px;
+  table-layout: fixed;
+  width: auto;
+}
+
+.month {
+  padding: 0;
+  text-align: start;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.day {
+  font-size: 10px;
+  padding-right: 4px;
+  text-align: right;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.tooltip {
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.empty {
+  padding: 0;
+  overflow: hidden;
+}

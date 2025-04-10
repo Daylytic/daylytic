@@ -1,8 +1,11 @@
-/* eslint-disable */
-import { usePanelFetcher } from "providers/panel-fetcher";
+import dayjs from "dayjs";
+import { useAnalytics } from "~/providers/analytics";
+import { usePanelFetcher } from "~/providers/panel-fetcher";
+import { useUser } from "~/providers/user";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { client } from "services/api-client";
-import { Task } from "types/task";
+import { client } from "~/services/api-client";
+import { Task } from "~/types/task";
+import { ISOFormatUTC } from "~/utils/date";
 
 interface TaskContextType {
   tasks: Task[];
@@ -10,17 +13,23 @@ interface TaskContextType {
 
   fetched: boolean;
 
-  createTask: (goalId: string, projectId: string, title: string) => Promise<void>;
-  updateTasks: (tasksByGoal: Record<string, Task[]>, immediatelyUpdate) => Promise<void>;
-  deleteTask: (task: Task, goalId: string) => Promise<void>;
+  createTask: (
+    title: string,
+    taskType: "ROUTINE" | "PROJECT",
+    projectId?: string,
+    userId?: string,
+  ) => Promise<void>;
+  updateTasks: (tasks: Task[], immediatelyUpdate) => Promise<void>;
+  deleteTask: (task: Task) => Promise<void>;
   forceRender: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const TaskContext = React.createContext<TaskContextType | undefined>(undefined);
 
 export const TaskProvider = ({ children }) => {
-  const { getTasksData, token, data } = usePanelFetcher();
-
+  const { getTasksData, token, fetched: goalsFetched } = usePanelFetcher();
+  const { fetchAnalytics } = useAnalytics();
+  const { profile } = useUser();
   const [tasks, setTasks] = useState<Task[]>([]);
   const selectedTask = useRef<Task | undefined>(undefined);
 
@@ -33,15 +42,14 @@ export const TaskProvider = ({ children }) => {
   const [, forceRender] = useState(0);
 
   const recalculatePositions = (tasks: Task[]): Task[] => {
-    return tasks
-      .sort((a, b) => a.position - b.position)
-      .map((task, index) => ({ ...task, position: index }));
+    return tasks.sort((a, b) => a.position - b.position);
   };
 
   const fetchAll = async () => {
     try {
-      const data = getTasksData();
-      setTasks(data);
+      if (!goalsFetched) return;
+      const tasksData = getTasksData();
+      setTasks(tasksData);
 
       setFetched(true);
     } catch (error) {
@@ -49,14 +57,18 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  const createTask = async (goalId: string, projectId: string, title: string) => {
+  const createTask = async (
+    title: string,
+    taskType: "ROUTINE" | "PROJECT",
+    projectId?: string,
+    userId?: string,
+  ) => {
     try {
-      const { data } = await client.POST("/goal/{goalId}/project/{projectId}/task/", {
+      const { data } = await client.POST("/task/", {
         params: {
-          path: { goalId, projectId },
           header: { authorization: `Bearer ${token}` },
         },
-        body: { title },
+        body: { title, projectId, userId, taskType },
       });
       setTasks((prevTasks) => recalculatePositions([...prevTasks, data!]));
     } catch (error) {
@@ -65,74 +77,74 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  const updateTasks = async (
-    tasksByGoal: Record<string, Task[]>,
-    immediatelyUpdate: boolean = false,
-  ) => {
-    console.log(tasksByGoal)
-    const now = new Date().toISOString();
+  const updateTasks = async (tasks: Task[], immediatelyUpdate: boolean = false) => {
+    for (const task of tasks) {
+      task.updatedAt = dayjs().utc().toISOString();
+      if (task.isCompleted) {
+        task.completedAt = dayjs().utc().tz(profile?.timeZone).format(ISOFormatUTC);
+      }
+      pendingChangesRef.current.set(task.id, { ...task });
+    }
 
-    Object.values(tasksByGoal).forEach((tasks) => {
-      tasks.forEach((task) => {
-        task.updatedAt = now;
-        pendingChangesRef.current.set(task.id, { ...task });
-      });
-    });
+    setTasks((prevTasks) =>
+      prevTasks.map((t) => {
+        const updatedTask = tasks.find((task) => task.id === t.id);
+        return updatedTask ? { ...t, ...updatedTask } : t;
+      }),
+    );
 
     if (immediatelyUpdate) {
-      setTasks((prevTasks) =>
-        prevTasks.map((t) => {
-          const updatedTask = Object.values(tasksByGoal)
-            .flat()
-            .find((task) => task.id === t.id);
-          return updatedTask ? { ...t, ...updatedTask } : t;
-        }),
-      );
-    }
+      if (globalUpdateTimeout.current) {
+        clearTimeout(globalUpdateTimeout.current);
+      }
 
-    if (globalUpdateTimeout.current) {
-      clearTimeout(globalUpdateTimeout.current);
-    }
-
-    globalUpdateTimeout.current = setTimeout(async () => {
       const tasksToUpdate = Array.from(pendingChangesRef.current.values());
-      if (tasksToUpdate.length > 0) {
-        try {
-          for (const [goalId, tasks] of Object.entries(tasksByGoal)) {
-            console.log([goalId, tasks])
-            await client.PUT("/goal/{goalId}/project/{projectId}/task/", {
+      try {
+        await client.PUT("/task/", {
+          params: {
+            header: { authorization: `Bearer ${token}` },
+          },
+          body: tasksToUpdate,
+        });
+        await fetchAnalytics();
+        pendingChangesRef.current.clear();
+      } catch (error) {
+        console.error("Failed to update tasks:", error);
+      }
+    } else {
+      if (globalUpdateTimeout.current) {
+        clearTimeout(globalUpdateTimeout.current);
+      }
+      globalUpdateTimeout.current = setTimeout(async () => {
+        const tasksToUpdate = Array.from(pendingChangesRef.current.values());
+        if (tasksToUpdate.length > 0) {
+          try {
+            await client.PUT("/task/", {
               params: {
                 header: { authorization: `Bearer ${token}` },
-                path: {
-                  goalId: goalId,
-                  projectId: tasks[0].projectId!, // Assuming all tasks in this group belong to the same project
-                },
               },
-              body: tasks,
+              body: tasksToUpdate,
             });
+            await fetchAnalytics();
+            pendingChangesRef.current.clear();
+          } catch (error) {
+            console.error("Failed to update tasks:", error);
           }
-
-          console.log("Tasks updated successfully in the database.");
-          pendingChangesRef.current.clear();
-        } catch (error) {
-          console.error("Failed to update tasks:", error);
         }
-      }
-    }, 3000);
+      }, 3000);
+    }
   };
 
-  const deleteTask = async (task: Task, goalId: string) => {
+  const deleteTask = async (task: Task) => {
     setTasks((prevTasks) =>
       recalculatePositions(prevTasks.filter((filterTask) => filterTask.id !== task.id)),
     );
 
     try {
-      await client.DELETE("/goal/{goalId}/project/{projectId}/task/{taskId}", {
+      await client.DELETE("/task/{taskId}", {
         params: {
           header: { authorization: `Bearer ${token}` },
           path: {
-            goalId: goalId,
-            projectId: task.projectId!,
             taskId: task.id,
           },
         },
@@ -147,7 +159,7 @@ export const TaskProvider = ({ children }) => {
     if (token && tasks.length === 0) {
       fetchAll();
     }
-  }, [data]);
+  }, [token, goalsFetched]);
 
   return (
     <TaskContext.Provider

@@ -1,17 +1,26 @@
-import { DescriptionsProps } from "antd";
+import { DescriptionsProps, Grid } from "antd";
+import { useLayout } from "~/providers/layout";
 import { useState } from "react";
-import { Task } from "types/task";
-import { formatDate } from "utils/date";
+import { Task } from "~/types/task";
+import { formatDate } from "~/utils/date";
+import { useNavigate } from "react-router";
+import { useSelectedTask } from "~/providers/selected-task";
+const { useBreakpoint } = Grid;
 
 interface UseHeaderProps {
-    selectedTask: Task;
+  selectedTask: Task;
 }
 
-export const useHeader = ({selectedTask}: UseHeaderProps) => {
-
+export const useHeader = ({ selectedTask }: UseHeaderProps) => {
   // HACK: Prevents counting characters and words every time user types something.
   // Instead, we only perform calculations when user clicks on the buttons with popover.
   const [counts, setCounts] = useState<[number, number]>();
+  const { setShowAction } = useLayout();
+  const { setSelectedTask } = useSelectedTask();
+
+  const screens = useBreakpoint();
+  const isMobile = !screens.lg;
+  const navigate = useNavigate();
 
   // eslint-disable-next-line
   const countCharactersAndWords = (node: any): [number, number] => {
@@ -48,6 +57,14 @@ export const useHeader = ({selectedTask}: UseHeaderProps) => {
     setCounts([totalWords, totalChars]);
   };
 
+  const handleClose = () => {
+    setSelectedTask(undefined);
+    setShowAction(false);
+    if (!isMobile) {
+      navigate("..");
+    }
+  };
+
   const menuItems: DescriptionsProps["items"] = [
     {
       key: "1",
@@ -75,5 +92,6 @@ export const useHeader = ({selectedTask}: UseHeaderProps) => {
     countCharactersAndWords,
     handleOpenDetails,
     menuItems,
-  }
-}
+    handleClose,
+  };
+};

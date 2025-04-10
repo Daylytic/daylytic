@@ -14,6 +14,7 @@
     margin: 0;
 }
 
-#setting-icon {
+
+.icon {
     font-size: var(--ant-font-size-heading-4);
 }

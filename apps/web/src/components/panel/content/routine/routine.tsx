@@ -1,9 +1,8 @@
-import { Content } from "antd/es/layout/layout";
-import styles from "./routine.module.css";
+import { Content } from "../";
 import { RoutineHeader, RoutineList, RoutineTaskInput } from ".";
 
 export const Routine = () => (
-  <Content id={styles.content}>
+  <Content>
     <RoutineHeader />
     <RoutineTaskInput />
     <RoutineList />

@@ -66,13 +66,13 @@ export const generatePresets = (presets = presetPalettes) => {
 
 export const pallets = {
   General: [
-    "#ff6e64",
-    "#ffb350",
-    "#ffde56",
-    "#69df73",
-    "#4d9eff",
-    "#cc7df5",
-    "#adacb0",
-    "#2a2a2a",
+    "#ffb6b1",
+    "#ffd49d",
+    "#ffeda3",
+    "#a8ecae",
+    "#9ac8ff",
+    "#e8c4fa",
+    "#d4d3d5",
+    "#505050",
   ],
 };

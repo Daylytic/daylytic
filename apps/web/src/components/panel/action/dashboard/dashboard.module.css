@@ -1,0 +1,68 @@
+#sider {
+    border-radius: var(--ant-border-radius-lg);
+    padding: var(--ant-padding-md);
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#wrapper {
+    height: 100%;
+    display: flex;
+}
+
+.title {
+    margin-bottom: 0 !important;
+}
+
+.list {
+    width: 100%;
+    overflow: auto;
+}
+
+.create {
+    width: 100%;
+    min-height: var(--ant-card-header-height);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.card {
+    width: 100%;
+    background-color: var(--ant-color-fill-quaternary);
+    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
+    cursor: pointer;
+}
+
+.card {
+    margin-top: var(--ant-padding-xs);
+}
+
+.card :global(.ant-card-actions) {
+    background-color: var(--ant-color-fill-quaternary);
+}
+
+.card.selectable.selected {
+    background-color: var(--ant-menu-item-selected-bg);
+    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
+}
+
+.card.selectable:hover:not(.selected) {
+    background-color: var(--ant-menu-item-hover-bg);
+    transition: border-color var(--ant-motion-duration-slow), background var(--ant-motion-duration-slow), padding var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
+}
+
+.card.selectable.selected,
+.card.selectable.selected *:not(a) {
+    color: var(--ant-menu-item-selected-color) !important;
+}
+
+.description-item {
+    color: var(--ant-color-text-description);
+}
+
+.description-item:hover {
+    color: unset;
+}

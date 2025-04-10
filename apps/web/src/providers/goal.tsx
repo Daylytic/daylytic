@@ -1,8 +1,8 @@
-/* eslint-disable */
+import { usePanelFetcher } from "~/providers/panel-fetcher";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { client } from "services/api-client";
-import { Goal, Project } from "types/goal";
+import { client } from "~/services/api-client";
+import { Goal } from "~/types/goal";
 
 interface GoalContextType {
   goals: Goal[];
@@ -19,7 +19,9 @@ interface GoalContextType {
 
 const GoalContext = React.createContext<GoalContextType | undefined>(undefined);
 
-export const GoalProvider = ({ token, children }) => {
+export const GoalProvider = ({ children }) => {
+
+  const { token, getGoalsData, fetched: goalsFetched } = usePanelFetcher();
   const [goals, setGoals] = useState<Goal[]>([]);
 
   const selectedGoal = useRef<Goal | undefined>(undefined);
@@ -32,13 +34,9 @@ export const GoalProvider = ({ token, children }) => {
 
   const fetchAll = async () => {
     try {
-      const { data } = await client.GET("/goal/all", {
-        params: { header: { authorization: `Bearer ${token}` } },
-      });
-
-      const goalsData = data ?? [];
+      if (!goalsFetched) return;
+      const goalsData = getGoalsData();
       setGoals(goalsData);
-
       setFetched(true);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
@@ -99,7 +97,7 @@ export const GoalProvider = ({ token, children }) => {
     if (token && goals.length === 0) {
       fetchAll();
     }
-  }, [token]);
+  }, [token, goalsFetched]);
 
   return (
     <GoalContext.Provider

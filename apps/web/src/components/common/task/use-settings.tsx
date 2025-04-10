@@ -1,11 +1,18 @@
 import { generate } from "@ant-design/colors";
-import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  BorderBottomOutlined,
+  BorderTopOutlined,
+  CloseCircleOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import { Tooltip, MenuProps, Popconfirm } from "antd";
-import { useTags } from "providers/tag";
-import { adjustColor } from "utils/color";
-import { capitalize } from "utils/string";
-import { Tag } from "components/common/tag";
-import { Priorities, Task } from "types/task";
+import { useTags } from "~/providers/tag";
+import { adjustColor } from "~/utils/color";
+import { capitalize } from "~/utils/string";
+import { Tag } from "~/components/common/tag";
+import { Priorities, Task } from "~/types/task";
+import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
+import { useTask } from "~/providers/task";
 
 interface UseSettingsProps {
   selectedTask: Task;
@@ -14,20 +21,59 @@ interface UseSettingsProps {
 }
 
 export const useSettings = ({ selectedTask, onChange, onConfirmDeletetion }: UseSettingsProps) => {
-  const { tags, updateCachedTag } = useTags();
+  const { tags, updateLocalTag } = useTags();
+  const { tasks, updateTasks } = useTask();
+
+  const sortedTasks = tasks
+    .filter((task) => task.projectId === selectedTask.projectId)
+    .sort((a, b) => a.position - b.position);
 
   const priorityOptions: { label: string; value: string }[] = [];
   const tagOptions: React.JSX.Element[] = [];
   const selectedTagOptions: React.JSX.Element[] = [];
 
+  const moveTask = async (startIndex: number, finishIndex: number) => {
+    const reorderedTasks = reorder({
+      list: sortedTasks,
+      startIndex,
+      finishIndex,
+    }).map((task, index) => ({
+      ...(task as Task),
+      position: index,
+    }));
+
+    await updateTasks(reorderedTasks, true);
+  };
+
   const menuItems: MenuProps["items"] = [
+    {
+      label: "Move Above",
+      key: "MoveAbove",
+      icon: <BorderTopOutlined />,
+      onClick: async () => {
+        const startIndex = sortedTasks.map((task) => task.id).indexOf(selectedTask.id);
+        if (startIndex !== -1) {
+          await moveTask(startIndex, startIndex - 1);
+        }
+      },
+    },
+    {
+      label: "Move Below",
+      key: "MoveBelow",
+      icon: <BorderBottomOutlined />,
+      onClick: async () => {
+        const startIndex = sortedTasks.map((task) => task.id).indexOf(selectedTask.id);
+        if (startIndex !== -1) {
+          await moveTask(startIndex, startIndex + 1);
+        }
+      },
+    },
     {
       key: "DELETE",
       label: (
         <Popconfirm
           title="Are you sure you want to delete this task?"
           onConfirm={onConfirmDeletetion}
-
           okText="Yes"
           cancelText="No"
         >
@@ -61,14 +107,14 @@ export const useSettings = ({ selectedTask, onChange, onConfirmDeletetion }: Use
 
               const taskIndex = tag!.taskIds.indexOf(selectedTask.id, 0);
               tag!.taskIds.splice(taskIndex, 1);
-              updateCachedTag(tag);
+              updateLocalTag(tag);
               await onChange(selectedTask);
             }
           } else {
             tag.taskIds.push(selectedTask.id);
             selectedTask.tagIds.push(tag.id);
             onChange(selectedTask);
-            updateCachedTag(tag);
+            updateLocalTag(tag);
           }
 
           if (!containsTask) {

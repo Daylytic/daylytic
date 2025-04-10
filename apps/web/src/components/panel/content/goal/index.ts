@@ -1,3 +1,10 @@
 export * from "./goal";
 export * from "./goal-header";
+export * from "./goal-add-project-card";
+export * from "./goal-board";
+export * from "./use-board";
+export * from "./use-projects-card";
+export * from "./use-header";
+export * from "./use-add-project-card";
+export * from "./goal-projects-card";
 export { default as styles } from "./goal.module.css";

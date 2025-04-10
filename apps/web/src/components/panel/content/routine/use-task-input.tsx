@@ -1,21 +1,36 @@
-import { message } from "antd";
-import { useDailyTasks } from "providers/daily-tasks";
+import { TASK_TITLE_MAX_LENGTH, TASK_TITLE_MIN_LENGTH } from "@daylytic/shared/constants";
+import { App } from "antd";
+import { useTask } from "~/providers/task";
+import { useUser } from "~/providers/user";
 import { useState } from "react";
 
 export const useTaskInput = () => {
   const [newTask, setNewTask] = useState("");
+  const { profile } = useUser();
   const [loading, setLoading] = useState(false);
-  const { createTask } = useDailyTasks();
+  const { createTask } = useTask();
+  const { message } = App.useApp();
+
+  const isValidLength = (name) => {
+    return !(name.length < TASK_TITLE_MIN_LENGTH || name.length > TASK_TITLE_MAX_LENGTH);
+  };
 
   const handleCreateTask = async () => {
-    const trimmedTask = newTask.trim();
-    if (!trimmedTask) {
+    const trimmed = newTask.trim();
+    if (!isValidLength(trimmed)) {
+      message.error(
+        `Task name must be between ${TASK_TITLE_MIN_LENGTH} and ${TASK_TITLE_MAX_LENGTH} characters.`,
+      );
       return;
     }
 
     setLoading(true);
     try {
-      await createTask(trimmedTask);
+      if (!profile?.id) {
+        return;
+      }
+
+      await createTask(trimmed, "ROUTINE", undefined, profile!.id);
       setNewTask("");
       message.success("Task added successfully");
     } catch {
@@ -34,5 +49,6 @@ export const useTaskInput = () => {
     handleCreateTask,
     loading,
     newTask,
+    isValidLength,
   };
 };
