@@ -1,12 +1,11 @@
-import { styles } from ".";
-import { GoalProjectsCard } from "./goal-projects-card";
-import { GoalAddProjectCard } from "components/panel/content/goal/goal-add-project-card";
+import { styles, GoalAddProjectCard, GoalProjectsCard, useGoalBoard } from ".";
 import { Flex } from "antd";
-import { useGoalBoard } from "components/panel/content/goal/use-board";
-import { GoalProjectsCardSkeleton } from "components/panel/content/goal/skeleton/goal-projects-card-skeleton";
+import { GoalProjectCardSkeleton } from "./skeleton";
+import { useProject } from "~/providers/project";
 
 export const GoalBoard = () => {
-  const { selectedGoal, projects, fetched } = useGoalBoard();
+  const { selectedGoal, projects } = useGoalBoard();
+  const { fetched } = useProject();
 
   return (
     <Flex className={styles["projects-list-wrapper"]}>
@@ -21,7 +20,7 @@ export const GoalBoard = () => {
           <GoalAddProjectCard />
         </ul>
       ) : (
-        <GoalProjectsCardSkeleton />
+        <GoalProjectCardSkeleton />
       )}
     </Flex>
   );
