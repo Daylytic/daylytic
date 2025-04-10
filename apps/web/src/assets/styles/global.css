@@ -31,27 +31,36 @@
     font-family: "Poppins";
 }
 
-:root {
-    --color1: #e2cfea;
-    --color2: #a06cd5;
-    --color3: #6247aa;
-    --color4: #102b3f;
-    --color5: #062726;
-}
-
 section {
+    /* scroll-margin-top: calc(var(--ant-layout-header-height) + var(--ant-padding-md)); */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    width: 100%;
+    min-height: calc(100vh - var(--ant-layout-header-height));
     margin: 0 auto;
+    width:100%;
+    max-width: 1200px;
+    min-height: 100vh;
+}
+
+section:first-child {
+    min-height: 100vh;
+}
+
+section:last-child {
+    min-height: calc(100vh - (var(--ant-layout-header-height * 2)));
 }
 
 @media screen and (max-width: 400px) {
     section {
         width: 90%;
+    }
+}
+
+@media screen and (min-width: 400px) {
+    section {
+        width: 80%;
     }
 }
 
@@ -77,7 +86,6 @@ section {
 }
 
 /* Ant Design Changes */
-
 .ant-anchor-link {
     height: 64px;
     line-height: 64px;
@@ -123,6 +131,7 @@ section {
     box-shadow: none !important;
     font-size: inherit !important;
     line-height: inherit !important;
+    overflow-y: hidden;
 }
 
 .ant-typography-edit-content {
@@ -131,14 +140,17 @@ section {
     padding-left: 0 !important;
 }
 
-/* Ensure text alignment matches original */
 .ant-typography-edit-content textarea {
     text-align: inherit !important;
-    /* Match original alignment */
     margin-left: 0 !important;
     padding-left: 0 !important;
 }
 
-.ant-list .ant-list-header, .ant-list .ant-list-footer {
+.ant-list .ant-list-header,
+.ant-list .ant-list-footer {
     padding-block: 0;
+}
+
+.ant-anchor-wrapper-horizontal .ant-anchor {
+    overflow: unset !important;
 }
