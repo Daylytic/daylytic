@@ -72,7 +72,6 @@ const updateGoal = async (data: UpdateGoalSchema) => {
     return await prisma.goal.update({
       where: {
         id: data.id,
-        userId: data.userId,
       },
       data: data
     });

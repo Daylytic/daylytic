@@ -1,3 +1,4 @@
+import { themes, timezones } from "@daylytic/shared/constants";
 import { buildJsonSchemas } from "fastify-zod";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
@@ -10,15 +11,24 @@ const SessionSchema = z.object({
   validUntil: z.date().optional(),
 });
 
-const UserSchema = z.object({
+const TimezoneSchema = z.string().refine((val) => timezones.includes(val), {
+  message: "Invalid timezone",
+});
+
+const ThemeSchema = z.string().refine((val) => themes.includes(val), {
+  message: "Invalid theme",
+});
+
+export const UserSchema = z.object({
   id: IdSchema,
   googleId: z.string(),
   name: z.string(),
   email: z.string(),
-  picture: z.string(),
+  picture: z.string().base64(),
   createdAt: z.date(),
   lastSeenAt: z.date(),
-  timeZone: z.string(),
+  timeZone: TimezoneSchema,
+  theme: ThemeSchema,
 });
 
 export const GoogleAccountSchema = z.object({
@@ -31,37 +41,44 @@ export const GoogleAccountSchema = z.object({
     .email(),
   name: z.string(),
   picture: z.string(),
-  timeZone: z.string(),
+  timeZone: TimezoneSchema,
+  theme: ThemeSchema,
 });
 
 // Create
 
 const CreateUserInputSchema = z.object({
   token: z.string(),
-  timeZone: z.string(),
+  timeZone: TimezoneSchema,
+  theme: ThemeSchema,
 });
 
-const CreateUserSchema = GoogleAccountSchema.extend({googleId: z.string(), id: IdSchema.optional()});
+const CreateUserSchema = GoogleAccountSchema.extend({ googleId: z.string(), id: IdSchema.optional() });
 
 const LoadUserInputSchema = z.object({
-    token: z.string(),
-    timeZone: z.string().optional(),
-  });
+  token: z.string(),
+  timeZone: TimezoneSchema,
+  theme: ThemeSchema,
+});
 
 // Fetch
 
 const FetchAuthenticationProfileSchema = SessionSchema.pick({ token: true });
 
-const FetchGoogleAccountInfoSchema = SessionSchema.pick({token: true});
+const FetchGoogleAccountInfoSchema = SessionSchema.pick({ token: true });
 
-const FetchUserSchema = UserSchema.pick({id: true});
+const FetchUserSchema = UserSchema.pick({ id: true });
 // Delete
 
-const DeleteSessionInputSchema = SessionSchema.pick({token: true});
+const DeleteSessionInputSchema = SessionSchema.pick({ token: true });
 
 // Update
 
-const UpdateLastSeenSchema = UserSchema.pick({id: true});
+const UpdateLastSeenSchema = UserSchema.pick({ id: true });
+const UpdateTimezoneInputSchema = UserSchema.pick({ timeZone: true });
+const UpdateThemeInputSchema = UserSchema.pick({ theme: true });
+const UpdateThemeSchema = UserSchema.pick({ id: true, theme: true });
+const UpdateTimezoneSchema = UserSchema.pick({ id: true, timeZone: true });
 
 // Header
 
@@ -82,6 +99,10 @@ export type FetchAuthenticationProfile = z.infer<
 export type FetchUser = z.infer<typeof FetchUserSchema>;
 export type FetchGoogleAccountInfo = z.infer<typeof FetchGoogleAccountInfoSchema>;
 export type UpdateLastSeen = z.infer<typeof UpdateLastSeenSchema>;
+export type UpdateTimezoneInputSchema = z.infer<typeof UpdateTimezoneInputSchema>;
+export type UpdateTimezoneSchema = z.infer<typeof UpdateTimezoneSchema>;
+export type UpdateThemeInputSchema = z.infer<typeof UpdateThemeInputSchema>;
+export type UpdateThemeSchema = z.infer<typeof UpdateThemeSchema>;
 
 export const { schemas: userSchemas, $ref } = buildJsonSchemas(
   {
@@ -90,6 +111,8 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas(
     GoogleAccountSchema,
     HeaderBearerSchema,
     LoadUserInputSchema,
+    UpdateTimezoneInputSchema,
+    UpdateThemeInputSchema
   },
   { $id: "UsersSchema" }
 );

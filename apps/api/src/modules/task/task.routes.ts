@@ -6,20 +6,18 @@ import { taskController } from "./task.controller.js";
 import { projectController } from "modules/project/project.controller.js";
 
 export const taskHandler: FastifyPluginAsync = async (server, _) => {
-  // Create task POST /goal/:goalId/project/:projectId/task
+  // Create task POST /task
   server.route({
     url: "/",
     method: "POST",
     preHandler: [
       authController.authenticate,
-      projectController.authenticateGoal,
-      taskController.authenticateProject,
     ],
     handler: taskController.createTask,
     schema: {
       description: "Create task",
       tags: ["project"],
-      body: $ref("CreateProjectTaskInputSchema"),
+      body: $ref("CreateTaskWithIdsSchema"),
       headers: $refAuth("HeaderBearerSchema"),
       response: {
         201: $ref("TaskSchema"),
@@ -27,18 +25,16 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Fetch all tasks GET /goal/:id/project/:projectId/task
+  // Fetch all tasks GET /task
   server.route({
     url: "/",
     method: "GET",
     preHandler: [
       authController.authenticate,
-      projectController.authenticateGoal,
-      taskController.authenticateProject,
     ],
     handler: taskController.fetchTasks,
     schema: {
-      description: "Fetch tasks from project",
+      description: "Fetch all the existing tasks",
       tags: ["project"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
@@ -47,12 +43,29 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Delete specific task DELETE /goal/:id/project/:projectId/task/:taskId
+  // Fetch all tasks GET /task
+  server.route({
+    url: "/routine",
+    method: "GET",
+    preHandler: [
+      authController.authenticate,
+    ],
+    handler: taskController.fetchRoutineTasks,
+    schema: {
+      description: "Fetch all routine tasks",
+      tags: ["project"],
+      headers: $refAuth("HeaderBearerSchema"),
+      response: {
+        200: $ref("FetchTasksResponseSchema"),
+      },
+    },
+  });
+
+  // Delete specific task DELETE /task/:taskId
   server.route({
     url: "/:taskId",
     method: "DELETE",
-    preHandler: [authController.authenticate, projectController.authenticateGoal,
-    taskController.authenticateProject],
+    preHandler: [authController.authenticate],
     handler: taskController.deleteTask,
     schema: {
       description: "Delete a specific project",
@@ -67,12 +80,11 @@ export const taskHandler: FastifyPluginAsync = async (server, _) => {
     },
   });
 
-  // Update specific task PUT /goal/:id/project/:projectId/task
+  // Update specific task PUT /task
   server.route({
     url: "/",
     method: "PUT",
-    preHandler: [authController.authenticate, projectController.authenticateGoal,
-    taskController.authenticateProject],
+    preHandler: [authController.authenticate],
     handler: taskController.updateTask,
     schema: {
       description: "Update project",

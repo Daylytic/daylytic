@@ -1,19 +1,25 @@
 import { RequestError } from "utils/error.js";
 import { prisma } from "utils/prisma.js";
 import {
-  CreateTaskWithIdSchema,
   Task,
-  DeleteTaskWithIdInputSchema,
   FetchTasksInputSchema,
   UpdateTasksSchema,
   VerifyOwnershipSchema,
+  DeleteTaskInputSchema,
+  FetchTasksWithIdsSchema,
+  FetchUserTasksInputSchema,
+  CreateTaskWithIdsSchema,
 } from "./task.schema.js";
-import { convertToTimeZoneISO8601 } from "utils/date.js";
+import { convertToTimeZoneISO8601, ISOFormat, ISOFormatUTC } from "utils/date.js";
 import { tagService } from "modules/tag/index.js";
 import { goalService } from "modules/goal/goal.service.js";
 import { projectService } from "modules/project/project.service.js";
+import { timelyticService } from "modules/timelytic/timelytic.service.js";
+import { analyticsService } from "modules/analytics/analytics.service.js";
+import dayjs, { Dayjs } from "dayjs";
+import { authService } from "modules/auth/auth.service.js";
 
-const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
+const createTask = async (data: CreateTaskWithIdsSchema): Promise<Task> => {
   try {
     const maxPosition = await prisma.task.aggregate({
       where: { userId: data.userId, projectId: data.projectId, taskType: data.taskType },
@@ -30,49 +36,185 @@ const createTask = async (data: CreateTaskWithIdSchema): Promise<Task> => {
   }
 };
 
+const fetchUserTasks = async (data: FetchUserTasksInputSchema): Promise<Task[]> => {
+  try {
+    return await prisma.task.findMany({
+      where: {
+        OR: [
+          { userId: data.userId }, // Direct user-owned tasks
+          { project: { goal: { userId: data.userId } } }, // Tasks linked via goal's userId
+        ],
+      },
+    });
+  } catch (err) {
+    throw new RequestError("Problem occurred while fetching tasks", 500, err);
+  }
+};
+
+const fetchRoutineTasks = async (data: FetchUserTasksInputSchema): Promise<Task[]> => {
+  try {
+    return await prisma.task.findMany({
+      where:
+        data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occurred while fetching tasks", 500, err);
+  }
+};
+
 const fetchTasks = async (data: FetchTasksInputSchema): Promise<Task[]> => {
   return await prisma.task.findMany({
     where: data,
   });
 };
 
-const deleteTask = async (data: DeleteTaskWithIdInputSchema): Promise<void> => {
+const fetchTasksWithIds = async (data: FetchTasksWithIdsSchema): Promise<Task[]> => {
+  return await prisma.task.findMany({
+    where: {
+      id: {
+        in: data,
+      },
+    },
+  });
+};
+
+const deleteTask = async (data: DeleteTaskInputSchema): Promise<void> => {
+  const { id } = data;
   try {
-    await prisma.task.delete({
-      where: data,
+    await prisma.$transaction(async (tx) => {
+      const tags = await tx.tag.findMany({
+        where: {
+          taskIds: {
+            has: id,
+          },
+        },
+      });
+
+      for (const tag of tags) {
+        const updatedTaskIds = tag.taskIds.filter(taskId => taskId !== id);
+        await tx.tag.update({
+          where: { id: tag.id },
+          data: { taskIds: updatedTaskIds },
+        });
+      }
+
+      await tx.task.delete({ where: { id } });
     });
   } catch (err) {
-    throw new RequestError("Problem occured while deleting task", 500, err);
+    throw new RequestError("Problem occurred while deleting task", 500, err);
   }
 };
 
-const updateTasks = async (data: UpdateTasksSchema) => {
+const updateTasks = async (data: UpdateTasksSchema): Promise<Task[]> => {
   try {
-    const updatedTasks: Task[] = [];
-    await verifyOwnership({tasks: updatedTasks, userId: data.userId});
+    // Verify the user actually owns these tasks
+    const user = await authService.getUser({ id: data.user.id })
+    await verifyOwnership({ tasks: data.tasks, userId: data.user.id });
 
-    for (const dataRow of data.tasks) {
-      const tagIds = dataRow.tagIds;
+    // Fetch data concurrently for efficiency.
+    const [timelytic, analytics, oldTasks] = await Promise.all([
+      timelyticService.fetchTimelytic({ userId: data.user.id }),
+      analyticsService.fetchAnalyticsData({ userId: data.user.id }),
+      fetchTasksWithIds(data.tasks.map((task) => task.id)),
+    ]);
 
-      const tags = await tagService.fetchTagsWithIds(tagIds);
-      await tagService.updateTasks({ tagIds: tags.map((tag) => tag.id), taskId: dataRow.id })
+    // Process each task concurrently.
+    const updatedTasks = await Promise.all(
+      data.tasks.map(async (task) => {
+        // Get the associated tags for this task.
+        const tags = await tagService.fetchTagsWithIds(task.tagIds);
+        const oldTask = oldTasks.find((t) => t.id === task.id);
 
-      updatedTasks.push(
-        await prisma.task.update({
-          where: {
-            id: dataRow.id,
-          },
+        // If the task wasn't found in the database, skip it.
+        if (!oldTask) return null;
+
+        // Determine if the completion time should change.
+        const calculateCompletedAt = (): Dayjs | null | undefined => {
+          if (oldTask.isCompleted === task.isCompleted) return undefined;
+          return oldTask.isCompleted && !task.isCompleted ? null : dayjs().utc().tz(user.timeZone);
+        };
+
+        // Calculate the timelytic flag and update analytics if needed.
+        const calculateTimelyticTask = async (): Promise<boolean | undefined> => {
+          const hasChanged = oldTask.isCompleted !== task.isCompleted;
+
+          // When timelytic is not running.
+          if (!timelytic.isRunning) {
+            if (!hasChanged) return undefined;
+            if (oldTask.timelyticTask) {
+              analytics.timelyticTasksFinished--;
+              if (analytics.timelyticTasksFinished > 0) {
+                await analyticsService.updateTimelyticTasksFinished({
+                  userId: data.user.id,
+                  timelyticTasksFinished: analytics.timelyticTasksFinished,
+                });
+              }
+              return false;
+            }
+            return undefined;
+          }
+
+          // When timelytic is running and no change occurred.
+          if (!hasChanged) return undefined;
+
+          // If the task was timelytic and already marked completed, revert it.
+          if (oldTask.timelyticTask && oldTask.isCompleted) {
+            analytics.timelyticTasksFinished--;
+            if (analytics.timelyticTasksFinished > 0) {
+              await analyticsService.updateTimelyticTasksFinished({
+                userId: data.user.id,
+                timelyticTasksFinished: analytics.timelyticTasksFinished,
+              });
+            }
+            task.isCompleted = false;
+            return false;
+          }
+
+          // If the task was not a timelytic task and not completed, mark it completed.
+          if (!oldTask.timelyticTask && !oldTask.isCompleted) {
+            analytics.timelyticTasksFinished++;
+            if (analytics.timelyticTasksFinished > 0) {
+              await analyticsService.updateTimelyticTasksFinished({
+                userId: data.user.id,
+                timelyticTasksFinished: analytics.timelyticTasksFinished,
+              });
+            }
+            task.isCompleted = true;
+            return true;
+          }
+
+          return undefined;
+        };
+
+        // Update the tags related to the task.
+        await tagService.updateTasks({
+          tagIds: tags.map((tag) => tag.id),
+          taskId: task.id,
+        });
+
+        // Calculate timelyticTask (which may update analytics).
+        const timelyticTask = await calculateTimelyticTask();
+
+        // Finally, update the task record in the database.
+        const updatedTask = await prisma.task.update({
+          where: { id: task.id },
           data: {
-            ...dataRow,
+            ...task,
             tagIds: tags.map((tag) => tag.id),
-            updatedAt: convertToTimeZoneISO8601(),
+            updatedAt: dayjs().utc().toISOString(),
+            completedAt: calculateCompletedAt()?.format(ISOFormatUTC),
+            timelyticTask: timelyticTask,
           },
-        })
-      );
-    }
-    return updatedTasks;
+        });
+
+        return updatedTask;
+      })
+    );
+
+    // Filter out any nulls (tasks that weren't found).
+    return updatedTasks.filter((task) => task !== null);
   } catch (err) {
-    throw new RequestError(`Problem occurred while updating task`, 500, err);
+    throw new RequestError("Problem occurred while updating tasks", 500, err);
   }
 };
 
@@ -81,7 +223,7 @@ const verifyOwnership = async (data: VerifyOwnershipSchema) => {
     const userId = data.userId;
     const goals = await goalService.fetchGoals({ userId });
     const goalIds = goals.map(goal => goal.id);
-    const projects = await projectService.fetchProjects({goalIds: goalIds});
+    const projects = await projectService.fetchProjects({ goalIds: goalIds });
 
     for (const task of data.tasks) {
       if (!task.userId && !task.projectId) {
@@ -96,7 +238,7 @@ const verifyOwnership = async (data: VerifyOwnershipSchema) => {
 
       if (task.projectId) {
         const project = projects.find((fetchedProject) => fetchedProject.id === task.projectId);
-        if(!project) {
+        if (!project) {
           throw Error("ProjectId does not match any projects user owns")
         }
       }
@@ -111,4 +253,6 @@ export const taskService = {
   fetchTasks,
   deleteTask,
   updateTasks,
+  fetchUserTasks,
+  fetchRoutineTasks,
 };

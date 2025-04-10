@@ -3,6 +3,7 @@ import {
   TASK_TITLE_MIN_LENGTH,
 } from "@daylytic/shared/constants";
 import { buildJsonSchemas } from "fastify-zod";
+import { UserSchema } from "modules/auth/auth.schema.js";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
@@ -12,16 +13,7 @@ export const Priority = z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"]
 export const TitleSchema = z
   .string()
   .max(TASK_TITLE_MAX_LENGTH)
-  .min(TASK_TITLE_MIN_LENGTH)
-  .refine(
-    (value) =>
-      value === null ||
-      (value.length >= TASK_TITLE_MIN_LENGTH &&
-        value.length <= TASK_TITLE_MAX_LENGTH),
-    {
-      message: `Title must have a length between ${TASK_TITLE_MIN_LENGTH} and ${TASK_TITLE_MAX_LENGTH}.`,
-    }
-  );
+  .min(TASK_TITLE_MIN_LENGTH);
 
 // Define a type alias for valid JSON values.
 export type JSONValue =
@@ -53,8 +45,10 @@ export const TaskSchema = z.object({
   title: TitleSchema,
   content: ContentSchema,
   isCompleted: z.boolean().default(false),
-  createdAt: z.date().default(new Date()),
+  timelyticTask: z.boolean().default(false),
+  createdAt: z.date(),
   updatedAt: z.date(),
+  completedAt: z.date().nullable(),
   deadline: z.date().nullable(),
   projectId: IdSchema.nullable(),
   userId: IdSchema.nullable(),
@@ -63,8 +57,8 @@ export const TaskSchema = z.object({
 
 // Create Task Schemas
 const CreateTaskInputSchema = TaskSchema.pick({ title: true, taskType: true });
-const CreateProjectTaskInputSchema = TaskSchema.pick({ title: true });
-const CreateTaskWithIdSchema = CreateTaskInputSchema.extend({
+const CreateProjectTaskInputSchema = TaskSchema.pick({ title: true }).merge(z.object({ projectId: IdSchema }));
+const CreateTaskWithIdsSchema = CreateTaskInputSchema.extend({
   userId: IdSchema.optional(),
   projectId: IdSchema.optional(),
 });
@@ -74,17 +68,16 @@ const FetchTasksInputSchema = z.object({
   userId: IdSchema.optional(),
   projectId: IdSchema.optional(),
 });
+const FetchTasksWithIdsSchema = z.array(IdSchema);
 const FetchTasksResponseSchema = z.array(TaskSchema);
+const FetchUserTasksInputSchema = z.object({userId: IdSchema});
 
 // Delete Task Schema
 const DeleteTaskInputSchema = z.object({
   id: IdSchema,
 });
-const DeleteTaskWithIdInputSchema = DeleteTaskInputSchema.extend({
-  userId: IdSchema.optional(),
-  projectId: IdSchema.optional(),
-});
-const DeleteTaskParamsInputSchema = z.object({ goalId: IdSchema, projectId: IdSchema, taskId: IdSchema });
+
+const DeleteTaskParamsInputSchema = z.object({ taskId: IdSchema });
 
 // Reset Task Schema
 const ResetTaskInputSchema = z.object({
@@ -93,14 +86,11 @@ const ResetTaskInputSchema = z.object({
 
 // Update Tasks Schema
 const UpdateTasksInputSchema = z.array(
-  TaskSchema.omit({
-    updatedAt: true,
-    createdAt: true,
-  })
+  TaskSchema
 );
 const UpdateTasksSchema = z.object({
   tasks: UpdateTasksInputSchema,
-  userId: IdSchema,
+  user: UserSchema,
 });;
 
 const VerifyOwnershipSchema = z.object({
@@ -113,11 +103,8 @@ const UpdateTasksResponseSchema = z.array(TaskSchema);
 export type Task = z.infer<typeof TaskSchema>;
 export type CreateTaskInputSchema = z.infer<typeof CreateTaskInputSchema>;
 export type CreateProjectTaskInputSchema = z.infer<typeof CreateProjectTaskInputSchema>;
-export type CreateTaskWithIdSchema = z.infer<typeof CreateTaskWithIdSchema>;
+export type CreateTaskWithIdsSchema = z.infer<typeof CreateTaskWithIdsSchema>;
 export type DeleteTaskInputSchema = z.infer<typeof DeleteTaskInputSchema>;
-export type DeleteTaskWithIdInputSchema = z.infer<
-  typeof DeleteTaskWithIdInputSchema
->;
 export type DeleteTaskParamsInputSchema = z.infer<typeof DeleteTaskParamsInputSchema>;
 export type UpdateTasksInputSchema = z.infer<typeof UpdateTasksInputSchema>;
 export type UpdateTasksSchema = z.infer<typeof UpdateTasksSchema>;
@@ -130,12 +117,14 @@ export type UpdateTasksResponseSchema = z.infer<
 >;
 export type ResetTaskInputSchema = z.infer<typeof ResetTaskInputSchema>;
 export type FetchTasksInputSchema = z.infer<typeof FetchTasksInputSchema>;
+export type FetchTasksWithIdsSchema = z.infer<typeof FetchTasksWithIdsSchema>;
+export type FetchUserTasksInputSchema = z.infer<typeof FetchUserTasksInputSchema>;
 
 export const { schemas: taskSchemas, $ref } = buildJsonSchemas(
   {
     TaskSchema,
     CreateTaskInputSchema,
-    CreateProjectTaskInputSchema,
+    CreateTaskWithIdsSchema,
     FetchTasksResponseSchema,
     DeleteTaskInputSchema,
     UpdateTasksInputSchema,

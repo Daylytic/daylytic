@@ -13,20 +13,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// WARNING!
+// In this database all dates are kept in UTC format.
+// For the purpose of simplicity we only convert the time on data send
+// Preferably just like in backend, for conversion we will use dayjs lib
+
 model User {
-  id         String     @unique @default(cuid())
-  googleId   String     @unique
-  email      String     @unique
-  name       String
-  picture    String
-  createdAt  DateTime   @default(now())
-  lastSeenAt DateTime   @default(now())
-  timeZone   String
-  sessions   Session[]
-  routine    Task[]
-  tags       Tag[]
-  goals      Goal[]
-  analytics  Analytics?
+  id          String       @unique @default(cuid())
+  googleId    String       @unique
+  email       String       @unique
+  name        String
+  picture     String
+  createdAt   DateTime     @default(now())
+  lastSeenAt  DateTime     @default(now())
+  timeZone    String
+  theme       String
+  sessions    Session[]
+  routine     Task[]
+  tags        Tag[]
+  goals       Goal[]
+  assistances Assistance[]
+  analytics   Analytics?
+  timelytic   Timelytic?
 }
 
 model Session {
@@ -37,17 +45,27 @@ model Session {
 }
 
 model Analytics {
-  id          String       @id @default(cuid())
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String       @unique
-  routineData RoutineData? @relation
+  id                     String   @id @default(cuid())
+  user                   User     @relation(fields: [userId], references: [id])
+  userId                 String   @unique
+  loginStreak            Int      @default(1)
+  recordLoginStreak      Int      @default(1)
+  routineStreak          Int      @default(0)
+  recordRoutineStreak    Int      @default(0)
+  timelyticTasksFinished Int      @default(0)
+  timelyticTimeSpent     Int      @default(0)
+  timelyticSessions      Int      @default(0)
+  lastRoutineReset       DateTime @default(now())
 }
 
-model RoutineData {
-  id               String    @id @default(cuid())
-  analytics        Analytics @relation(fields: [analyticsId], references: [id])
-  analyticsId      String    @unique
-  lastRoutineReset DateTime  @default(now())
+model Timelytic {
+  id         String    @id @default(cuid())
+  isRunning  Boolean   @default(false)
+  deadline   DateTime?
+  duration   Int?
+  pausedTime DateTime?
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String    @unique
 }
 
 model Goal {
@@ -57,15 +75,17 @@ model Goal {
   projects    Project[]
   userId      String
   user        User?     @relation(fields: [userId], references: [id])
+  archived    Boolean   @default(false)
 }
 
 model Project {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   position Int
   title    String
   goalId   String
-  goal     Goal   @relation(fields: [goalId], references: [id])
+  goal     Goal    @relation(fields: [goalId], references: [id])
   tasks    Task[]
+  archived Boolean @default(false)
 }
 
 enum TaskType {
@@ -82,21 +102,23 @@ enum Priority {
 }
 
 model Task {
-  id          String    @id @default(cuid())
-  position    Int
-  taskType    TaskType
-  priority    Priority?
-  title       String
-  content     Json
-  isCompleted Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deadline    DateTime?
-  userId      String? // Relation field to ToDoList
-  user        User?     @relation(fields: [userId], references: [id])
-  tagIds      String[]
-  project     Project?  @relation(fields: [projectId], references: [id])
-  projectId   String?
+  id            String    @id @default(cuid())
+  position      Int
+  taskType      TaskType
+  priority      Priority?
+  title         String
+  content       Json
+  isCompleted   Boolean   @default(false)
+  timelyticTask Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  completedAt   DateTime?
+  updatedAt     DateTime  @updatedAt
+  deadline      DateTime?
+  userId        String? // Relation field to ToDoList
+  user          User?     @relation(fields: [userId], references: [id])
+  tagIds        String[]
+  project       Project?  @relation(fields: [projectId], references: [id])
+  projectId     String?
 }
 
 model Tag {
@@ -106,4 +128,13 @@ model Tag {
   taskIds String[]
   userId  String?
   user    User?    @relation(fields: [userId], references: [id])
+}
+
+model Assistance {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  questions Json
+  response  String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }

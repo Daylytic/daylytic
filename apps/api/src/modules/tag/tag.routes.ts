@@ -12,7 +12,7 @@ export const tagHandler: FastifyPluginAsync = async (server, _) => {
     handler: tagController.fetchTags,
     schema: {
       description: "Fetch all tags from the user",
-      tags: ["routine"],
+      tags: ["tag"],
       headers: $refAuth("HeaderBearerSchema"),
       response: {
         201: $ref("FetchTagsResponseSchema"),
@@ -27,7 +27,7 @@ export const tagHandler: FastifyPluginAsync = async (server, _) => {
     handler: tagController.createTag,
     schema: {
       description: "Create new tag",
-      tags: ["routine"],
+      tags: ["tag"],
       body: $ref("CreateTagInputSchema"),
       headers: $refAuth("HeaderBearerSchema"),
       response: {
@@ -37,14 +37,27 @@ export const tagHandler: FastifyPluginAsync = async (server, _) => {
   });
 
   server.route({
-    url: "/",
+    url: "/:tagId",
     method: "DELETE",
     preHandler: [authController.authenticate],
     handler: tagController.deleteTag,
     schema: {
       description: "Delete tag",
-      tags: ["routine"],
-      body: $ref("DeleteTagInputSchema"),
+      tags: ["tag"],
+      params: $ref("DeleteTagInputSchema"),
+      headers: $refAuth("HeaderBearerSchema"),
+    },
+  });
+
+  server.route({
+    url: "/",
+    method: "PUT",
+    preHandler: [authController.authenticate],
+    handler: tagController.updateTag,
+    schema: {
+      description: "Update tag",
+      tags: ["tag"],
+      body: $ref("UpdateTagInputSchema"),
       headers: $refAuth("HeaderBearerSchema"),
     },
   });

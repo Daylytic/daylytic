@@ -1,3 +1,4 @@
+import { GOAL_DESCRIPTION_MAX_LENGTH, GOAL_DESCRIPTION_MIN_LENGTH, GOAL_TITLE_MIN_LENGTH } from "@daylytic/shared/constants";
 import { buildJsonSchemas } from "fastify-zod";
 import { ProjectSchema } from "modules/project/project.schema.js";
 import { TaskSchema } from "modules/task/index.js";
@@ -8,9 +9,10 @@ import { z } from "zod";
 
 const GoalSchema = z.object({
   id: IdSchema,
-  title: z.string(),
-  description: z.string(),
+  title: z.string().min(GOAL_TITLE_MIN_LENGTH).max(GOAL_DESCRIPTION_MAX_LENGTH),
+  description: z.string().min(GOAL_DESCRIPTION_MIN_LENGTH).max(GOAL_DESCRIPTION_MAX_LENGTH),
   userId: IdSchema,
+  archived: z.boolean(),
 });
 
 const AuthenticateGoalParamsInput = z.object({ goalId: IdSchema });
@@ -22,7 +24,7 @@ const FetchGoalsResponseSchema = z.array(GoalSchema);
 const FetchAllResponseSchema = z.array(GoalSchema.extend({ projects: z.array(ProjectSchema.extend({ tasks: z.array(TaskSchema) })) }));
 const DeleteGoalInputSchema = z.object({ goalId: IdSchema });
 const DeleteGoalSchema = GoalSchema.pick({ id: true, userId: true });
-const UpdateGoalSchema = GoalSchema.omit({ id: true, userId: true });
+const UpdateGoalSchema = GoalSchema.omit({ userId: true });
 
 export type GoalSchema = z.infer<typeof GoalSchema>;
 
