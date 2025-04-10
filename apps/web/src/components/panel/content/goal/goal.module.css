@@ -1,16 +1,3 @@
-#content {
-    background: var(--ant-color-white);
-    border-radius: var(--ant-border-radius-lg);
-    padding: var(--ant-padding-md) 0 0 var(--ant-padding-md);
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-
-    overflow: hidden;
-}
-
 .project-card-title {
     cursor: grab;
 }
