@@ -1,8 +1,8 @@
 import { TASK_TITLE_MAX_LENGTH, TASK_TITLE_MIN_LENGTH } from "@daylytic/shared/constants";
-import { App } from "antd";
+import { App, InputRef } from "antd";
 import { useTask } from "~/providers/task";
 import { useUser } from "~/providers/user";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export const useTaskInput = () => {
   const [newTask, setNewTask] = useState("");
@@ -10,6 +10,7 @@ export const useTaskInput = () => {
   const [loading, setLoading] = useState(false);
   const { createTask } = useTask();
   const { message } = App.useApp();
+  const inputRef = useRef<InputRef>(null);
 
   const isValidLength = (name) => {
     return !(name.length < TASK_TITLE_MIN_LENGTH || name.length > TASK_TITLE_MAX_LENGTH);
@@ -32,6 +33,11 @@ export const useTaskInput = () => {
 
       await createTask(trimmed, "ROUTINE", undefined, profile!.id);
       setNewTask("");
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 0);
       message.success("Task added successfully");
     } catch {
       message.error("Failed to add task. Please try again.");
@@ -50,5 +56,6 @@ export const useTaskInput = () => {
     loading,
     newTask,
     isValidLength,
+    inputRef,
   };
 };

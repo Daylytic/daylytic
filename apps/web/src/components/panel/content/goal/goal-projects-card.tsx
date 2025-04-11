@@ -1,9 +1,6 @@
 import { Button, Card, Dropdown, Flex, Input, Spin } from "antd";
 import { styles, useProjectsCard } from ".";
-import {
-  EllipsisOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { EllipsisOutlined, PlusOutlined } from "@ant-design/icons";
 import { Project } from "~/types/goal";
 import clsx from "clsx";
 import { DropIndicator } from "~/components/common/drop-indicator/drop-indicator";
@@ -38,6 +35,7 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
     fetched,
     handleTaskClick,
     updateTasks,
+    inputRef,
   } = useProjectsCard(project);
 
   return (
@@ -52,6 +50,7 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
         actions={[
           <Flex className={styles["input-wrapper"]}>
             <Input
+              ref={inputRef}
               size="middle"
               className={styles.input}
               prefix={<PlusOutlined />}
@@ -61,7 +60,7 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
               value={taskName}
               onChange={handleInputChange}
               onPressEnter={handleTaskCreate}
-              aria-label="New task input"
+              aria-label="Create A New Task"
               disabled={loading}
               suffix={loading && <Spin size="small" />}
             />

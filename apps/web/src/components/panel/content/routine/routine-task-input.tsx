@@ -3,10 +3,12 @@ import { Input, Spin } from "antd";
 import { styles, useTaskInput } from ".";
 
 export const RoutineTaskInput = () => {
-  const { isValidLength, loading, handleCreateTask, handleInputChange, newTask } = useTaskInput();
+  const { inputRef, isValidLength, loading, handleCreateTask, handleInputChange, newTask } =
+    useTaskInput();
 
   return (
     <Input
+      ref={inputRef}
       size="large"
       className={styles.input}
       prefix={<PlusOutlined />}

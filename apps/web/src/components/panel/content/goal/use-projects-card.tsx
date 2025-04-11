@@ -10,7 +10,7 @@ import {
   extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { TASK_TITLE_MIN_LENGTH, TASK_TITLE_MAX_LENGTH } from "@daylytic/shared/constants";
-import { App, Popconfirm } from "antd";
+import { App, InputRef, Popconfirm } from "antd";
 import { MenuProps } from "antd";
 import { Project } from "~/types/goal";
 import { useProject } from "~/providers/project";
@@ -33,6 +33,7 @@ export const useProjectsCard = (project: Project) => {
   const { setSelectedTask } = useSelectedTask();
   const { setShowAction } = useLayout();
   const navigate = useNavigate();
+  const inputRef = useRef<InputRef>(null);
 
   const { message } = App.useApp();
 
@@ -57,6 +58,12 @@ export const useProjectsCard = (project: Project) => {
     await createTask(taskName, "PROJECT", project.id);
     setTaskName("");
     setLoading(false);
+
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
   }, [createTask, project.goalId, project.id, taskName]);
 
   const projectTasks = useMemo(
@@ -245,5 +252,6 @@ export const useProjectsCard = (project: Project) => {
     updateTasks,
     items,
     handleTaskClick,
+    inputRef,
   };
 };
