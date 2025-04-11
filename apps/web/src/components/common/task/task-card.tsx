@@ -37,7 +37,7 @@ export const TaskCard = React.memo(
     const ref = dnd !== false ? dndData.ref! : undefined;
     const dragging = dnd !== false ? dndData.dragging! : undefined;
     const closestEdge = dnd !== false ? dndData.closestEdge! : undefined;
-    
+
     return (
       <li
         ref={ref}
@@ -64,7 +64,12 @@ export const TaskCard = React.memo(
             />
             <Flex vertical className={styles["task-card-button-details"]}>
               <span className={styles["task-card-button-title"]}>
-                {item.title} {item.deadline && <AntTag key={item.id}>{dayjs(item.deadline).format(timeFormat).toString()}</AntTag>}
+                {item.title}{" "}
+                {item.deadline && item.taskType === "ROUTINE" && (
+                  <AntTag key={item.id}>
+                    {dayjs(item.deadline).format(timeFormat).toString()}
+                  </AntTag>
+                )}
               </span>
               <Flex wrap gap="small">
                 {item.tagIds.map((tagId) => {
