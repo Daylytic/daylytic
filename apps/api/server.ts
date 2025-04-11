@@ -33,7 +33,7 @@ declare module "fastify" {
 const server = Fastify({
   logger: true,
   trustProxy: true,
-  https: process.env.DEV
+  https: process.env.DEV === "true"
     ? {}
     : {
       key: readFileSync('/etc/letsencrypt/live/daylytic.com/privkey.pem'),
