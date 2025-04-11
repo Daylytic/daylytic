@@ -56,6 +56,7 @@ export const useCreatorCard = ({ alwaysShowInput = false, setup }: UseCreatorCar
   };
 
   const handleCreateGoal = async () => {
+    if (alwaysShowInput) return;
     const trimmedTitle = goalTitle.trim();
     const trimmedDescription = goalDescription.trim();
     if (!isValidLengthTitle(trimmedTitle)) {
