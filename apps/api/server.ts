@@ -32,9 +32,9 @@ declare module "fastify" {
 
 const server = Fastify({
   logger: true,
-  trustProxy: true,
+  trustProxy: process.env.DEV === "true" ? false : true,
   https: process.env.DEV === "true"
-    ? {}
+    ? null
     : {
       key: readFileSync('/etc/letsencrypt/live/daylytic.com/privkey.pem'),
       cert: readFileSync('/etc/letsencrypt/live/daylytic.com/fullchain.pem'),
@@ -165,7 +165,7 @@ const main = async () => {
   server.register(contactHandler, { prefix: "/contact" });
 
   try {
-    await server.listen({ port: 8084, host: "0.0.0.0" });
+    await server.listen({ port: 8084, host: process.env.DEV === "true" ? undefined : "0.0.0.0" });
     console.log(`Server listening at https://localhost:8084`);
   } catch (err) {
     console.error(err);
