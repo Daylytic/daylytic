@@ -1,6 +1,5 @@
 import { Button, Flex } from "antd";
 import dayjs from "dayjs";
-import { dateFormat } from "~/utils/date";
 import { Routes } from "~/utils/routes";
 import { useActions } from ".";
 
@@ -18,7 +17,7 @@ export const HeroActions = () => {
                   return;
                 }
 
-                if (dayjs().utc().diff(dayjs(profile.createdAt, dateFormat), "minutes") < 2) {
+                if (dayjs().utc().diff(dayjs(profile.createdAt), "minutes") < 2) {
                   navigate(Routes.SETUP);
                   return;
                 }
