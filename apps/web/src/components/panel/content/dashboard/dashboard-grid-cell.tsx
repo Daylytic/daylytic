@@ -48,6 +48,7 @@ export const GridCell = ({ dayData, getColorForTasks }) => {
           style={{
             width: CELL_SIZE,
             height: CELL_SIZE,
+            backgroundColor: getColorForTasks(taskCount),
           }}
           className={styles.tooltip}
         />
