@@ -18,9 +18,10 @@ import { assistanceSchemas } from "modules/assistance/assistance.schema.js";
 import { assistanceHandler } from "modules/assistance/index.js";
 import { statsHandler } from "modules/misc/stats/stats.routes.js";
 import { statsSchemas } from "modules/misc/stats/stats.schema.js";
-import fastifyCron from "fastify-cron";
 import { contactSchemas } from "modules/misc/contact/contact.schema.js";
 import { contactHandler } from "modules/misc/contact/contact.routes.js";
+import { readFileSync } from 'fs';
+import { constants } from 'crypto';
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -29,7 +30,17 @@ declare module "fastify" {
   }
 }
 
-const server = Fastify({ logger: true });
+const server = Fastify({
+  logger: true,
+  trustProxy: true,
+  https: process.env.DEV
+    ? {}
+    : {
+      key: readFileSync('/etc/letsencrypt/live/daylytic.com/privkey.pem'),
+      cert: readFileSync('/etc/letsencrypt/live/daylytic.com/fullchain.pem'),
+      secureOptions: constants.SSL_OP_NO_SSLv2 | constants.SSL_OP_NO_SSLv3,
+    }
+});
 
 // server.register(fastifyCron as any, {
 //   jobs: [
