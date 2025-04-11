@@ -2,7 +2,7 @@
 # Daylytic - Reach Your Goals, With a Plan.
 
 [![Open Source](https://img.shields.io/badge/Open%20Source-Yes-green.svg)](https://github.com/Daylytic/daylytic)
-[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/license/gpl-3-0) 
+[![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://fossa.com/blog/open-source-software-licenses-101-agpl-license/) 
 
 ## The Idea Behind The Project
 
@@ -100,4 +100,4 @@ Your pull request will be reviewed and provide feedback as soon as possible.
 
 ## License
 
-Daylytic is licensed under the [GNU General Public License](ttps://opensource.org/license/gpl-3-0). See the `LICENSE` file in the repository for more details.
+Daylytic is licensed under the ![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg). See the `LICENSE` file in the repository for more details.
