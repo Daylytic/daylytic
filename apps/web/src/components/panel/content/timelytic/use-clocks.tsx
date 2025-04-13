@@ -54,7 +54,7 @@ export const useClock = () => {
     }
     let minutes = 30;
     if (e && e.key) {
-      if (e.key === "1") minutes = 0.05;
+      if (e.key === "1") minutes = 30;
       else if (e.key === "2") minutes = 45;
       else if (e.key === "3") minutes = 60;
     }
