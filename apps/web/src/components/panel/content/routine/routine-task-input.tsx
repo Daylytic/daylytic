@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Input, Spin } from "antd";
+import { Button, Input, Spin } from "antd";
 import { styles, useTaskInput } from ".";
 
 export const RoutineTaskInput = () => {
@@ -11,7 +11,15 @@ export const RoutineTaskInput = () => {
       ref={inputRef}
       size="large"
       className={styles.input}
-      prefix={<PlusOutlined />}
+      prefix={
+        <Button
+          size="small"
+          type={newTask.length > 0 ? "primary" : "text"}
+          icon={<PlusOutlined />}
+          disabled={!(newTask.length > 0)}
+          onClick={handleCreateTask}
+        />
+      }
       placeholder="Create A New task"
       value={newTask}
       onChange={handleInputChange}
