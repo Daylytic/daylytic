@@ -53,7 +53,15 @@ export const GoalProjectsCard = ({ project }: GoalProjectsCardProps) => {
               ref={inputRef}
               size="middle"
               className={styles.input}
-              prefix={<PlusOutlined />}
+              prefix={
+                <Button
+                  size="small"
+                  type={taskName.length > 0 ? "primary" : "text"}
+                  icon={<PlusOutlined />}
+                  disabled={!(taskName.length > 0)}
+                  onClick={handleTaskCreate}
+                />
+              }
               placeholder="Create A New task"
               status={taskName.length > 0 && !isValidLength(taskName) ? "error" : undefined}
               autoFocus={false}
