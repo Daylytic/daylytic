@@ -37,7 +37,7 @@ const analyzeProductivity = async (data: CreateAssistanceSchema): Promise<string
             response_format: {
                 "type": "text"
             },
-            store: true,
+            store: false,
         });
 
         const analysis = chatCompletion.choices[0].message.content;
