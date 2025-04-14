@@ -7,7 +7,7 @@ import { UserSchema } from "modules/auth/auth.schema.js";
 import { IdSchema } from "utils/zod.js";
 import { z } from "zod";
 
-export const TaskType = z.enum(["ROUTINE", "PROJECT"]);
+export const TaskType = z.enum(["ROUTINE", "PROJECT", "EVENT"]);
 export const Priority = z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"]).nullable();
 
 export const TitleSchema = z
@@ -36,7 +36,6 @@ const ContentSchema: z.ZodType<any> = z.lazy(() =>
 );
 
 // Base
-
 export const TaskSchema = z.object({
   id: IdSchema,
   position: z.number(),
