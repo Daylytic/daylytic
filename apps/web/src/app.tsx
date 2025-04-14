@@ -19,9 +19,15 @@ import {
 import { config } from "~/config";
 import { NotificationProvider } from "~/providers/notification";
 import { useUser } from "~/providers/user";
+import { useEffect } from "react";
+import { registerServiceWorker } from "~/utils/register-service-worker";
 
 export const App = () => {
   const { isDarkMode } = useUser();
+
+  useEffect(() => {
+    registerServiceWorker();
+  });
 
   return (
     <ConfigProvider theme={config({ darkMode: isDarkMode() })}>
@@ -48,7 +54,7 @@ export const App = () => {
                 <Route path="timelytic" element={<LayoutTimelytic />}></Route>
                 <Route path="calendar" element={<LayoutCalendar />}>
                   <Route path=":date" element={<CalendarAction />}>
-                    <Route path=":goalId/:taskId" element={<TaskAction />} />
+                    <Route path=":goalId?/:taskId" element={<TaskAction />} />
                   </Route>
                 </Route>
               </Route>
