@@ -6,7 +6,11 @@ export const CalendarHero = () => {
 
   return (
     <Flex className={styles.wrapper}>
-      <Calendar className={styles.calendar} cellRender={cellRender} onSelect={handleSelect} />
+      <Calendar
+        className={styles.calendar}
+        cellRender={cellRender}
+        onSelect={handleSelect}
+      />
     </Flex>
   );
 };

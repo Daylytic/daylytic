@@ -18,6 +18,9 @@ import { timelyticService } from "modules/timelytic/timelytic.service.js";
 import { analyticsService } from "modules/analytics/analytics.service.js";
 import dayjs, { Dayjs } from "dayjs";
 import { authService } from "modules/auth/auth.service.js";
+import utc from 'dayjs/plugin/utc.js';
+
+dayjs.extend(utc);
 
 const createTask = async (data: CreateTaskWithIdsSchema): Promise<Task> => {
   try {
@@ -102,6 +105,91 @@ const deleteTask = async (data: DeleteTaskInputSchema): Promise<void> => {
     });
   } catch (err) {
     throw new RequestError("Problem occurred while deleting task", 500, err);
+  }
+};
+
+
+const fetchScheduledTasks = async (data: FetchUserTasksInputSchema): Promise<Task[]> => {
+  try {
+    const now = dayjs().utc().startOf("minute");
+
+    // Tasks due in...
+    const windows = [
+      {
+        start: now,
+        end: now.add(1, "minute"),
+      },
+      {
+        start: now.add(30, "minute"),
+        end: now.add(30, "minute").add(1, "minute"),
+      },
+      {
+        start: now.add(1, "hour"),
+        end: now.add(1, "hour").add(1, "minute"),
+      },
+      {
+        start: now.add(6, "hour"),
+        end: now.add(6, "hour").add(1, "minute"),
+      },
+      {
+        start: now.add(24, "hour"),
+        end: now.add(24, "hour").add(1, "minute"),
+      },
+    ];
+
+    const routineWindows = windows.slice(0, 3);
+
+    const nonRoutineFilters = windows.map((window) => ({
+      deadline: {
+        gte: window.start.toDate(),
+        lte: window.end.toDate(),
+      },
+    }));
+
+    const nonRoutineTasks = await prisma.task.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              { userId: data.userId },
+              { project: { goal: { userId: data.userId } } },
+            ],
+          },
+          { taskType: { not: "ROUTINE" } },
+          { OR: nonRoutineFilters },
+        ],
+      },
+    });
+
+    // For routine tasks, we ignore the day and compare only hour and minute.
+    const allRoutineTasks = await prisma.task.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              { userId: data.userId },
+              { project: { goal: { userId: data.userId } } },
+            ],
+          },
+          { taskType: "ROUTINE" },
+        ],
+      },
+    });
+
+    const routineTasks = allRoutineTasks.filter((task) => {
+      const taskDeadline = dayjs(task.deadline).utc();
+      return routineWindows.some((window) => {
+        return (
+          taskDeadline.hour() === window.start.hour() &&
+          taskDeadline.minute() === window.start.minute()
+        );
+      });
+    });
+
+    // Combine both sets of tasks and return.
+    return [...nonRoutineTasks, ...routineTasks];
+  } catch (err) {
+    throw new RequestError("Problem occurred while fetching scheduled tasks", 500, err);
   }
 };
 
@@ -255,4 +343,5 @@ export const taskService = {
   updateTasks,
   fetchUserTasks,
   fetchRoutineTasks,
+  fetchScheduledTasks,
 };

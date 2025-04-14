@@ -2,6 +2,7 @@ import { RequestError } from "utils/error.js";
 import { convertToTimeZoneISO8601 } from "../../utils/date.js";
 import { prisma } from "../../utils/prisma.js";
 import {
+  CreateNotificationSubscriptionSchema,
   CreateUserInput,
   CreateUserSchema,
   DeleteSessionInput,
@@ -125,7 +126,7 @@ const updateLastSeen = async (data: UpdateLastSeen): Promise<User> => {
 const updateTimezone = async (data: UpdateTimezoneSchema): Promise<User> => {
   try {
     return await prisma.user.update({
-      where: {id: data.id},
+      where: { id: data.id },
       data: {
         timeZone: data.timeZone,
       },
@@ -138,7 +139,7 @@ const updateTimezone = async (data: UpdateTimezoneSchema): Promise<User> => {
 const updateTheme = async (data: UpdateThemeSchema): Promise<User> => {
   try {
     return await prisma.user.update({
-      where: {id: data.id},
+      where: { id: data.id },
       data: {
         theme: data.theme,
       },
@@ -148,6 +149,26 @@ const updateTheme = async (data: UpdateThemeSchema): Promise<User> => {
   };
 };
 
+const subscribeToNotifications = async (data: CreateNotificationSubscriptionSchema) => {
+  try {
+    const existingSubscription = await prisma.notificationSubscriptions.findFirst({
+      where: {
+        userId: data.userId,
+        endpoint: data.endpoint,
+      },
+    });
+
+    if (existingSubscription) {
+      return;
+    }
+
+    await prisma.notificationSubscriptions.create({
+      data: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while updating last seen for user", 500, err);
+  };
+};
 
 export const authService = {
   createUser,
@@ -158,4 +179,5 @@ export const authService = {
   updateLastSeen,
   updateTimezone,
   updateTheme,
+  subscribeToNotifications,
 };

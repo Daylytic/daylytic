@@ -4,7 +4,7 @@ import { usePanelFetcher } from "~/providers/panel-fetcher";
 import { useUser } from "~/providers/user";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { client } from "~/services/api-client";
-import { Task } from "~/types/task";
+import { Task, TaskType } from "~/types/task";
 import { ISOFormatUTC } from "~/utils/date";
 
 interface TaskContextType {
@@ -15,10 +15,10 @@ interface TaskContextType {
 
   createTask: (
     title: string,
-    taskType: "ROUTINE" | "PROJECT",
+    taskType: TaskType,
     projectId?: string,
     userId?: string,
-  ) => Promise<void>;
+  ) => Promise<Task>;
   updateTasks: (tasks: Task[], immediatelyUpdate) => Promise<void>;
   deleteTask: (task: Task) => Promise<void>;
   forceRender: React.Dispatch<React.SetStateAction<number>>;
@@ -59,7 +59,7 @@ export const TaskProvider = ({ children }) => {
 
   const createTask = async (
     title: string,
-    taskType: "ROUTINE" | "PROJECT",
+    taskType: TaskType,
     projectId?: string,
     userId?: string,
   ) => {
@@ -70,7 +70,14 @@ export const TaskProvider = ({ children }) => {
         },
         body: { title, projectId, userId, taskType },
       });
+
       setTasks((prevTasks) => recalculatePositions([...prevTasks, data!]));
+
+      if (!data) {
+        throw new Error("Failed to create task: Response data is undefined");
+      }
+      
+      return data as Task;
     } catch (error) {
       console.error("Failed to create task:", error);
       throw error;

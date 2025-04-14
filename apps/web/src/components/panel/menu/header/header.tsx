@@ -1,5 +1,10 @@
-import { BookOutlined, CloseOutlined, SettingOutlined } from "@ant-design/icons";
-import { Flex, Button, theme, Typography, Grid } from "antd";
+import {
+  BookOutlined,
+  CloseOutlined,
+  NotificationOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+import { Flex, Button, theme, Typography, Grid, Badge, Tooltip } from "antd";
 import LogoSvg from "~/assets/svgs/logo.svg?react";
 import styles from "./header.module.css";
 import { General } from "~/components/panel/menu/general";
@@ -24,6 +29,8 @@ export const Header = () => {
     token: { paddingXS },
   } = theme.useToken();
 
+  const permission = Notification.permission;
+
   return (
     <Flex vertical data-tour-id="menu-header">
       <Flex id={styles.header} className="ant-typography">
@@ -39,6 +46,24 @@ export const Header = () => {
             Daylytic
           </Title>
         </Flex>
+        {permission !== "granted" ? (
+          <Tooltip title="Notifications are not working. Please enable them in your browser settings.">
+            <Badge dot>
+              <Button
+                shape="circle"
+                type="text"
+                onClick={() => {
+                  setShowSettings(true);
+                }}
+                data-tour-id="menu-header-settings"
+              >
+                <NotificationOutlined className={styles.icon} />
+              </Button>
+            </Badge>
+          </Tooltip>
+        ) : (
+          <></>
+        )}
         <Button
           shape="circle"
           type="text"

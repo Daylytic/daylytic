@@ -11,6 +11,16 @@ const SessionSchema = z.object({
   validUntil: z.date().optional(),
 });
 
+const NotificationSubscriptionSchema = z.object({
+  id: IdSchema,
+  userId: IdSchema,
+  endpoint: z.string(),
+  keys: z.object({
+    p256dh: z.string(),
+    auth: z.string(),
+  }),
+});
+
 const TimezoneSchema = z.string().refine((val) => timezones.includes(val), {
   message: "Invalid timezone",
 });
@@ -61,19 +71,19 @@ const LoadUserInputSchema = z.object({
   theme: ThemeSchema,
 });
 
+const CreateNotificationSubscriptionInputSchema = NotificationSubscriptionSchema.pick({ endpoint: true, keys: true })
+const CreateNotificationSubscriptionSchema = NotificationSubscriptionSchema.pick({ endpoint: true, keys: true, userId: true })
+
 // Fetch
 
 const FetchAuthenticationProfileSchema = SessionSchema.pick({ token: true });
-
 const FetchGoogleAccountInfoSchema = SessionSchema.pick({ token: true });
-
 const FetchUserSchema = UserSchema.pick({ id: true });
-// Delete
 
+// Delete
 const DeleteSessionInputSchema = SessionSchema.pick({ token: true });
 
 // Update
-
 const UpdateLastSeenSchema = UserSchema.pick({ id: true });
 const UpdateTimezoneInputSchema = UserSchema.pick({ timeZone: true });
 const UpdateThemeInputSchema = UserSchema.pick({ theme: true });
@@ -81,7 +91,6 @@ const UpdateThemeSchema = UserSchema.pick({ id: true, theme: true });
 const UpdateTimezoneSchema = UserSchema.pick({ id: true, timeZone: true });
 
 // Header
-
 const HeaderBearerSchema = z.object({
   authorization: z.string(),
 });
@@ -92,6 +101,8 @@ export type GoogleAccount = z.infer<typeof GoogleAccountSchema>;
 export type CreateUserInput = z.infer<typeof CreateUserInputSchema>;
 export type CreateUserSchema = z.infer<typeof CreateUserSchema>;
 export type LoadUserInput = z.infer<typeof LoadUserInputSchema>;
+export type CreateNotificationSubscriptionInputSchema = z.infer<typeof CreateNotificationSubscriptionInputSchema>;
+export type CreateNotificationSubscriptionSchema = z.infer<typeof CreateNotificationSubscriptionSchema>;
 export type DeleteSessionInput = z.infer<typeof DeleteSessionInputSchema>;
 export type FetchAuthenticationProfile = z.infer<
   typeof FetchAuthenticationProfileSchema
@@ -112,7 +123,8 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas(
     HeaderBearerSchema,
     LoadUserInputSchema,
     UpdateTimezoneInputSchema,
-    UpdateThemeInputSchema
+    UpdateThemeInputSchema, 
+    CreateNotificationSubscriptionInputSchema
   },
   { $id: "UsersSchema" }
 );

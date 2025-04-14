@@ -1,4 +1,4 @@
-export type TaskType = "ROUTINE" | "PROJECT";
+export type TaskType = "ROUTINE" | "PROJECT" | "EVENT";
 export const Priorities = ["LOW", "MEDIUM", "HIGH", "CRITICAL", "OPTIONAL"] as const;
 
 export interface Tag {

@@ -3,7 +3,7 @@ import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { authHandler } from "./src/modules/auth/index.js";
 import { Session, User, userSchemas } from "./src/modules/auth/auth.schema.js";
-import { taskSchemas } from "./src/modules/task/index.js";
+import { taskSchemas, taskService } from "./src/modules/task/index.js";
 import { tagHandler, tagSchemas } from "modules/tag/index.js";
 import { goalHandler } from "modules/goal/goal.routes.js";
 import { projectHandler } from "modules/project/project.routes.js";
@@ -22,6 +22,10 @@ import { contactSchemas } from "modules/misc/contact/contact.schema.js";
 import { contactHandler } from "modules/misc/contact/contact.routes.js";
 import { readFileSync } from 'fs';
 import { constants } from 'crypto';
+import webPush from "web-push";
+import fastifyCron from "fastify-cron";
+import { prisma } from "utils/prisma.js";
+import { getNotificationMessage } from "utils/date.js";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -42,22 +46,60 @@ const server = Fastify({
     }
 });
 
-// server.register(fastifyCron as any, {
-//   jobs: [
-//     {
-//       cronTime: '*/1 * * * *',
-//       onTick: () => {
-//         console.log('This task runs every 1 minutes:', new Date().toISOString());
-//         // Your task logic here
-//       },
-//     },
-//   ],
-// });
+webPush.setVapidDetails(
+  "https://daylytic.com/#contact",
+  process.env.VAPID_PUBLIC_KEY ?? "",
+  process.env.VAPID_PRIVATE_KEY ?? "",
+);
 
-// await server.register(import('@fastify/rate-limit'), {
-//   max: 100,
-//   timeWindow: '1 minute'
-// })
+server.register(fastifyCron as any, {
+  jobs: [
+    {
+      cronTime: '*/1 * * * *',  // Executes every minute
+      onTick: async () => {
+        const notifications = await prisma.notificationSubscriptions.findMany();
+
+        // Iterate over each subscription.
+        for (const notification of notifications) {
+          const tasks = await taskService.fetchScheduledTasks({ userId: notification.userId });
+
+          if (tasks.length === 0) {
+            continue;
+          }
+
+          try {
+            for (const task of tasks) {
+              const pushSubscription = {
+                endpoint: notification.endpoint,
+                keys: notification.keys as { auth: string, p256dh: string },
+              };
+
+              const message = getNotificationMessage(task);
+
+              const payload = JSON.stringify({
+                title: `Daylytic - ${task.title}`,
+                body: message,
+                timestamp: new Date().toISOString(),
+              });
+
+              await webPush.sendNotification(pushSubscription, payload);
+            }
+          } catch (err) {
+            // Remove the subscription if sending the notification fails.
+            await prisma.notificationSubscriptions.delete({
+              where: { id: notification.id },
+            });
+          }
+        }
+      },
+    },
+  ],
+});
+
+await server.register(import('@fastify/rate-limit'), {
+  max: 100,
+  timeWindow: '1 minute'
+})
 
 const main = async () => {
   for (const schema of [
@@ -76,9 +118,9 @@ const main = async () => {
   }
 
   // Start jobs when ready
-  // server.addHook('onReady', () => {
-  //   server.cron.startAllJobs();
-  // });
+  server.addHook('onReady', () => {
+    server.cron.startAllJobs();
+  });
 
 
   server.addHook("onRequest", async (request, reply) => {

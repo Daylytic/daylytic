@@ -1,7 +1,7 @@
-import { Badge, CalendarProps } from "antd";
+import { CalendarProps, Flex, Tag } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { useNavigate } from "react-router";
-import { styles } from "~/components/layout";
+import { styles } from ".";
 import { useLayout } from "~/providers/layout";
 import { useTask } from "~/providers/task";
 import { Task } from "~/types/task";
@@ -14,7 +14,7 @@ export const useHero = () => {
 
   const { setShowAction } = useLayout();
 
-  const projectTasks = tasks.filter((task) => task.taskType === "PROJECT");
+  const projectTasks = tasks.filter((task) => task.taskType !== "ROUTINE");
   const projectDate: Record<string, Task[]> = projectTasks.reduce(
     (acc, task) => {
       if (task.deadline) {
@@ -47,13 +47,21 @@ export const useHero = () => {
   const dateCellRender = (value: Dayjs) => {
     const listData = getListData(value);
     return (
-      <ul className={styles.cell}>
-        {listData.map((item) => (
-          <li>
-            <Badge status="default" text={item.title} />
-          </li>
-        ))}
-      </ul>
+      <>
+        {listData.length > 0 && (
+          <Flex className={styles.count} vertical align="center" justify="center">
+            <span>{listData.length}</span>
+            <span>Tasks</span>
+          </Flex>
+        )}
+        <ul className={styles.cell}>
+          {listData.map((item) => (
+            <li>
+              <Tag>{item.title}</Tag>
+            </li>
+          ))}
+        </ul>
+      </>
     );
   };
 
@@ -67,5 +75,5 @@ export const useHero = () => {
     setShowAction(true);
   };
 
-  return {cellRender, handleSelect}
+  return { cellRender, handleSelect };
 };
