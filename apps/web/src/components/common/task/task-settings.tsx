@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Button, DatePicker, Divider, Dropdown, Flex, Popover, Select, TimePicker } from "antd";
 import { styles } from ".";
-import { dateFormat, timeFormat } from "~/utils/date";
+import { dateWithTimeFormat, timeFormat } from "~/utils/date";
 import dayjs from "dayjs";
 import { TaskSettingsSkeleton, useSettings } from ".";
 import clsx from "clsx";
@@ -36,21 +36,7 @@ export const TaskSettings = ({
   });
 
   const timelinePicker =
-    selectedTask.taskType === "PROJECT" ? (
-      <DatePicker
-        format={dateFormat}
-        variant="filled"
-        prefix={<CalendarOutlined />}
-        suffixIcon={<></>}
-        className={styles["settings-button"]}
-        placeholder="Date"
-        defaultValue={dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null}
-        onChange={(e) => {
-          selectedTask.deadline = e.toISOString();
-          onChange(selectedTask);
-        }}
-      />
-    ) : (
+    selectedTask.taskType === "ROUTINE" ? (
       <TimePicker
         format={timeFormat}
         variant="filled"
@@ -58,6 +44,21 @@ export const TaskSettings = ({
         suffixIcon={<></>}
         className={styles["settings-button"]}
         placeholder="Time"
+        defaultValue={dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null}
+        onChange={(e) => {
+          selectedTask.deadline = e.toISOString();
+          onChange(selectedTask);
+        }}
+      />
+    ) : (
+      <DatePicker
+        format={dateWithTimeFormat}
+        variant="filled"
+        prefix={<CalendarOutlined />}
+        showTime={true}
+        suffixIcon={<></>}
+        className={styles["settings-button"]}
+        placeholder="Date"
         defaultValue={dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null}
         onChange={(e) => {
           selectedTask.deadline = e.toISOString();
