@@ -19,22 +19,31 @@ datasource db {
 // Preferably just like in backend, for conversion we will use dayjs lib
 
 model User {
-  id          String       @unique @default(cuid())
-  googleId    String       @unique
-  email       String       @unique
-  name        String
-  picture     String
-  createdAt   DateTime     @default(now())
-  lastSeenAt  DateTime     @default(now())
-  timeZone    String
-  theme       String
-  sessions    Session[]
-  routine     Task[]
-  tags        Tag[]
-  goals       Goal[]
-  assistances Assistance[]
-  analytics   Analytics?
-  timelytic   Timelytic?
+  id                        String                      @unique @default(cuid())
+  googleId                  String                      @unique
+  email                     String                      @unique
+  name                      String
+  picture                   String
+  createdAt                 DateTime                    @default(now())
+  lastSeenAt                DateTime                    @default(now())
+  timeZone                  String
+  theme                     String
+  sessions                  Session[]
+  routine                   Task[]
+  tags                      Tag[]
+  goals                     Goal[]
+  assistances               Assistance[]
+  notificationSubscriptions NotificationSubscriptions[]
+  analytics                 Analytics?
+  timelytic                 Timelytic?
+}
+
+model NotificationSubscriptions {
+  id       String @id @default(cuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  endpoint String
+  keys     Json
 }
 
 model Session {
@@ -91,6 +100,7 @@ model Project {
 enum TaskType {
   ROUTINE
   PROJECT
+  EVENT
 }
 
 enum Priority {
