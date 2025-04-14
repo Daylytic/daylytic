@@ -146,6 +146,48 @@ export interface paths {
         };
         trace?: never;
     };
+    "/oauth2/notification/subscribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Subscribe user to notifications */
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["def-0"]["CreateNotificationSubscriptionInputSchema"];
+                };
+            };
+            responses: {
+                /** @description Succesfully subscribed to notifications */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/timelytic/": {
         parameters: {
             query?: never;
@@ -1190,6 +1232,13 @@ export interface components {
             UpdateThemeInputSchema: {
                 theme: components["schemas"]["def-0"]["UserSchema"]["theme"];
             };
+            CreateNotificationSubscriptionInputSchema: {
+                endpoint: string;
+                keys: {
+                    p256dh: string;
+                    auth: string;
+                };
+            };
         };
         /** TaskSchemas */
         "def-1": {
@@ -1197,7 +1246,7 @@ export interface components {
                 id: string;
                 position: number;
                 /** @enum {string} */
-                taskType: "ROUTINE" | "PROJECT";
+                taskType: "ROUTINE" | "PROJECT" | "EVENT";
                 priority: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL") | null;
                 title: string;
                 content: number | string | boolean | unknown[] | {
@@ -1305,7 +1354,7 @@ export interface components {
                         id: components["schemas"]["def-3"]["GoalSchema"]["id"];
                         position: number;
                         /** @enum {string} */
-                        taskType: "ROUTINE" | "PROJECT";
+                        taskType: "ROUTINE" | "PROJECT" | "EVENT";
                         priority: ("LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | "OPTIONAL") | null;
                         title: string;
                         content: number | string | boolean | unknown[] | {
