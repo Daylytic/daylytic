@@ -31,6 +31,7 @@ interface UserContextValue {
   isDarkMode: () => boolean;
   updateTimezone: (timezone: string) => Promise<void>;
   updateTheme: (theme: string) => Promise<void>;
+  subscribeToNotifications: (data: PushSubscription) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextValue | undefined>(undefined);
@@ -187,6 +188,33 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const subscribeToNotifications = async (data: PushSubscription) => {
+    try {
+      const { endpoint, keys } = data.toJSON();
+
+      if (!endpoint || !keys?.p256dh || !keys?.auth || !profile) return;
+
+      const response = await client.POST("/oauth2/notification/subscribe", {
+        params: {
+          header: { authorization: `Bearer ${cookies.token}` },
+        },
+        body: {
+          endpoint,
+          keys: {
+            p256dh: keys.p256dh,
+            auth: keys.auth,
+          },
+        },
+      });
+
+      if (response.error) {
+        throw new Error("Error occurred while subscribing to notifications");
+      }
+    } catch (err) {
+      console.error("Subscription error:", err);
+    }
+  };
+
   const isDarkMode = () => {
     return profile ? profile.theme === "dark" : darkMode;
   };
@@ -208,6 +236,7 @@ export const UserProvider = ({ children }) => {
         darkMode,
         isDarkMode,
         setDarkMode,
+        subscribeToNotifications,
       }}
     >
       {children}
