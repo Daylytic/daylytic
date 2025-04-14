@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router";
 import { TaskList } from "~/components/common/task/task-list";
 import { useProject } from "~/providers/project";
+import { useSelectedTask } from "~/providers/selected-task";
 import { useTask } from "~/providers/task";
 import { Task } from "~/types/task";
 import { dateFormat } from "~/utils/date";
@@ -10,6 +11,7 @@ import { getCalendarRoute } from "~/utils/routes";
 
 export const useCalendar = () => {
   const { date, taskId } = useParams();
+  const { setSelectedTask } = useSelectedTask();
   const parsedDate = dayjs(date, dateFormat, true);
   const { tasks, fetched, updateTasks } = useTask();
   const { projects } = useProject();
@@ -46,10 +48,21 @@ export const useCalendar = () => {
         fetched={fetched}
         dnd={false}
         handleTaskClick={(task) => {
-          const goalId = getGoalId(task);
-          if (!goalId) return;
+          setSelectedTask(task);
+          switch (task.taskType) {
+            case "EVENT":
+              navigate(getCalendarRoute(date!, task.id));
+              break;
+            case "PROJECT": {
+              const goalId = getGoalId(task);
+              if (!goalId) return;
 
-          navigate(getCalendarRoute(date!, goalId, task.id));
+              navigate(getCalendarRoute(date!, goalId, task.id));
+              break;
+            }
+            default:
+              break;
+          }
         }}
         handleTaskUpdate={async (task: Task): Promise<void> => {
           await updateTasks([task], true);

@@ -1,6 +1,6 @@
 import { Divider, Flex } from "antd";
 import { Outlet, redirect } from "react-router";
-import { styles, useCalendar } from ".";
+import { CalendarTaskInput, styles, useCalendar } from ".";
 import { CalendarHeader } from "~/components/panel/action/calendar/calendar-header";
 import { Routes } from "~/utils/routes";
 import { Action } from "~/components/panel/action/action";
@@ -16,6 +16,7 @@ export const Calendar = () => {
     <Action>
       <Flex vertical id={styles["wrapper"]}>
         <CalendarHeader calendar={date!} />
+        <CalendarTaskInput />
         {renderTasks()}
       </Flex>
       {taskId && (
