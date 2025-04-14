@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { authService } from "./index.js";
 import { isValidTimeZone } from "utils/date.js";
-import { LoadUserInput, UpdateThemeInputSchema, UpdateTimezoneInputSchema, UpdateTimezoneSchema } from "./auth.schema.js";
+import { CreateNotificationSubscriptionInputSchema, LoadUserInput, UpdateThemeInputSchema, UpdateTimezoneInputSchema, UpdateTimezoneSchema } from "./auth.schema.js";
 import { analyticsService } from "modules/analytics/analytics.service.js";
 import { handleControllerError, RequestError } from "utils/error.js";
 import dayjs from "dayjs";
@@ -64,6 +64,19 @@ const updateTheme = async (req: FastifyRequest, rep: FastifyReply) => {
     const { theme } = req.params as UpdateThemeInputSchema;
 
     await authService.updateTheme({ id: user.id, theme });
+    return { status: "success" };
+  } catch (err) {
+    handleControllerError(err, rep);
+  }
+}
+
+const subscribeToNotifications = async (req: FastifyRequest, rep: FastifyReply) => {
+  try {
+    const user = req.user!;
+
+    const { keys, endpoint } = req.body as CreateNotificationSubscriptionInputSchema;
+
+    await authService.subscribeToNotifications({ userId: user.id, keys, endpoint });
     return { status: "success" };
   } catch (err) {
     handleControllerError(err, rep);
@@ -163,4 +176,5 @@ export const authController = {
   authenticate,
   updateTimezone,
   updateTheme,
+  subscribeToNotifications,
 };

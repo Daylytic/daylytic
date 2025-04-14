@@ -38,6 +38,19 @@ export const authHandler: FastifyPluginAsync = async (server, _) => {
         }
     });
 
+    server.route({
+        url: "/notification/subscribe", method: "POST", preHandler: authController.authenticate, handler: authController.subscribeToNotifications, schema: {
+            tags: ["auth"],
+            description: "Subscribe user to notifications",
+            body: $ref("CreateNotificationSubscriptionInputSchema"),
+            headers: $ref("HeaderBearerSchema"),
+            response: {
+                204: {
+                    description: "Succesfully subscribed to notifications",
+                }
+            }
+        }
+    });
 
     server.route({
         url: "/google", method: "DELETE", preHandler: authController.authenticate, handler: authController.logout, schema: {
