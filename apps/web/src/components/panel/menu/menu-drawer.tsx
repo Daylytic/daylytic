@@ -17,6 +17,9 @@ export const MenuDrawer = () => {
       closable={false}
       onClose={() => setShowMenu(!showMenu)}
       data-tour-id="menu"
+      motion={{
+        motionAppear: false,
+      }}
     >
       <Flex vertical gap="large" className={styles["drawer-content-wrapper"]}>
         <Header />
