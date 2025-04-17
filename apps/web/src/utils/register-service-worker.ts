@@ -4,7 +4,7 @@ export const registerServiceWorker = () => {
   if ("serviceWorker" in navigator && "PushManager" in window) {
     console.log("Service Worker and Push Manager are supported!");
     navigator.serviceWorker
-      .register(`${import.meta.env.VITE_DEV === "true" ? "../public/" : "/"}sw.js`)
+      .register(`/sw.js`, { scope: `${import.meta.env.VITE_DEV === "true" ? "/public" : ""}` })
       .then((registration) => {
         swRegistration = registration;
       })

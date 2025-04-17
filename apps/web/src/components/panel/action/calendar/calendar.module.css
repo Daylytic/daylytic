@@ -10,8 +10,15 @@
 #wrapper {
     height: 100%;
     display: flex;
+    overflow: hidden;
 }
 
 .title {
     margin-bottom: 0 !important;
+}
+
+.content {
+    flex: 1;
+    height: 100%;
+    overflow: auto;
 }

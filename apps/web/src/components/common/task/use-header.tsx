@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DescriptionsProps, Grid } from "antd";
 import { useLayout } from "~/providers/layout";
 import { useState } from "react";
 import { Task } from "~/types/task";
 import { formatDate } from "~/utils/date";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useSelectedTask } from "~/providers/selected-task";
 const { useBreakpoint } = Grid;
 
@@ -17,6 +18,7 @@ export const useHeader = ({ selectedTask }: UseHeaderProps) => {
   const [counts, setCounts] = useState<[number, number]>();
   const { setShowAction } = useLayout();
   const { setSelectedTask } = useSelectedTask();
+  const { date } = useParams();
 
   const screens = useBreakpoint();
   const isMobile = !screens.lg;
@@ -58,11 +60,14 @@ export const useHeader = ({ selectedTask }: UseHeaderProps) => {
   };
 
   const handleClose = () => {
-    setSelectedTask(undefined);
-    setShowAction(false);
-    if (!isMobile) {
-      navigate("..");
+    if (!date) {
+      setShowAction(false);
     }
+    
+    setSelectedTask(undefined);
+    // if (!isMobile) {
+    navigate("..");
+    // }
   };
 
   const menuItems: DescriptionsProps["items"] = [

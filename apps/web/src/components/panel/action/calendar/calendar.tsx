@@ -15,16 +15,16 @@ export const Calendar = () => {
   return (
     <Action>
       <Flex vertical id={styles["wrapper"]}>
-        <CalendarHeader calendar={date!} />
-        <CalendarTaskInput />
-        {renderTasks()}
+        <Flex vertical className={styles.content}>
+          <CalendarHeader calendar={date!} />
+          <CalendarTaskInput />
+          {renderTasks()}
+        </Flex>
+        {taskId && <Divider type="horizontal" />}
+        <Flex vertical className={styles.content}>
+          {taskId && <Outlet />}
+        </Flex>
       </Flex>
-      {taskId && (
-        <>
-          <Divider type="horizontal" />
-          <Outlet />
-        </>
-      )}
     </Action>
   );
 };

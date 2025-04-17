@@ -3,3 +3,12 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.clock>* {
+    color: var(--ant-menu-item-selected-color) !important;
+    font-size: var(--ant-font-size) !important;
+    height: var(--ant-menu-item-height);
+    display: flex;
+    align-items: center;
+    line-height: var(--ant-menu-item-height);
+}

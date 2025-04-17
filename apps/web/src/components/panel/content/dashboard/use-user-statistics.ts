@@ -163,7 +163,7 @@ export const useUserStatistics = () => {
   }, [goals, projectsByGoal, tasksByProject]);
 
   const completedTasks = useMemo(() => {
-    return tasks.filter((task) => task.isCompleted && task.taskType === "PROJECT");
+    return tasks.filter((task) => task.isCompleted && task.taskType !== "ROUTINE");
   }, [tasks]);
 
   const openDailyAssistant = () => {

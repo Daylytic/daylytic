@@ -1,7 +1,6 @@
-import { Drawer, Flex } from "antd";
+import { Drawer } from "antd";
 import { useNavigate, useLocation } from "react-router";
-import { styles } from "~/components/layout";
-import { ActionProps } from ".";
+import { ActionProps, styles } from ".";
 import { useLayout } from "~/providers/layout";
 
 export const ActionDrawer = ({ children }: ActionProps) => {
@@ -12,13 +11,16 @@ export const ActionDrawer = ({ children }: ActionProps) => {
 
   return (
     <Drawer
-      className={styles.drawer}
+      rootClassName={styles.drawer}
       size="default"
       placement="right"
       closable={false}
       open={showAction}
       onClose={() => {
         setShowAction(!showAction);
+      }}
+      motion={{
+        motionAppear: false,
       }}
       afterOpenChange={(visible) => {
         if (!visible) {
@@ -28,9 +30,7 @@ export const ActionDrawer = ({ children }: ActionProps) => {
         }
       }}
     >
-      <Flex vertical className={styles["wrapper"]}>
-        {children}
-      </Flex>
+      {children}
     </Drawer>
   );
 };

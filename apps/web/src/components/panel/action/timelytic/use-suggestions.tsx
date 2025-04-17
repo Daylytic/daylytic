@@ -13,7 +13,7 @@ export const useSuggestions = () => {
   const { projects } = useProject();
 
   const filteredTasks = tasks.filter((task) => {
-    return task.taskType === "PROJECT" && !task.isCompleted;
+    return !task.isCompleted;
   });
 
   const overWeekOld = filteredTasks.filter((task) => {

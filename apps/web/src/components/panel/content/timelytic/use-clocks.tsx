@@ -7,7 +7,7 @@ import { useLayout } from "~/providers/layout";
 
 dayjs.extend(utc);
 
-export const useClock = () => {
+export const useClock = (performAnimations = true) => {
   const { timelytic, resetTimelytic, pauseTimelytic, endTimelytic, continueTimelytic } =
     useTimelytic();
   const DEFAULT_DURATION = 1000 * 60 * 30; // Default: 30 minutes in ms
@@ -22,7 +22,7 @@ export const useClock = () => {
   const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!timelytic || !deadline) return;
+    if (!timelytic || !deadline || !performAnimations) return;
 
     const startTime = deadline!.subtract(duration, "milliseconds");
 
@@ -46,7 +46,7 @@ export const useClock = () => {
         if (animationRef.current) cancelAnimationFrame(animationRef.current);
       };
     }
-  }, [timelytic]);
+  }, [timelytic, performAnimations]);
 
   const resetTimer = async (e) => {
     if (!timelytic) {
@@ -151,5 +151,6 @@ export const useClock = () => {
     endTimer,
     handleOpenOverview,
     timelytic,
+    performAnimations,
   };
 };

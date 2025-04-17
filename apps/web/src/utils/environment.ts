@@ -12,6 +12,11 @@ declare global {
 
 const documentMode = CAN_USE_DOM && "documentMode" in document ? document.documentMode : null;
 
+export const isInStandaloneMode = () =>
+  (window.matchMedia('(display-mode: standalone)').matches) ||
+  (window.navigator.standalone) ||
+  document.referrer.includes('android-app://');
+  
 export const IS_APPLE: boolean = CAN_USE_DOM && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
 export const IS_FIREFOX: boolean =
@@ -36,3 +41,8 @@ export const IS_ANDROID_CHROME: boolean = CAN_USE_DOM && IS_ANDROID && IS_CHROME
 
 export const IS_APPLE_WEBKIT =
   CAN_USE_DOM && /AppleWebKit\/[\d.]+/.test(navigator.userAgent) && !IS_CHROME;
+
+export const isMobile = () => {
+  const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  return regex.test(navigator.userAgent);
+}
