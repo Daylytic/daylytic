@@ -50,19 +50,18 @@ export const UserProvider = ({ children }) => {
 
   const [darkMode, setDarkMode] = useState<boolean>(localStorage.getItem("darkMode") === "true");
 
-  const login = () => {
-    // Adding options SHOULD fix the issue with sessions expiring in PWA
-    const options = {
-      path: '/',
-      sameSite: "lax" as const,
-      secure: true, // IMPORTANT: Set to true if using HTTPS (required for PWAs and SameSite=None)
-    };
+  const cookieOptions = {
+    path: "/",
+    sameSite: "lax" as const,
+    secure: true, // required for PWAs and SameSite=None
+  };
 
-    useGoogleLogin({
-      onSuccess: (codeResponse: User) => setCookies("token", codeResponse.access_token, options),
-      onError: (error: unknown) => console.log("Login Failed:", error),
-    });
-  }
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse: User) => {
+      setCookies("token", codeResponse.access_token, cookieOptions);
+    },
+    onError: (error: unknown) => console.error("Login Failed:", error),
+  });
 
   const fetchProfile = async () => {
     if (cookies.token && !profile) {
