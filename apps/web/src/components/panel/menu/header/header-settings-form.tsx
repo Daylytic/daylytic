@@ -1,4 +1,4 @@
-import { Form, Select, Radio, Card, Avatar, Button, Alert, Collapse } from "antd";
+import { Form, Select, Radio, Card, Avatar, Button, Alert, Collapse, Modal } from "antd";
 import { timezones } from "@daylytic/shared/constants";
 import { HeaderSettingsFormSkeleton } from "./skeleton";
 import { useSettingsForm } from ".";
@@ -14,6 +14,9 @@ export const HeaderSettingsForm = () => {
     handleThemeChange,
     enableNotifications,
     notificationStatus,
+    showTutorial,
+    getDeviceInstructions,
+    setShowTutorial,
   } = useSettingsForm();
 
   if (!profile) {
@@ -22,6 +25,14 @@ export const HeaderSettingsForm = () => {
 
   return (
     <>
+      <Modal
+        open={showTutorial}
+        closeIcon={null}
+        cancelButtonProps={{ style: { display: "none" } }}
+        onOk={() => setShowTutorial(false)}
+      >
+        {getDeviceInstructions()}
+      </Modal>
       <Card style={{ marginBottom: 24 }}>
         <Card.Meta
           avatar={<Avatar src={profile.picture} size="large" />}
