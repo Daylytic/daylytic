@@ -141,7 +141,7 @@ export const useGrid = (year: number) => {
     () =>
       tasks.reduce(
         (acc, task) => {
-          if(task.taskType !== "PROJECT") return acc; // Only consider project tasks
+          if(task.taskType === "ROUTINE") return acc; // Only consider project tasks
           if (task.completedAt && task.isCompleted) {
             const date = createDayjs(task.completedAt).format(dateFormat);
 
