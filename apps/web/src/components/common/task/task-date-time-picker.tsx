@@ -100,6 +100,11 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
           centered
           okText="Confirm"
           cancelText="Cancel"
+          modalRender={(modal) => (
+            <Flex align="center" justify="center">
+              {modal}
+            </Flex>
+          )}
           footer={[
             <Button key="reset" type="default" danger onClick={handleReset}>
               Reset
