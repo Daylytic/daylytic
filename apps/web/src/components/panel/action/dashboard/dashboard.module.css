@@ -66,3 +66,7 @@
 .description-item:hover {
     color: unset;
 }
+
+.assistances {
+    overflow: auto;
+}

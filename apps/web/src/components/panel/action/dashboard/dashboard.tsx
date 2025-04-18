@@ -20,7 +20,7 @@ export const Dashboard = () => {
       {assistance ? (
         <DashboardAssistance assistance={assistance} />
       ) : (
-        <Flex gap="small" vertical>
+        <Flex gap="small" vertical className={styles.assistances}>
           <List
             itemLayout="vertical"
             dataSource={sortedAssistances.slice(0, visibleCount)}

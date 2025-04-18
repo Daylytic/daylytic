@@ -9,7 +9,7 @@ import { useTaskCard } from "~/components/common/task/use-task-card";
 import { DropIndicator } from "~/components/common/drop-indicator/drop-indicator";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Tag as AntTag } from "antd";
-import { timeFormat } from "~/utils/date";
+import { dateWithTimeFormat, timeFormat } from "~/utils/date";
 import dayjs from "dayjs";
 import React from "react";
 
@@ -20,11 +20,12 @@ interface TaskCardProps {
   onTaskClick: (task: Task) => void;
   onCheckboxChange: ((e: CheckboxChangeEvent) => void) | undefined;
   showDelete?: boolean;
+  isCalendar?: boolean;
   onDelete?: (task: Task) => void;
 }
 
 export const TaskCard = React.memo(
-  ({ item, tags, onCheckboxChange, onTaskClick, dnd, showDelete, onDelete }: TaskCardProps) => {
+  ({ item, tags, onCheckboxChange, onTaskClick, dnd, showDelete, onDelete, isCalendar }: TaskCardProps) => {
     const { selectedTask } = useSelectedTask();
     const { taskId } = useParams();
     const dndData = useTaskCard({
@@ -65,9 +66,9 @@ export const TaskCard = React.memo(
             <Flex vertical className={styles["task-card-button-details"]}>
               <span className={styles["task-card-button-title"]}>
                 {item.title}{" "}
-                {item.deadline && item.taskType === "ROUTINE" && (
+                {item.deadline && (
                   <AntTag key={item.id}>
-                    {dayjs(item.deadline).format(timeFormat).toString()}
+                    {dayjs(item.deadline).format((item.taskType === "ROUTINE" || isCalendar) ? timeFormat : dateWithTimeFormat).toString()}
                   </AntTag>
                 )}
               </span>
