@@ -28,46 +28,40 @@ export const useDashboard = () => {
 
   const notificationKey = "dailyAssistantNotification";
 
-  const openNotification = () => {
-    notification.open({
-      key: notificationKey,
-      message: `Daily Assistant`,
-      description: (
-        <Flex gap="small">
-          <span>
-            Your Daily Assistance Is Here {profile?.name ?? ""}. Click on the button to improve your
-            productivity
-          </span>
-          <Button
-            type="primary"
-            onClick={() => {
-              notification.destroy(notificationKey);
-              if (sortedAssistances.length < 1) {
-                return;
-              }
-              const id = sortedAssistances[0].id;
-              navigate(getAssistanceRoute(id));
-            }}
-          >
-            View
-          </Button>
-        </Flex>
-      ),
-      duration: 0,
-    });
-  };
-
   const handleSubmit = async (data) => {
     const hide = message.loading("Your daily assistance is being generated...", 0);
-    createAssistance(data)
-      .then((value) => {
-        hide();
-        if (!value) return;
-        openNotification();
-      })
-      .catch(() => {
-        hide();
+  
+    try {
+      const newAssistance = await createAssistance(data);
+      hide();
+  
+      if (!newAssistance) return;
+  
+      notification.open({
+        key: notificationKey,
+        message: "Daily Assistant",
+        description: (
+          <Flex gap="small">
+            <span>
+              Your Daily Assistance Is Here {profile?.name ?? ""}. Click on the button to improve your
+              productivity
+            </span>
+            <Button
+              type="primary"
+              onClick={() => {
+                notification.destroy(notificationKey);
+                navigate(getAssistanceRoute(newAssistance.id));
+              }}
+            >
+              View
+            </Button>
+          </Flex>
+        ),
+        duration: 0,
       });
+    } catch (_) {
+      hide();
+    }
   };
 
   return {navigate, assistance, sortedAssistances, visibleCount, handleSubmit, loadMore}
