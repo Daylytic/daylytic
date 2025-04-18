@@ -20,7 +20,9 @@ export const useCalendar = () => {
 
   const daysTasks = tasks.filter((task) => {
     const taskDate = dayjs(task.deadline);
-    return (taskDate.isValid() && taskDate.format(dateFormat) === date) && task.taskType !== "ROUTINE";
+    return (
+      taskDate.isValid() && taskDate.format(dateFormat) === date && task.taskType !== "ROUTINE"
+    );
   });
 
   const getGoalId = (task: Task): string | undefined => {
@@ -47,6 +49,7 @@ export const useCalendar = () => {
         tasks={daysTasks}
         fetched={fetched}
         dnd={false}
+        isCalendar={true}
         handleTaskClick={(task) => {
           setSelectedTask(task);
           switch (task.taskType) {

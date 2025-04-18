@@ -10,6 +10,7 @@ interface TaskListProps {
   handleTaskClick: (task: Task) => void;
   handleTaskUpdate: (task: Task) => Promise<void>;
   showDelete?: boolean;
+  isCalendar?: boolean;
   onDelete?: (task: Task) => void;
 }
 
@@ -20,6 +21,7 @@ export const TaskList = ({
   handleTaskClick,
   handleTaskUpdate,
   showDelete,
+  isCalendar,
   onDelete,
 }: TaskListProps) => {
   const { tags } = useTags();
@@ -40,6 +42,7 @@ export const TaskList = ({
                 dnd={dnd}
                 onDelete={onDelete}
                 showDelete={showDelete}
+                isCalendar={isCalendar}
                 onTaskClick={handleTaskClick}
                 onCheckboxChange={async (e: CheckboxChangeEvent) => {
                   task.isCompleted = e.target.checked;
