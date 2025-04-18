@@ -23,7 +23,7 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   if (!fetched) {
     return (
       <Flex align="center" justify="center">
-        <Spin></Spin>
+        <Spin />
       </Flex>
     );
   }
