@@ -28,7 +28,7 @@ export const App = () => {
 
   useEffect(() => {
     registerServiceWorker();
-  });
+  }, []);
 
   return (
     <ConfigProvider theme={config({ darkMode: isDarkMode() })}>
