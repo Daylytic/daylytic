@@ -31,6 +31,11 @@
     font-family: "Poppins";
 }
 
+/* Remove blue highlight from buttons */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 section {
     /* scroll-margin-top: calc(var(--ant-layout-header-height) + var(--ant-padding-md)); */
     display: flex;
