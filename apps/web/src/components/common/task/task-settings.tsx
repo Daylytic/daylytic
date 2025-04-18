@@ -55,7 +55,11 @@ export const TaskSettings = ({
         format={dateWithTimeFormat}
         variant="filled"
         prefix={<CalendarOutlined />}
-        showTime={true}
+        showTime={{
+          format: timeFormat,
+          hideDisabledOptions: true,
+          showNow: false
+        }}
         suffixIcon={<></>}
         className={styles["settings-button"]}
         placeholder="Date"
@@ -64,6 +68,7 @@ export const TaskSettings = ({
           selectedTask.deadline = e.toISOString();
           onChange(selectedTask);
         }}
+        getPopupContainer={(trigger) => trigger.parentElement || document.body}
       />
     );
 
@@ -78,7 +83,7 @@ export const TaskSettings = ({
               {selectedTagOptions}
             </Flex>
             {selectedTagOptions.length > 0 && tagOptions.length > 0 ? (
-              <Divider className={styles["tags-divider"]} /> //TODO: Check if orientional margin is just normal margin
+              <Divider className={styles["tags-divider"]} />
             ) : (
               <></>
             )}
