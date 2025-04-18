@@ -1,5 +1,5 @@
 import { ConfigProvider, App as AntApp } from "antd";
-import { Routes, Route, BrowserRouter } from "react-router";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router"; // Ensure using react-router-dom
 import { ScrollToHash } from "~/components/common/scroll-to-hash";
 import { Task as TaskActionWrapper } from "~/components/panel/action/task";
 import { TaskAction } from "~/components/panel/action/task";
@@ -21,13 +21,14 @@ import { NotificationProvider } from "~/providers/notification";
 import { useUser } from "~/providers/user";
 import { useEffect } from "react";
 import { registerServiceWorker } from "~/utils/register-service-worker";
+import { PrivateRoute } from "~/components/common/private-route";
 
 export const App = () => {
   const { isDarkMode } = useUser();
 
   useEffect(() => {
     registerServiceWorker();
-  });
+  }, []);
 
   return (
     <ConfigProvider theme={config({ darkMode: isDarkMode() })}>
@@ -36,9 +37,19 @@ export const App = () => {
           <BrowserRouter>
             <ScrollToHash />
             <Routes>
+              {/* Public Routes */}
               <Route index element={<LayoutHome />} />
               <Route path="/setup" element={<LayoutSetup />} />
-              <Route path="/panel/*" element={<LayoutPanel />}>
+
+              {/* Protected Routes */}
+              <Route
+                path="/panel/*"
+                element={
+                  <PrivateRoute>
+                    <LayoutPanel />
+                  </PrivateRoute>
+                }
+              >
                 <Route path="dashboard" element={<LayoutDashboard />}>
                   <Route path="daily-assistant/:assistanceId?" element={<DashboardAction />} />
                 </Route>
@@ -51,13 +62,19 @@ export const App = () => {
                 <Route path="tag/:tagId" element={<LayoutTag />}>
                   <Route path=":taskId" element={<TaskActionWrapper />} />
                 </Route>
-                <Route path="timelytic" element={<LayoutTimelytic />}></Route>
+                <Route path="timelytic" element={<LayoutTimelytic />} />
                 <Route path="calendar" element={<LayoutCalendar />}>
                   <Route path=":date" element={<CalendarAction />}>
                     <Route path=":goalId?/:taskId" element={<TaskAction />} />
                   </Route>
                 </Route>
+                {/* If LayoutPanel itself doesn't handle non-matching nested routes,
+                    you might want a catch-all or index route within /panel/* */}
+                 <Route index element={<Navigate to="dashboard" replace />} />
               </Route>
+
+              {/* 404 Not Found Route */}
+              <Route path="*" element={<LayoutHome />} />
             </Routes>
           </BrowserRouter>
         </NotificationProvider>
