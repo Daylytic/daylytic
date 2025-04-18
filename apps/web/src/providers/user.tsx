@@ -52,8 +52,9 @@ export const UserProvider = ({ children }) => {
 
   const cookieOptions = {
     path: "/",
-    sameSite: "lax" as const,
+    sameSite: "none" as const,
     secure: true, // required for PWAs and SameSite=None
+    maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
   };
 
   const login = useGoogleLogin({
