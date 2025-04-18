@@ -10,7 +10,7 @@ export const useForm = ({ onSubmit, onCancel }: QuestionnaireModalProps) => {
   const [form] = Form.useForm();
 
   const handleOk = async () => {
-    setConfirmLoading(true);
+    setVisible(false);
     try {
       const values = await form.validateFields();
       await onSubmit(values);

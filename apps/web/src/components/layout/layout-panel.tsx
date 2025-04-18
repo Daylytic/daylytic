@@ -18,6 +18,7 @@ import "nprogress/nprogress.css";
 import NProgress from "nprogress";
 import { TourProvider } from "~/providers/tour";
 import { GlobalTour } from "~/providers/tour/global-tour";
+import { PrivateRoute } from "~/components/common/private-route";
 
 interface PanelDataWrapperProps {
   children: ReactNode;
@@ -67,8 +68,10 @@ export const LayoutPanel = () => {
 
   return (
     <PanelDataWrapper>
-      <Menu />
-      <Outlet />
+      <PrivateRoute>
+        <Menu />
+        <Outlet />
+      </PrivateRoute>
     </PanelDataWrapper>
   );
 };

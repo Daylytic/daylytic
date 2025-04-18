@@ -39,7 +39,7 @@ section {
     justify-content: center;
     min-height: calc(100vh - var(--ant-layout-header-height));
     margin: 0 auto;
-    width:100%;
+    width: 100%;
     max-width: 1200px;
     min-height: 100vh;
 }
@@ -158,5 +158,69 @@ section:last-child {
 @media only screen and (max-width: 480px) {
     .ant-picker-calendar .ant-picker-calendar-header {
         display: flex !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .ant-picker-dropdown {
+        width: 100% !important;
+        max-width: 280px !important;
+        min-width: auto !important;
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+    }
+
+    .ant-picker-datetime-panel {
+        display: flex;
+        flex-direction: column;
+        width: 100% !important;
+    }
+
+    .ant-picker-panel-container {
+        width: 100% !important;
+    }
+
+    .ant-picker-time-panel {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-top: 1px solid #f0f0f0 !important;
+        border-left: none !important;
+        margin-top: 5px !important;
+        padding-top: 5px !important;
+    }
+
+    .ant-picker-time-panel-column {
+        flex: 1;
+        max-width: 80px;
+        min-width: auto !important;
+    }
+
+    .ant-picker-datetime-panel .ant-picker-date-panel {
+        border-bottom: none !important;
+    }
+
+    .ant-picker-date-panel,
+    .ant-picker-time-panel {
+        width: 100% !important;
+    }
+
+    @media (max-height: 600px) {
+        .ant-picker-dropdown {
+            max-height: 70vh !important;
+        }
+
+        .ant-picker-time-panel-column {
+            height: 180px !important;
+        }
+
+        .ant-picker-body {
+            max-height: 170px !important;
+            overflow-y: auto !important;
+        }
+
+        .ant-picker-panel-container {
+            transform-origin: top center;
+            transform: scale(0.9);
+        }
     }
 }

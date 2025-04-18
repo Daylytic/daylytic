@@ -55,6 +55,7 @@ const LazyCheckListPlugin = lazy(() =>
     default: module.CheckListPlugin,
   })),
 );
+
 const LazyMarkdownShortcutPlugin = lazy(() =>
   import("@lexical/react/LexicalMarkdownShortcutPlugin").then((module) => ({
     default: module.MarkdownShortcutPlugin,
@@ -73,6 +74,11 @@ const LazyLinkPlugin = lazy(() =>
 const LazyOnChangePlugin = lazy(() =>
   import("~/components/common/editor/plugins/on-change").then((module) => ({
     default: module.OnChangePlugin,
+  })),
+);
+const LazyHorizontalRulePlugin = lazy(() =>
+  import("@lexical/react/LexicalHorizontalRulePlugin").then((module) => ({
+    default: module.HorizontalRulePlugin,
   })),
 );
 
@@ -100,12 +106,13 @@ const Editor = ({ onChange, type, showToolbar }: EditorProps) => {
     () => (
       <>
         <LazyHistoryPlugin />
-        <LazyMarkdownShortcutPlugin />
+        <LazyMarkdownShortcutPlugin/>
         <LazyCodeHighlightPlugin />
         <LazyLinkPlugin />
         <LazyListPlugin />
         <LazyTabIndentationPlugin />
         <LazyCheckListPlugin />
+        <LazyHorizontalRulePlugin />
         <LazyShortcutsPlugin editor={activeEditor.current} setIsLinkEditMode={setIsLinkEditMode} />
         {floatingAnchorElem.current && (
           <LazyFloatingLinkEditorPlugin

@@ -1,6 +1,8 @@
 import { EditorType, Lexical } from "~/components/common/editor";
 import { Assistance } from "~/types/assistance";
-import { $convertFromMarkdownString, TRANSFORMERS } from "@lexical/markdown";
+import { $convertFromMarkdownString } from "@lexical/markdown";
+import { ASSISTANCE_TRANSFORMERS } from "~/components/common/editor/markdown/transformers/horizontal-rule";
+
 
 interface DashboardAssistanceProps {
   assistance: Assistance;
@@ -15,7 +17,7 @@ export const DashboardAssistance = ({ assistance }: DashboardAssistanceProps) =>
       type={EditorType.rich}
       generateDefaultContent={(root) => {
         root.clear();
-        $convertFromMarkdownString(assistance.response ?? "", TRANSFORMERS, root);
+        $convertFromMarkdownString(assistance.response ?? "", ASSISTANCE_TRANSFORMERS, root);
         return root;
       }}
       defaultContent={{}}

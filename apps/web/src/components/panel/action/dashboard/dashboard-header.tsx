@@ -1,11 +1,9 @@
 import { Button, Flex, Tooltip, Typography } from "antd";
 import { styles, useHeader } from ".";
-import { useParams } from "react-router";
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
 
 export const DashboardHeader = () => {
-  const { handleExitClick } = useHeader();
-  const { assistanceId } = useParams();
+  const { handleExitClick, assistanceId } = useHeader();
 
   return (
     <Flex className="ant-typography" justify="space-between" align="center">

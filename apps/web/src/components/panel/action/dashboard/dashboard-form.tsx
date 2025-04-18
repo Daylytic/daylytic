@@ -27,7 +27,9 @@ export const DashboardForm = ({ onSubmit, onCancel }: QuestionnaireModalProps) =
       <Modal
         open={visible}
         title="Answer the Questions"
-        onOk={handleOk}
+        onOk={() => {
+          handleOk();
+        }}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         okText="Submit"

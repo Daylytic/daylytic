@@ -545,7 +545,7 @@
   color: #ccc;
 }
 .hr {
-  padding: 2px 2px;
+  padding-block: var(--ant-padding-md);
   border: none;
   margin: 1em 0;
   cursor: pointer;
