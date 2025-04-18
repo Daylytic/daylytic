@@ -21,7 +21,7 @@ const analyzeProductivity = async (data: CreateAssistanceSchema): Promise<string
             apiKey: process.env.OPENAI_API_KEY,
         });
         const chatCompletion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
+            model: "gpt-4.1",
             messages: [
                 {
                     role: "system",
@@ -136,6 +136,7 @@ ${treeString}
 - Today’s date and time: ${dayjs().format(`${dateFormat} ${timeFormat}`)}.
 - User routine streak: ${analytics.routineStreak} days.
 - Remaining routine tasks: ${routineTasks.map(task => task.title).join(", ")}.
+- Try not to use too big headings. Instead of starting with h1, start with h3 to h6.
 
 ### Please Provide:
 - A brief overall assessment of the user's current state.
