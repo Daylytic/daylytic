@@ -21,7 +21,6 @@ import { NotificationProvider } from "~/providers/notification";
 import { useUser } from "~/providers/user";
 import { useEffect } from "react";
 import { registerServiceWorker } from "~/utils/register-service-worker";
-import { PrivateRoute } from "~/components/common/private-route";
 
 export const App = () => {
   const { isDarkMode } = useUser();
@@ -45,13 +44,13 @@ export const App = () => {
               <Route
                 path="/panel/*"
                 element={
-                  <PrivateRoute>
                     <LayoutPanel />
-                  </PrivateRoute>
                 }
               >
                 <Route path="dashboard" element={<LayoutDashboard />}>
-                  <Route path="daily-assistant/:assistanceId?" element={<DashboardAction />} />
+                  <Route path="daily-assistant" element={<DashboardAction />}>
+                    <Route path=":assistanceId" element={<></>}/>
+                  </Route>
                 </Route>
                 <Route path="goal/:goalId" element={<LayoutGoal />}>
                   <Route path=":taskId" element={<TaskActionWrapper />} />
@@ -70,7 +69,7 @@ export const App = () => {
                 </Route>
                 {/* If LayoutPanel itself doesn't handle non-matching nested routes,
                     you might want a catch-all or index route within /panel/* */}
-                 <Route index element={<Navigate to="dashboard" replace />} />
+                <Route index element={<Navigate to="dashboard" replace />} />
               </Route>
 
               {/* 404 Not Found Route */}
