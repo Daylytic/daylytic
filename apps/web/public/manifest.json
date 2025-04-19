@@ -1,6 +1,13 @@
 {
   "short_name": "Daylytic",
-  "name": "Daylytic",
+  "name": "Daylytic – Shatter Limitations. Build Your Best Life",
+  "description": "Break limits and achieve more with Daylytic: Intelligent tracking, motivation, and insights for personal growth and productivity.",
+  "lang": "en",
+  "start_url": "/panel/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "icons": [
     {
       "src": "windows11/SmallTile.scale-100.png",
@@ -466,9 +473,5 @@
       "form_factor": "wide",
       "label": "Desktop Dashboard"
     }
-  ],
-  "start_url": "/panel/dashboard",
-  "theme_color": "#000000",
-  "background_color": "#000000",
-  "display": "standalone"
+  ]
 }
