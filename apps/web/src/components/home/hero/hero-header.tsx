@@ -7,7 +7,7 @@ export const HeroHeader = () => {
   const typeWriter = useTypewriter(["Goal", "Dream"], 400, 100, 1000);
 
   return (
-    <header id={styles.header}>
+    <div id={styles.header}>
       <Title level={1} className={styles.title}>
         What Is Your <br />
         Next{" "}
@@ -20,6 +20,6 @@ export const HeroHeader = () => {
         <strong>Daylytic</strong> is the secret to shattering limitations and building the life you
         deserve!
       </Paragraph>
-    </header>
+    </div>
   );
 };

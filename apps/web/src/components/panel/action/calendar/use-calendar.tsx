@@ -23,7 +23,7 @@ export const useCalendar = () => {
     return (
       taskDate.isValid() && taskDate.format(dateFormat) === date && task.taskType !== "ROUTINE"
     );
-  });
+  }).sort((a, b) => dayjs(a.deadline).isBefore(b.deadline) ? -1 : 1);
 
   const getGoalId = (task: Task): string | undefined => {
     const tasksProject = projects.find((project) => project.id === task.projectId);
