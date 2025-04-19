@@ -16,7 +16,7 @@ const analyzeProductivity = async (data: CreateAssistanceSchema): Promise<string
         if (!process.env.OPENAI_API_KEY) {
             throw new RequestError("OpenAI API key is not set", 500, null);
         }
-        
+
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY,
         });
@@ -50,10 +50,11 @@ const analyzeProductivity = async (data: CreateAssistanceSchema): Promise<string
 
 const constructPrompt = async (data: CreateAssistanceSchema): Promise<string> => {
     const analytics = await analyticsService.fetchAnalyticsData({ userId: data.userId });
-    const tasks = await taskService.fetchUserTasks({ userId: data.userId });
+    const tasks = (await taskService.fetchUserTasks({ userId: data.userId })).filter((task) => !task.isCompleted);
     const projects = await projectService.fetchProjectsForUser({ userId: data.userId });
     const goals = await goalService.fetchGoals({ userId: data.userId });
-    const routineTasks = tasks.filter((task) => task.taskType === "ROUTINE" && !task.isCompleted);
+    const routineTasks = tasks.filter((task) => task.taskType === "ROUTINE");
+    const calendarTasks = tasks.filter((task) => task.taskType === "EVENT");
 
     const tree: {
         [goalTitle: string]: {
@@ -97,7 +98,6 @@ const constructPrompt = async (data: CreateAssistanceSchema): Promise<string> =>
             taskDescription += `, ${extras.join(", ")}`;
         }
         // Append the annotation for the task using the final link format
-        // IMPORTANT: Do not change the link at all, just include it as is in the final link.
         taskDescription += ` (Task - "/panel/goal/${goal.id}/${task.id})"`;
 
         // Add the task into the appropriate project under the goal
@@ -111,7 +111,6 @@ const constructPrompt = async (data: CreateAssistanceSchema): Promise<string> =>
         // Use the final link format for goals as well.
         treeString += `${goalTitle} (Goal - "/panel/goal/${goalId}"):\n`;
         Object.keys(tree[goalTitle].projects).forEach(projectTitle => {
-            const projectId = tree[goalTitle].projects[projectTitle].id;
             treeString += `    ${projectTitle} (Project)\n`;
             tree[goalTitle].projects[projectTitle].tasks.forEach(task => {
                 treeString += `        ${task.description}\n`;
@@ -128,6 +127,9 @@ ${Object.keys(data.questions).map((key, index) => `   ${index + 1}. "${key}": ${
 
 ### User Tasks Tree (Goals > Projects > Tasks):
 ${treeString}
+
+### Tasks In Calendar
+${calendarTasks.map((task) => `${task.title} Task(/panel/calendar/${dayjs(task.deadline).format(dateFormat)}/${task.id})`).join("\n")}
 
 ### Notes:
 - Each goal has projects, and each project has tasks.
