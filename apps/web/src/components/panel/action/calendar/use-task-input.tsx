@@ -5,7 +5,7 @@ import { useUser } from "~/providers/user";
 import { useRef, useState } from "react";
 import dayjs from "dayjs";
 import { useParams } from "react-router";
-import { dateFormat } from "~/utils/date";
+import { dateWithTimeFormat } from "~/utils/date";
 
 export const useTaskInput = () => {
   const { date } = useParams();
@@ -37,7 +37,14 @@ export const useTaskInput = () => {
 
       const task = await createTask(trimmed, "EVENT", undefined, profile!.id);
       if (!task) return;
-      task.deadline = dayjs(date, dateFormat).utc().toISOString();
+
+      const today = dayjs().utc();
+      const isToday = date === today.format("YYYY-MM-DD");
+
+      const deadlineTime = isToday ? today.format("HH:mm") : "00:00";
+
+      task.deadline = dayjs(`${date} ${deadlineTime}`, dateWithTimeFormat).utc().toISOString();
+
       await updateTasks([task], true);
       setNewTask("");
       setTimeout(() => {
