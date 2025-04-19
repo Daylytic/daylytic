@@ -1,11 +1,10 @@
 import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Modal, TimePicker, Flex } from "antd";
-import { dateWithTimeFormat, timeFormat } from "~/utils/date";
-import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { dateFormat, dateWithTimeFormat, timeFormat } from "~/utils/date";
+import dayjs from "dayjs";
 import { Task } from "~/types/task";
 import clsx from "clsx";
-import { styles } from ".";
+import { styles, useDateTimePicker } from ".";
 
 interface TaskDateTimePickerProps {
   isMobileView: boolean;
@@ -13,44 +12,24 @@ interface TaskDateTimePickerProps {
   onChange: (task: Task) => Promise<void>;
 }
 
-export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
+export const TaskDateTimePicker = ({
   isMobileView,
   selectedTask,
   onChange,
-}) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [tempDate, setTempDate] = useState<Dayjs | null>(
-    dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null,
-  );
-
-  // Handle RESET
-  const handleReset = () => {
-    selectedTask.deadline = "";
-    onChange(selectedTask);
-    setTempDate(null);
-    setIsModalVisible(false);
-  };
-
-  const handleOpenModal = () => {
-    setTempDate(dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null);
-    setIsModalVisible(true);
-  };
-
-  const handleModalOk = () => {
-    if (tempDate) {
-      selectedTask.deadline = tempDate.toISOString();
-      onChange(selectedTask);
-    }
-    setIsModalVisible(false);
-  };
-
-  const handleModalCancel = () => {
-    setIsModalVisible(false);
-  };
+}: TaskDateTimePickerProps) => {
+  const {
+    handleModalCancel,
+    handleModalOk,
+    handleReset,
+    handleOpenModal,
+    isModalVisible,
+    tempDate,
+    setTempDate,
+  } = useDateTimePicker({ selectedTask, onChange });
+  const deadline = dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null;
 
   // Routine type ONLY picks time
   if (selectedTask.taskType === "ROUTINE") {
-    const val = dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null;
     return (
       <Flex gap="small" align="center">
         <TimePicker
@@ -58,11 +37,11 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
           variant="filled"
           prefix={<ClockCircleOutlined />}
           placeholder="Time"
-          value={val}
+          value={deadline}
           onChange={(time) => {
             if (time) {
-              const dt = val
-                ? val.hour(time.hour()).minute(time.minute()).second(0)
+              const dt = deadline
+                ? deadline.hour(time.hour()).minute(time.minute()).second(0)
                 : dayjs().hour(time.hour()).minute(time.minute()).second(0);
               selectedTask.deadline = dt.toISOString();
               onChange(selectedTask);
@@ -84,7 +63,7 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
           variant="filled"
           className={clsx(styles["settings-button"])}
         >
-            Date
+          Date
         </Button>
 
         <Modal
@@ -92,7 +71,7 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
           open={isModalVisible}
           onOk={handleModalOk}
           onCancel={handleModalCancel}
-          centered
+          
           okText="Confirm"
           cancelText="Cancel"
           modalRender={(modal) => (
@@ -114,10 +93,11 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
         >
           <Flex vertical gap="middle" style={{ width: "100%" }}>
             <DatePicker
-              format="YYYY-MM-DD"
+              format={dateFormat}
               placeholder="Select date"
               style={{ width: "100%" }}
               value={tempDate}
+              inputReadOnly={true}
               onChange={(date) => {
                 if (date && tempDate) {
                   const newDate = date.hour(tempDate.hour()).minute(tempDate.minute()).second(0);
@@ -132,6 +112,7 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
               placeholder="Select time"
               style={{ width: "100%" }}
               value={tempDate}
+              inputReadOnly={true}
               onChange={(time) => {
                 if (time && tempDate) {
                   const newDate = tempDate.hour(time.hour()).minute(time.minute()).second(0);
@@ -147,7 +128,6 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
     );
   }
 
-  const val = dayjs(selectedTask.deadline).isValid() ? dayjs(selectedTask.deadline) : null;
   return (
     <Flex gap="small" align="center">
       <DatePicker
@@ -156,7 +136,7 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
         prefix={<CalendarOutlined />}
         showTime={{ format: timeFormat }}
         placeholder="Date"
-        value={val}
+        value={deadline}
         onChange={(date) => {
           if (date) {
             selectedTask.deadline = date.toISOString();

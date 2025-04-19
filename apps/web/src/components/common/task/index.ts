@@ -4,6 +4,7 @@ export * from "./task-settings.tsx";
 export * from "./task-header.tsx";
 export * from "./use-header.tsx"
 export * from "./use-settings.tsx";
+export * from "./use-date-time-picker.ts";
 export * from "./skeleton";
 export * from "./task-priority-select";
 export * from "./task-tags-popover";
