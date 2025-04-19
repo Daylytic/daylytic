@@ -1,7 +1,7 @@
 import { Alert, Flex, Form, Steps, Tabs } from "antd";
 const { Step } = Steps;
 import { useUser } from "~/providers/user";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { App } from "antd";
 import { swRegistration } from "~/utils/register-service-worker";
 import { isInStandaloneMode, isMobile } from "~/utils/environment";
