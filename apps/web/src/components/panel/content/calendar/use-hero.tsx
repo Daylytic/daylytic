@@ -50,14 +50,16 @@ export const useHero = () => {
       <>
         {listData.length > 0 && (
           <Flex className={styles.count} vertical align="center" justify="center">
-            <span>{listData.length}</span>
+            <span>
+              {listData.filter((task) => task.isCompleted).length}/{listData.length}
+            </span>
             <span>Tasks</span>
           </Flex>
         )}
         <ul className={styles.cell}>
           {listData.map((item) => (
             <li>
-              <Tag>{item.title}</Tag>
+              <Tag className={item.isCompleted && styles.finished}>{item.title}</Tag>
             </li>
           ))}
         </ul>

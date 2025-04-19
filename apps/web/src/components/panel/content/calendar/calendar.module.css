@@ -24,10 +24,11 @@
   justify-content: center;
   align-items: center;
   display: none;
+  overflow: hidden;
 }
 
 .cell {
-  display:flex;
+  display: flex;
   flex-direction: column;
   gap: var(--ant-padding-xs);
   margin: 0;
@@ -72,4 +73,9 @@
   .count {
     font-size: 10px;
   }
+}
+
+.finished {
+  text-decoration: line-through;
+  opacity: 0.5;
 }
