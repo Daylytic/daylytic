@@ -69,11 +69,6 @@ export const TaskDateTimePicker: React.FC<TaskDateTimePickerProps> = ({
             }
           }}
         />
-        {val && (
-          <Button size="small" onClick={handleReset}>
-            Reset
-          </Button>
-        )}
       </Flex>
     );
   }
