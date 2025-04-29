@@ -32,53 +32,65 @@ const getAuthenticationProfile = async (
 const createAuthenticationProfile = async (
   data: CreateUserInput
 ): Promise<{ user: User; session: Session }> => {
-  /* If session doesn't exist in DB, fetch google info about token*/
-  const rawGoogleAccount = await fetchGoogleAccountInfo({ token: data.token });
-  const googleAccount = GoogleAccountSchema.parse({
-    ...rawGoogleAccount,
-    timeZone: data.timeZone,
-    theme: data.theme,
-  });
+  try {
+    /* If session doesn't exist in DB, fetch google info about token*/
+    const rawGoogleAccount = await fetchGoogleAccountInfo({ token: data.token });
+    const googleAccount = GoogleAccountSchema.parse({
+      ...rawGoogleAccount,
+      timeZone: data.timeZone,
+      theme: data.theme,
+    });
 
-  /* Create User if doesnt exist, else get existing user data from google account id */
-  const userExists = await prisma.user.findFirst({
-    where: { googleId: googleAccount.id! },
-  });
-  const user =
-    userExists ||
-    (await createUser({ ...googleAccount, timeZone: data.timeZone, id: undefined, googleId: googleAccount.id }));
+    /* Create User if doesnt exist, else get existing user data from google account id */
+    const userExists = await prisma.user.findFirst({
+      where: { googleId: googleAccount.id! },
+    });
+    const user =
+      userExists ||
+      (await createUser({ ...googleAccount, timeZone: data.timeZone, id: undefined, googleId: googleAccount.id }));
 
-  /* Create Session attached to the userId */
-  const session = { token: data.token, userId: user.id };
-  await createSession(session);
+    /* Create Session attached to the userId */
+    const session = { token: data.token, userId: user.id };
+    await createSession(session);
 
-  return { user: user, session: session };
+    return { user: user, session: session };
+  } catch (err) {
+    throw new RequestError("Problem occured while creating authentication profile", 500, err);
+  }
 };
 
 const deleteSession = async (data: DeleteSessionInput) => {
-  await prisma.session.delete({
-    where: data,
-  });
+  try {
+    await prisma.session.delete({
+      where: data,
+    });
+  } catch (err) {
+    throw new RequestError("Problem occured while deleting session", 500, err);
+  }
 };
 
 const fetchGoogleAccountInfo = async (
   data: FetchGoogleAccountInfo
 ): Promise<GoogleAccount> => {
-  const userDetails = await fetch(
-    `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.token}`,
-    {
-      headers: {
-        Authorization: `Bearer ${data.token}`,
-        Accept: "application/json",
-      },
+  try {
+    const userDetails = await fetch(
+      `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (!userDetails.ok) {
+      throw new Error("Given token is not linked with any google account.");
     }
-  );
 
-  if (!userDetails.ok) {
-    throw new Error("Given token is not linked with any google account.");
+    return await userDetails.json();
+  } catch (err) {
+    throw new RequestError("Problem occured while fetching data about google account", 500, err);
   }
-
-  return await userDetails.json();
 };
 
 // Create a new user in the database
