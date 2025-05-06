@@ -84,7 +84,11 @@ const subscribeToNotifications = async (req: FastifyRequest, rep: FastifyReply) 
 }
 
 const logout = async (req: FastifyRequest, rep: FastifyReply) => {
-  authService.deleteSession({ token: req.session!.token });
+  try {
+    await authService.deleteSession({ token: req.session!.token });
+  } catch (err) {
+    handleControllerError(err, rep);
+  }
   return { status: "success" };
 };
 
@@ -101,7 +105,7 @@ const authenticate = async (req: FastifyRequest, rep: FastifyReply) => {
     });
 
     if (dayjs(session.validUntil).utc().isBefore(dayjs().utc())) {
-      authService.deleteSession(session);
+      await authService.deleteSession(session);
       throw new RequestError("Session has expired.", 401, null);
     }
 
