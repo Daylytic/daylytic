@@ -1,5 +1,4 @@
-import React, { lazy, Suspense, useMemo, useRef, useState } from "react";
-import { Spin } from "antd";
+import React, { useMemo, useRef, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import clsx from "clsx";
 import styles from "./lexical.module.css";
@@ -7,80 +6,21 @@ import { EditorType } from "~/components/common/editor";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { LexicalContentEditable } from "~/components/common/editor/ui/content-editable";
 
-// Lazy load plugins with prefetch hints
-const LazyHistoryPlugin = lazy(() =>
-  import("@lexical/react/LexicalHistoryPlugin").then((module) => ({
-    default: module.HistoryPlugin,
-  })),
-);
-const LazyRichTextPlugin = lazy(() =>
-  import("@lexical/react/LexicalRichTextPlugin").then((module) => ({
-    default: module.RichTextPlugin,
-  })),
-);
-const LazyPlainTextPlugin = lazy(() =>
-  import("@lexical/react/LexicalPlainTextPlugin").then((module) => ({
-    default: module.PlainTextPlugin,
-  })),
-);
-const LazyShortcutsPlugin = lazy(() =>
-  import("~/components/common/editor/plugins/shortcuts").then((module) => ({
-    default: module.ShortcutsPlugin,
-  })),
-);
-const LazyToolbarPlugin = lazy(() =>
-  import("~/components/common/editor/plugins/toolbar").then((module) => ({
-    default: module.ToolbarPlugin,
-  })),
-);
-const LazyCodeHighlightPlugin = lazy(() =>
-  import("~/components/common/editor/plugins/code-highlight").then((module) => ({
-    default: module.CodeHighlightPlugin,
-  })),
-);
-const LazyListPlugin = lazy(() =>
-  import("@lexical/react/LexicalListPlugin").then((module) => ({
-    default: module.ListPlugin,
-  })),
-);
-const LazyTabIndentationPlugin = lazy(() =>
-  import("@lexical/react/LexicalTabIndentationPlugin").then(
-    (module) => ({
-      default: module.TabIndentationPlugin,
-    }),
-  ),
-);
-const LazyCheckListPlugin = lazy(() =>
-  import("@lexical/react/LexicalCheckListPlugin").then((module) => ({
-    default: module.CheckListPlugin,
-  })),
-);
+// Normal imports
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
+import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { HorizontalRulePlugin } from "@lexical/react/LexicalHorizontalRulePlugin";
 
-const LazyMarkdownShortcutPlugin = lazy(() =>
-  import("@lexical/react/LexicalMarkdownShortcutPlugin").then((module) => ({
-    default: module.MarkdownShortcutPlugin,
-  })),
-);
-const LazyFloatingLinkEditorPlugin = lazy(() =>
-  import("~/components/common/editor/plugins/floating-link-editor").then((module) => ({
-    default: module.FloatingLinkEditorPlugin,
-  })),
-);
-const LazyLinkPlugin = lazy(() =>
-  import("~/components/common/editor/plugins/link").then((module) => ({
-    default: module.LinkPlugin,
-  })),
-);
-const LazyOnChangePlugin = lazy(() =>
-  import("~/components/common/editor/plugins/on-change").then((module) => ({
-    default: module.OnChangePlugin,
-  })),
-);
-const LazyHorizontalRulePlugin = lazy(() =>
-  import("@lexical/react/LexicalHorizontalRulePlugin").then((module) => ({
-    default: module.HorizontalRulePlugin,
-  })),
-);
+import { ShortcutsPlugin } from "~/components/common/editor/plugins/shortcuts";
+import { ToolbarPlugin } from "~/components/common/editor/plugins/toolbar";
+import { CodeHighlightPlugin } from "~/components/common/editor/plugins/code-highlight";
+import { FloatingLinkEditorPlugin } from "~/components/common/editor/plugins/floating-link-editor";
+import { LinkPlugin } from "~/components/common/editor/plugins/link";
 
 interface EditorProps {
   // eslint-disable-next-line
@@ -89,7 +29,7 @@ interface EditorProps {
   showToolbar: boolean;
 }
 
-const Editor = ({ onChange, type, showToolbar }: EditorProps) => {
+const Editor = ({ type, showToolbar }: EditorProps) => {
   const [editor] = useLexicalComposerContext();
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
   const activeEditor = useRef(editor);
@@ -105,17 +45,17 @@ const Editor = ({ onChange, type, showToolbar }: EditorProps) => {
   const Plugins = useMemo(
     () => (
       <>
-        <LazyHistoryPlugin />
-        <LazyMarkdownShortcutPlugin/>
-        <LazyCodeHighlightPlugin />
-        <LazyLinkPlugin />
-        <LazyListPlugin />
-        <LazyTabIndentationPlugin />
-        <LazyCheckListPlugin />
-        <LazyHorizontalRulePlugin />
-        <LazyShortcutsPlugin editor={activeEditor.current} setIsLinkEditMode={setIsLinkEditMode} />
+        <HistoryPlugin />
+        <MarkdownShortcutPlugin />
+        <CodeHighlightPlugin />
+        <LinkPlugin />
+        <ListPlugin />
+        <TabIndentationPlugin />
+        <CheckListPlugin />
+        <HorizontalRulePlugin />
+        <ShortcutsPlugin editor={activeEditor.current} setIsLinkEditMode={setIsLinkEditMode} />
         {floatingAnchorElem.current && (
-          <LazyFloatingLinkEditorPlugin
+          <FloatingLinkEditorPlugin
             anchorElem={floatingAnchorElem.current}
             isLinkEditMode={isLinkEditMode}
             setIsLinkEditMode={setIsLinkEditMode}
@@ -127,11 +67,11 @@ const Editor = ({ onChange, type, showToolbar }: EditorProps) => {
   );
 
   return (
-    <Suspense fallback={<Spin tip="Loading editor..." />}>
+    <>
       {type === EditorType.rich ? (
         <>
           {showToolbar && (
-            <LazyToolbarPlugin
+            <ToolbarPlugin
               editor={editor}
               activeEditor={activeEditor.current}
               setActiveEditor={(value) => {
@@ -140,7 +80,7 @@ const Editor = ({ onChange, type, showToolbar }: EditorProps) => {
               setIsLinkEditMode={setIsLinkEditMode}
             />
           )}
-          <LazyRichTextPlugin
+          <RichTextPlugin
             contentEditable={
               <div className={styles.scroller}>
                 <div className={clsx(styles.editor, "css-var-rl", "ant-input-css-var")} ref={onRef}>
@@ -153,7 +93,7 @@ const Editor = ({ onChange, type, showToolbar }: EditorProps) => {
           {Plugins}
         </>
       ) : (
-        <LazyPlainTextPlugin
+        <PlainTextPlugin
           contentEditable={
             <div className={styles.scroller}>
               <div className={clsx(styles.editor, "css-var-rl", "ant-input-css-var")} ref={onRef}>
@@ -164,8 +104,8 @@ const Editor = ({ onChange, type, showToolbar }: EditorProps) => {
           ErrorBoundary={LexicalErrorBoundary}
         />
       )}
-      <LazyOnChangePlugin onChange={onChange} />
-    </Suspense>
+      {/* <LazyOnChangePlugin onChange={onChange} /> */}
+    </>
   );
 };
 
