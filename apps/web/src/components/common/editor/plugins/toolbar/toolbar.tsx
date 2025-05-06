@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { JSX } from "react";
 
 import { $isCodeNode, CODE_LANGUAGE_MAP } from "@lexical/code";
@@ -5,11 +6,7 @@ import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $isListNode, ListNode } from "@lexical/list";
 import { $isHeadingNode } from "@lexical/rich-text";
 import { $isTableSelection } from "@lexical/table";
-import {
-  $findMatchingParent,
-  $getNearestNodeOfType,
-  mergeRegister,
-} from "@lexical/utils";
+import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import {
   $getSelection,
   $isRangeSelection,
@@ -389,34 +386,33 @@ export const ToolbarPlugin = ({
 
   return (
     <Flex id={styles.wrapper}>
-      <Tooltip title={IS_APPLE ? "Undo (⌘Z)" : "Undo (Ctrl+Z)"}>
-        <Button
-          disabled={!toolbarState.canUndo || !isEditable}
-          onClick={() => {
-            activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
-          }}
-          icon={<UndoOutlined />}
-          type="text"
-          className="toolbar-item spaced"
-          aria-label="Undo"
-        />
-      </Tooltip>
-      <Tooltip title={IS_APPLE ? "Redo (⇧⌘Z)" : "Redo (Ctrl+Y)"}>
-        <Button
-          disabled={!toolbarState.canRedo || !isEditable}
-          onClick={() => {
-            activeEditor.dispatchCommand(REDO_COMMAND, undefined);
-          }}
-          icon={<RedoOutlined />}
-          type="text"
-          className="toolbar-item"
-          aria-label="Redo"
-        />
-      </Tooltip>
+      <ToolbarButton
+        disabled={!toolbarState.canUndo || !isEditable}
+        onClick={() => {
+          activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
+        }}
+        icon={<UndoOutlined />}
+        type="text"
+        title={IS_APPLE ? "Undo (⌘Z)" : "Undo (Ctrl+Z)"}
+        ariaLabel="Undo"
+        className="toolbar-item spaced"
+      />
+      <ToolbarButton
+        disabled={!toolbarState.canRedo || !isEditable}
+        onClick={() => {
+          activeEditor.dispatchCommand(REDO_COMMAND, undefined);
+        }}
+        icon={<RedoOutlined />}
+        type="text"
+        title={IS_APPLE ? "Redo (⇧⌘Z)" : "Redo (Ctrl+Y)"}
+        ariaLabel="Redo"
+        className="toolbar-item"
+      />
       <AntDivider />
       {toolbarState.blockType in blockTypeToBlockName && activeEditor === editor && (
         <>
           <BlockFormatDropDown
+            key={toolbarState.blockType}
             disabled={!isEditable}
             blockType={toolbarState.blockType}
             editor={activeEditor}
@@ -424,52 +420,89 @@ export const ToolbarPlugin = ({
           <AntDivider />
         </>
       )}
-      <Tooltip title={`Bold (${SHORTCUTS.BOLD})`}>
-        <Button
-          disabled={!isEditable}
-          onClick={() => {
-            activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
-          }}
-          icon={<BoldOutlined />}
-          type="text"
-          className={"toolbar-item spaced " + (toolbarState.isBold ? "active" : "")}
-          aria-label={`Format text as bold. Shortcut: ${SHORTCUTS.BOLD}`}
-        />
-      </Tooltip>{" "}
-      <Tooltip title={`Italic (${SHORTCUTS.ITALIC})`}>
-        <Button
-          disabled={!isEditable}
-          onClick={() => {
-            activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
-          }}
-          icon={<ItalicOutlined />}
-          type="text"
-          className={"toolbar-item spaced " + (toolbarState.isItalic ? "active" : "")}
-          aria-label={`Format text as italics. Shortcut: ${SHORTCUTS.ITALIC}`}
-        />
-      </Tooltip>
-      <Tooltip title={`Underline (${SHORTCUTS.UNDERLINE})`}>
-        <Button
-          disabled={!isEditable}
-          onClick={() => {
-            activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
-          }}
-          icon={<StrikethroughOutlined />}
-          type="text"
-          className={"toolbar-item spaced " + (toolbarState.isUnderline ? "active" : "")}
-          aria-label={`Format text to underlined. Shortcut: ${SHORTCUTS.UNDERLINE}`}
-        />
-      </Tooltip>
-      <Tooltip title={`Insert link (${SHORTCUTS.INSERT_LINK})`}>
-        <Button
-          disabled={!isEditable}
-          onClick={insertLink}
-          icon={<LinkOutlined />}
-          type="text"
-          className={"toolbar-item spaced " + (toolbarState.isLink ? "active" : "")}
-          aria-label="Insert link"
-        />
-      </Tooltip>
+      <ToolbarButton
+        disabled={!isEditable}
+        onClick={() => {
+          activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+        }}
+        icon={<BoldOutlined />}
+        type="text"
+        title={`Bold (${SHORTCUTS.BOLD})`}
+        ariaLabel={`Format text as bold. Shortcut: ${SHORTCUTS.BOLD}`}
+        className={"toolbar-item spaced " + (toolbarState.isBold ? "active" : "")}
+      />
+      <ToolbarButton
+        disabled={!isEditable}
+        onClick={() => {
+          activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+        }}
+        icon={<ItalicOutlined />}
+        type="text"
+        title={`Italic (${SHORTCUTS.ITALIC})`}
+        ariaLabel={`Format text as italics. Shortcut: ${SHORTCUTS.ITALIC}`}
+        className={"toolbar-item spaced " + (toolbarState.isItalic ? "active" : "")}
+      />
+
+      <ToolbarButton
+        disabled={!isEditable}
+        onClick={() => {
+          activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+        }}
+        icon={<StrikethroughOutlined />}
+        type="text"
+        title={`Underline (${SHORTCUTS.UNDERLINE})`}
+        ariaLabel={`Format text to underlined. Shortcut: ${SHORTCUTS.UNDERLINE}`}
+        className={"toolbar-item spaced " + (toolbarState.isUnderline ? "active" : "")}
+      />
+
+      <ToolbarButton
+        disabled={!isEditable}
+        onClick={insertLink}
+        icon={<LinkOutlined />}
+        type="text"
+        title={`Insert link (${SHORTCUTS.INSERT_LINK})`}
+        ariaLabel="Insert link"
+        className={"toolbar-item spaced " + (toolbarState.isLink ? "active" : "")}
+      />
     </Flex>
+  );
+};
+
+interface ToolbarButton {
+  disabled: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  type: string;
+  ariaLabel: string;
+  title: string;
+  className: string;
+}
+
+export const ToolbarButton = ({ disabled, onClick, icon, type, title, ariaLabel, className }) => {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      {hovered ? (
+        <Tooltip title={title}>
+          <Button
+            disabled={disabled}
+            onClick={onClick}
+            icon={icon}
+            type={type}
+            className={className}
+            aria-label={ariaLabel}
+          />
+        </Tooltip>
+      ) : (
+        <Button
+          disabled={disabled}
+          onClick={onClick}
+          icon={icon}
+          type={type}
+          className={className}
+          aria-label={ariaLabel}
+        />
+      )}
+    </div>
   );
 };

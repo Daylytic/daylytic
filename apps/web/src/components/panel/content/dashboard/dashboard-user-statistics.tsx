@@ -12,7 +12,7 @@ import { styles, useUserStatistics } from ".";
 import { statisticsCountUp } from "~/utils/data";
 
 export const DashboardUserStatistics = () => {
-  const {openDailyAssistant, result, analytics} = useUserStatistics();
+  const { openDailyAssistant, result, analytics } = useUserStatistics();
 
   return (
     <Flex gap="small" className={styles.row}>
@@ -25,8 +25,8 @@ export const DashboardUserStatistics = () => {
         <RobotOutlined />
         Daily Assistant
       </Button>
-      <Card className={styles.card}>
-        <Tooltip title="Your productivity index is calculated based on your routine consistency, task completion, project completion, and more.">
+      <Tooltip title="Your productivity index is calculated based on your routine consistency, task completion, project completion, and more.">
+        <Card className={styles.card}>
           <Statistic
             title={
               <>
@@ -41,8 +41,8 @@ export const DashboardUserStatistics = () => {
             }
             formatter={statisticsCountUp}
           />
-        </Tooltip>
-      </Card>
+        </Card>
+      </Tooltip>
       <Card className={styles.card}>
         <Statistic
           title="Login Streak"
@@ -61,8 +61,8 @@ export const DashboardUserStatistics = () => {
           suffix="Days"
         />
       </Card>
-      <Card className={styles.card}>
-        <Tooltip title="Your routine streak only updates by the end of the day.">
+      <Tooltip title="Your routine streak only updates by the end of the day.">
+        <Card className={styles.card}>
           <Statistic
             title={
               <>
@@ -74,8 +74,8 @@ export const DashboardUserStatistics = () => {
             formatter={statisticsCountUp}
             suffix="Days"
           />
-        </Tooltip>
-      </Card>
+        </Card>
+      </Tooltip>
       <Card className={styles.card}>
         <Statistic
           title="Record Routine Streak"
