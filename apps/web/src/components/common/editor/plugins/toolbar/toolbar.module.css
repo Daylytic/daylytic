@@ -3,6 +3,8 @@
     display: flex;
     align-items: center;
     justify-content: start;
+    overflow-x: auto;
+    overflow-y: hidden;
     background-color: var(--ant-color-primary-bg);
     border-radius: var(--ant-border-radius-lg);
     margin-bottom: var(--ant-margin-xs);
