@@ -16,4 +16,7 @@ export default defineConfig({
       "~": path.resolve(__dirname, "src"), // Global alias: # refers to the src folder
     },
   },
+  server: {
+    port: 3000,
+  }
 });

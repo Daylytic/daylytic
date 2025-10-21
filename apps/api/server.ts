@@ -149,7 +149,7 @@ const main = async () => {
       },
       servers: [
         {
-          url: "http://localhost:8084",
+          url: "http://localhost:4000",
           description: "Development server",
         },
       ],
@@ -207,8 +207,8 @@ const main = async () => {
   server.register(contactHandler, { prefix: "/contact" });
 
   try {
-    await server.listen({ port: 8084, host: process.env.DEV === "true" ? undefined : "0.0.0.0" });
-    console.log(`Server listening at https://localhost:8084`);
+    await server.listen({ port: 4000, host: process.env.DEV === "true" ? undefined : "0.0.0.0" });
+    console.log(`Server listening at https://localhost:4000`);
   } catch (err) {
     console.error(err);
     process.exit(1);
