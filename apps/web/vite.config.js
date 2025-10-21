@@ -3,14 +3,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import svgr from "vite-plugin-svgr";
-import eslint from 'vite-plugin-eslint'
+import eslint from "vite-plugin-eslint";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    svgr(),
-    eslint(),
-  ],
+  plugins: [react(), svgr(), eslint()],
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "src"), // Global alias: # refers to the src folder
@@ -19,5 +15,9 @@ export default defineConfig({
   server: {
     port: 3000,
     host: "0.0.0.0",
-  }
+  },
+  preview: {
+    allowedHosts: ["daylytic.com", "www.daylytic.com"],
+    port: 3000,
+  },
 });
