@@ -25,7 +25,8 @@
     "zod": "^3.24.4"
   },
   "scripts": {
-    "dev": "tsx watch server.ts"
+    "dev": "tsx watch server.ts",
+    "build": "tsx watch server.ts"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.3",
