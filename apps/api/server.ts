@@ -40,14 +40,14 @@ const server = Fastify({
   https: process.env.DEV === "true"
     ? null
     : {
-      key: readFileSync('/etc/letsencrypt/live/daylytic.com/privkey.pem'),
-      cert: readFileSync('/etc/letsencrypt/live/daylytic.com/fullchain.pem'),
+      key: readFileSync('/etc/letsencrypt/live/daylytic.idarkq.dev/privkey.pem'),
+      cert: readFileSync('/etc/letsencrypt/live/daylytic.idarkq.dev/fullchain.pem'),
       secureOptions: constants.SSL_OP_NO_SSLv2 | constants.SSL_OP_NO_SSLv3,
     }
 });
 
 webPush.setVapidDetails(
-  "https://daylytic.com/#contact",
+  "https://daylytic.idarkq.dev/#contact",
   process.env.VAPID_PUBLIC_KEY ?? "",
   process.env.VAPID_PRIVATE_KEY ?? "",
 );

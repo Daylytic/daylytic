@@ -1,4 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
-Sitemap: https://daylytic.com/sitemap.xml
+Sitemap: https://daylytic.idarkq.dev/sitemap.xml

@@ -17,7 +17,7 @@ export default defineConfig({
     host: "0.0.0.0",
   },
   preview: {
-    allowedHosts: ["daylytic.com", "www.daylytic.com"],
+    allowedHosts: ["daylytic.idarkq.dev", "www.daylytic.idarkq.dev"],
     port: 3000,
   },
 });
